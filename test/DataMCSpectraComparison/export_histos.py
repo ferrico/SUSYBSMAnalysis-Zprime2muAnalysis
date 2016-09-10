@@ -10,13 +10,13 @@ from SUSYBSMAnalysis.Zprime2muAnalysis.MCSamples import *
 ROOT.TH1.AddDirectory(False)
 
 mumu_mc_fn_base = 'mc/ana_datamc_%s.root'
-mumu_data_fn = 'data/Run2015MuonsOnly/ana_datamc_data.root'
+mumu_data_fn = 'data/Run2016MuonsOnly/ana_datamc_data.root'
 mumu_rebin_factor = 1
 mumu_histogram = 'DimuonMassVertexConstrained'
 mumu_scale = 48
 #mumu_scale = 1.
 emu_mc_fn_base = 'mc/ana_datamc_%s.root'
-emu_data_fn = 'data/Run2015MuonsOnly/ana_datamc_data.root' #it was Run2015 only
+emu_data_fn = 'data/Run2016MuonsOnly/ana_datamc_data.root' #it was Run2015 only
 emu_rebin_factor = 20
 emu_histogram = 'DileptonMass'
 emu_scale = 4641

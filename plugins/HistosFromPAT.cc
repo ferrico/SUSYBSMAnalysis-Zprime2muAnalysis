@@ -117,6 +117,9 @@ class Zprime2muHistosFromPAT : public edm::EDAnalyzer {
   TProfile* DileptonPtVsEta;
   TH1F* DileptonMass;
   TH1F* DileptonMassWeight;
+  TH1F* DileptonMass_bb;
+  TH1F* DileptonMass_ne;
+  TH1F* DileptonMass_pe;
   TH1F* DileptonWithPhotonsMass;
   TH1F* DileptonDeltaPt;
   TH1F* DileptonDeltaP;
@@ -129,7 +132,13 @@ class Zprime2muHistosFromPAT : public edm::EDAnalyzer {
   TH1F* DileptonDaughterDeltaPhi;
   TH1F* DimuonMassVertexConstrained;
   TH1F* DimuonMassVertexConstrainedWeight;
+  TH1F* DimuonMassVertexConstrained_bb;
+  TH1F* DimuonMassVertexConstrained_ne;
+  TH1F* DimuonMassVertexConstrained_pe;
   TH1F* DimuonMassVtxConstrainedLog;
+  TH1F* DimuonMassVtxConstrainedLog_bb;
+  TH1F* DimuonMassVtxConstrainedLog_ne;
+  TH1F* DimuonMassVtxConstrainedLog_pe;
   TH1F* DimuonMassVtxConstrainedLogWeight;
   TH2F* DimuonMassConstrainedVsUn;
   TH2F* DimuonMassVertexConstrainedError;
@@ -250,14 +259,19 @@ Zprime2muHistosFromPAT::Zprime2muHistosFromPAT(const edm::ParameterSet& cfg)
   DileptonPt = fs->make<TH1F>("DileptonPt", titlePrefix + "dil. pT", 5000, 0, 5000);
   DileptonPz = fs->make<TH1F>("DileptonPz", titlePrefix + "dil. pz", 5000, 0, 5000);
   DileptonP  = fs->make<TH1F>("DileptonP",  titlePrefix + "dil. p",  5000, 0, 5000);
-  
+
+
   // Dilepton momenta versus pseudorapidity.
   DileptonPVsEta  = fs->make<TProfile>("DileptonPVsEta",  titlePrefix + "dil. p vs. #eta",  100, -6, 6);
   DileptonPtVsEta = fs->make<TProfile>("DileptonPtVsEta", titlePrefix + "dil. pT vs. #eta", 100, -6, 6);
   
   // Dilepton invariant mass.
   DileptonMass            = fs->make<TH1F>("DileptonMass",            titlePrefix + "dil. mass", 20000, 0, 20000);
+  DileptonMass_bb            = fs->make<TH1F>("DileptonMass_bb",            titlePrefix + "dil. mass barrel-barrel", 20000, 0, 20000);
+  DileptonMass_ne            = fs->make<TH1F>("DileptonMass_ne",            titlePrefix + "dil. mass negative endcap", 20000, 0, 20000);
+  DileptonMass_pe            = fs->make<TH1F>("DileptonMass_pe",            titlePrefix + "dil. mass positive endcap", 20000, 0, 20000);
   DileptonMassWeight      = fs->make<TH1F>("DileptonMassWeight",      titlePrefix + "dil. mass", 20000, 0, 20000);
+
   DileptonWithPhotonsMass = fs->make<TH1F>("DileptonWithPhotonsMass", titlePrefix + "res. mass", 20000, 0, 20000);
   
   // Plots comparing the daughter lepton momenta.
@@ -277,6 +291,9 @@ Zprime2muHistosFromPAT::Zprime2muHistosFromPAT(const edm::ParameterSet& cfg)
 
   // Dimuons have a vertex-constrained fit: some associated histograms.
   DimuonMassVertexConstrained = fs->make<TH1F>("DimuonMassVertexConstrained", titlePrefix + "dimu. vertex-constrained mass", 20000, 0, 20000);
+  DimuonMassVertexConstrained_bb = fs->make<TH1F>("DimuonMassVertexConstrained_bb", titlePrefix + "dimu. vertex-constrained mass barrel-barrel", 20000, 0, 20000);
+  DimuonMassVertexConstrained_ne = fs->make<TH1F>("DimuonMassVertexConstrained_ne", titlePrefix + "dimu. vertex-constrained mass negative endcap", 20000, 0, 20000);
+  DimuonMassVertexConstrained_pe = fs->make<TH1F>("DimuonMassVertexConstrained_pe", titlePrefix + "dimu. vertex-constrained mass positive endcap", 20000, 0, 20000);
   DimuonMassVertexConstrainedWeight = fs->make<TH1F>("DimuonMassVertexConstrainedWeight", titlePrefix + "dimu. vertex-constrained mass", 20000, 0, 20000);
   // Mass plot in bins of log(mass)
   const int    NMBINS = 100;
@@ -285,12 +302,61 @@ Zprime2muHistosFromPAT::Zprime2muHistosFromPAT(const edm::ParameterSet& cfg)
   for (int ibin = 0; ibin <= NMBINS; ibin++)
     logMbins[ibin] = exp(log(MMIN) + (log(MMAX)-log(MMIN))*ibin/NMBINS);
   DimuonMassVtxConstrainedLog = fs->make<TH1F>("DimuonMassVtxConstrainedLog", titlePrefix + "dimu vtx-constrained mass in log bins", NMBINS, logMbins);
+  DimuonMassVtxConstrainedLog_bb = fs->make<TH1F>("DimuonMassVtxConstrainedLog_bb", titlePrefix + "dimu vtx-constrained mass in log bins barrel-barrel", NMBINS, logMbins);
+  DimuonMassVtxConstrainedLog_ne = fs->make<TH1F>("DimuonMassVtxConstrainedLog_ne", titlePrefix + "dimu vtx-constrained mass in log bins negative endcap", NMBINS, logMbins);
+  DimuonMassVtxConstrainedLog_pe = fs->make<TH1F>("DimuonMassVtxConstrainedLog_pe", titlePrefix + "dimu vtx-constrained mass in log bins positive endcap", NMBINS, logMbins);
   DimuonMassVtxConstrainedLogWeight = fs->make<TH1F>("DimuonMassVtxConstrainedLogWeight", titlePrefix + "dimu vtx-constrained mass in log bins", NMBINS, logMbins);
+
   DimuonMassConstrainedVsUn = fs->make<TH2F>("DimuonMassConstrainedVsUn", titlePrefix + "dimu. vertex-constrained vs. non-constrained mass", 200, 0, 3000, 200, 0, 3000);
   DimuonMassVertexConstrainedError = fs->make<TH2F>("DimuonMassVertexConstrainedError", titlePrefix + "dimu. vertex-constrained mass error vs. mass", 100, 0, 3000, 100, 0, 400);
     //special
     DimuonMassVtx_chi2 = fs->make<TH1F>("DimuonMassVtx_chi2", titlePrefix + "dimu. vertex #chi^{2}/dof", 300, 0, 30);
     DimuonMassVtx_prob = fs->make<TH1F>("DimuonMassVtx_prob", titlePrefix + "dimu. vertex probability", 100, 0, 1);
+}
+
+float triggerWeight(const float mu1_pt, const float mu1_eta, const float mu2_pt, const float mu2_eta);
+float muonTriggerWeight(const float mu_pt, const float mu_eta);
+
+float muonTriggerWeight(const float mu_pt, const float mu_eta){
+    //    [0.918826,0.799085,0.926197,0.885586,0.854526,0.816214,0.736484],
+    //    [0.921847,0.813589,0.921885,0.86827,0.789756,0.815474,0.734284],
+    //    [0.952756,0.642857,0.907787,0.84153,0.807882,0.753247,0.635135]
+    unsigned int etaBINS = 7;
+    double SF_trigger[etaBINS];
+    if (fabs(mu_pt) < 100){
+        SF_trigger[0] = 0.918826; SF_trigger[1] = 0.799085; SF_trigger[2] = 0.926197; SF_trigger[3] = 0.885586; SF_trigger[4] = 0.854526; SF_trigger[5] = 0.816214; SF_trigger[6] = 0.736484;
+    }else if(fabs(mu_pt) < 200){
+        SF_trigger[0] = 0.921847; SF_trigger[1] = 0.813589; SF_trigger[2] = 0.921885; SF_trigger[3] = 0.86827; SF_trigger[4] = 0.789756; SF_trigger[5] = 0.815474; SF_trigger[6] = 0.734284;
+    }else{
+        SF_trigger[0] = 0.952756; SF_trigger[1] = 0.642857; SF_trigger[2] = 0.907787; SF_trigger[3] = 0.84153; SF_trigger[4] = 0.807882; SF_trigger[5] = 0.753247; SF_trigger[6] = 0.635135;
+    }
+    
+    //Eta bins definition.
+    double etabin[etaBINS+1];
+    etabin[0]=0.; etabin[1]=0.2; etabin[2]=0.3; etabin[3]=0.9; etabin[4]=1.2; etabin[5]=1.6; etabin[6]=2.1; etabin[7]=2.4;
+    
+    unsigned int ibin = etaBINS;
+    for (unsigned int kbin=0; kbin<=etaBINS; ++kbin) {
+        if (fabs(mu_eta)<etabin[kbin+1]) {
+            ibin = kbin;
+            break;
+        }
+    }
+    
+    float sf = SF_trigger[ibin];
+    return sf;
+    
+}
+
+float triggerWeight(const float mu1_pt, const float mu1_eta, const float mu2_pt, const float mu2_eta){
+    //(1.0-(1.0-eff1)*(1.0-eff2))
+    float weight = muonTriggerWeight(mu1_pt,mu1_eta)+muonTriggerWeight(mu2_pt,mu2_eta)-(muonTriggerWeight(mu1_pt,mu1_eta)*muonTriggerWeight(mu2_pt,mu2_eta));
+//    if (mu1_pt + mu2_pt > 300){
+//    std::cout<<"eff1 "<<muonTriggerWeight(mu1_pt,mu1_eta)<<"   pt = "<<mu1_pt<<"   eta = "<<mu1_eta<<std::endl;
+//    std::cout<<"eff2 "<<muonTriggerWeight(mu2_pt,mu2_eta)<<"   pt = "<<mu2_pt<<"   eta = "<<mu2_eta<<std::endl;
+//    std::cout<<"total weight "<<weight<<std::endl;
+//    }
+    return weight;
 }
 
 void Zprime2muHistosFromPAT::getBSandPV(const edm::Event& event) {
@@ -425,23 +491,41 @@ void Zprime2muHistosFromPAT::fillDileptonHistos(const pat::CompositeCandidate& d
     dbg_t.id = dil.daughter(0)->pdgId() + dil.daughter(1)->pdgId();
     dbg_tree->Fill();
   }
-  DileptonEta->Fill(dil.eta());
-  DileptonRap->Fill(dil.rapidity());
-  DileptonPhi->Fill(dil.phi());
+  const reco::CandidateBaseRef& lep0 = dileptonDaughter(dil, 0);
+  const reco::CandidateBaseRef& lep1 = dileptonDaughter(dil, 1);
 
-  DileptonPt->Fill(dil.pt());
-  DileptonPz->Fill(fabs(dil.pz()));
-  DileptonP ->Fill(dil.p());
+  float weight = 1;
+  if (lep0.isNonnull() && lep1.isNonnull()) {
+  weight = triggerWeight(lep0->pt(), lep0->eta(), lep1->pt(), lep1->eta());
+//      std::cout<<"pt:eta"<<lep0->pt()<<" : "<<lep0->eta()<<" : "<<lep1->pt()<<" : "<<lep1->eta()<<std::endl;
+//      std::cout<<"weight"<<weight<<std::endl;
+  }
+  
+  DileptonEta->Fill(dil.eta(), weight);
+  DileptonRap->Fill(dil.rapidity(), weight);
+  DileptonPhi->Fill(dil.phi(), weight);
+
+  DileptonPt->Fill(dil.pt(), weight);
+  DileptonPz->Fill(fabs(dil.pz()), weight);
+  DileptonP ->Fill(dil.p(), weight);
 
   DileptonPtVsEta->Fill(dil.eta(), dil.pt());
   DileptonPVsEta ->Fill(dil.eta(), dil.p());
 
-  DileptonMass->Fill(dil.mass());
+  DileptonMass->Fill(dil.mass(), weight);
   DileptonMassWeight->Fill(dil.mass(),_prescaleWeight);
   DileptonWithPhotonsMass->Fill(resonanceP4(dil).mass());
 
-  const reco::CandidateBaseRef& lep0 = dileptonDaughter(dil, 0);
-  const reco::CandidateBaseRef& lep1 = dileptonDaughter(dil, 1);
+
+  if (dil.daughter(0)->eta()<=1.2 && dil.daughter(1)->eta()<=1.2 && dil.daughter(0)->eta()>=-1.2 && dil.daughter(1)->eta()>=-1.2){
+     DileptonMass_bb->Fill(dil.mass(), weight);
+  }
+  if (dil.daughter(0)->eta()<-1.2 || dil.daughter(1)->eta()<-1.2){
+    DileptonMass_ne->Fill(dil.mass(), weight);
+  }
+  if ((dil.daughter(0)->eta()>1.2 && dil.daughter(1)->eta()>=-1.2) || (dil.daughter(0)->eta()>=-1.2 && dil.daughter(1)->eta()>1.2)){
+    DileptonMass_pe->Fill(dil.mass(), weight);
+  }
 
   if (lep0.isNonnull() && lep1.isNonnull()) {
     DileptonDeltaPt->Fill(fabs(lep0->pt()) - fabs(lep1->pt()));
@@ -484,12 +568,26 @@ void Zprime2muHistosFromPAT::fillDileptonHistos(const pat::CompositeCandidate& d
   if (dil.hasUserFloat("vertexM") && dil.hasUserFloat("vertexMError")) {
     float vertex_mass = dil.userFloat("vertexM");
     float vertex_mass_err = dil.userFloat("vertexMError");
-    DimuonMassVertexConstrained->Fill(vertex_mass);
-    DimuonMassVtxConstrainedLog->Fill(vertex_mass);
+    DimuonMassVertexConstrained->Fill(vertex_mass, weight);
+    DimuonMassVtxConstrainedLog->Fill(vertex_mass, weight);
     DimuonMassConstrainedVsUn->Fill(dil.mass(), vertex_mass);
     DimuonMassVertexConstrainedError->Fill(vertex_mass, vertex_mass_err);
     DimuonMassVertexConstrainedWeight->Fill(vertex_mass,_prescaleWeight);
     DimuonMassVtxConstrainedLogWeight->Fill(vertex_mass,_prescaleWeight);
+
+    if (dil.daughter(0)->eta()<=1.2 && dil.daughter(1)->eta()<=1.2 && dil.daughter(0)->eta()>=-1.2 && dil.daughter(1)->eta()>=-1.2){
+        DimuonMassVertexConstrained_bb->Fill(vertex_mass,weight);
+        DimuonMassVtxConstrainedLog_bb->Fill(vertex_mass, weight);
+    }
+    if (dil.daughter(0)->eta()<-1.2 || dil.daughter(1)->eta()<-1.2){
+        DimuonMassVertexConstrained_ne->Fill(vertex_mass,weight);
+        DimuonMassVtxConstrainedLog_ne->Fill(vertex_mass, weight);
+    }
+    if ((dil.daughter(0)->eta()>1.2 && dil.daughter(1)->eta()>=-1.2) || (dil.daughter(0)->eta()>=-1.2 && dil.daughter(1)->eta()>1.2)){
+        DimuonMassVertexConstrained_pe->Fill(vertex_mass,weight);
+        DimuonMassVtxConstrainedLog_pe->Fill(vertex_mass, weight);
+    }
+
     // special
     float vertex_chi2 = dil.userFloat("vertex_chi2");
       DimuonMassVtx_chi2->Fill(vertex_chi2);
@@ -558,5 +656,6 @@ void Zprime2muHistosFromPAT::analyze(const edm::Event& event, const edm::EventSe
     fillDileptonHistos(*dileptons, event);
   }
 }
+
 
 DEFINE_FWK_MODULE(Zprime2muHistosFromPAT);

@@ -144,5 +144,4 @@ if __name__=='__main__':
     if not os.path.exists('plots/%s'%tag):
         raise ValueError('Tagged directory %s does not exist!'%tag)
 
-    draw_bckg_pct_test(tag, args.stats, float(args.lumi))
-
+draw_bckg_pct_test(tag, args.stats, float(args.lumi))

@@ -3,33 +3,29 @@
 import sys, os, FWCore.ParameterSet.Config as cms
 from SUSYBSMAnalysis.Zprime2muAnalysis.Zprime2muAnalysis_cff import switch_hlt_process_name
 from SUSYBSMAnalysis.Zprime2muAnalysis.Zprime2muAnalysis_cfg import process
+#from SUSYBSMAnalysis.Zprime2muAnalysis.DYGenMassFilter_cfi import DYGenMassFilter
 
-process.source.fileNames =[
-'file:root://xrootd-cms.infn.it//store/user/ferrico/SingleMuon/datamc_SingleMuonRun2016E-Prompt-v2_276831_277420_20160801162452/160801_142532/0000/pat_101.root'
-#'file:root://xrootd-cms.infn.it///store/user/alfloren/PAATuples/ZZ_TuneCUETP8M1_13TeV-pythia8/datamc_zz/160610_110447/0000/pat_15.root'
-#'file:PAT_SingleMuRun2015B-Rereco-Suite_251162_251559_20160120153115/crab_SingleMuRun2015B-Rereco-Suite_251162_251559_20160120153115/results/Zprime_123.root',
-#                          'file:Zprime_10.root',
+
+
+process.source.fileNames =[#'file:PAT_SingleMuRun2015B-Rereco-Suite_251162_251559_20160120153115/crab_SingleMuRun2015B-Rereco-Suite_251162_251559_20160120153115/results/Zprime_123.root',
+                          'file:root://xrootd-cms.infn.it///store/user/alfloren/PAATuples/WWTo2L2Nu_13TeV-powheg/datamc_WWinclusive/160524_124813/0000/pat_1.root',
+#                          'file:root://xrootd-cms.infn.it///store/user/alfloren/PAATuples/WWTo2L2Nu_13TeV-powheg/datamc_WWinclusive/160524_124813/0000/pat_2.root'
+
+#                          'file:WWinclusive.root',
                            ]
-process.maxEvents.input =-1
-#process.GlobalTag.globaltag = '76X_dataRun2_v15'## solo per proare i dati
-process.GlobalTag.globaltag = '80X_dataRun2_Prompt_v10'
+process.maxEvents.input =50
+process.GlobalTag.globaltag = '80X_mcRun2_asymptotic_2016_v3'
 #process.options.wantSummary = cms.untracked.bool(True)# false di default
 process.MessageLogger.cerr.FwkReport.reportEvery = 1 # default 1000
 
 from SUSYBSMAnalysis.Zprime2muAnalysis.hltTriggerMatch_cfi import trigger_match, prescaled_trigger_match, trigger_paths, prescaled_trigger_paths, overall_prescale, offline_pt_threshold, prescaled_offline_pt_threshold
 
-
-############################
-# Prescale Trigger #########
-############################
 # Since the prescaled trigger comes with different prescales in
 # different runs/lumis, this filter prescales it to a common factor to
 # make things simpler.
 process.load('SUSYBSMAnalysis.Zprime2muAnalysis.PrescaleToCommon_cff')
 process.PrescaleToCommon.trigger_paths = prescaled_trigger_paths
 process.PrescaleToCommon.overall_prescale = overall_prescale
-
-
 
 # The histogramming module that will be cloned multiple times below
 # for making histograms with different cut/dilepton combinations.
@@ -49,9 +45,9 @@ import SUSYBSMAnalysis.Zprime2muAnalysis.OurSelectionDec2012_cff as OurSelection
 # off. To get e.g. mu+mu+ separate from mu-mu-, cut on the sum of the
 # pdgIds (= -26 for mu+mu+).
 dils = [
-	('MuonsPlusMuonsMinusBarrel',    '%(leptons_name)s:muons@+ %(leptons_name)s:muons@-',         'daughter(0).pdgId() + daughter(1).pdgId() == 0 && daughter(0).eta()<=1.2 && daughter(1).eta()<=1.2 && daughter(0).eta()>=-1.2 &&  daughter(1).eta()>=-1.2'),
-	('MuonsPlusMuonsMinusPositive',    '%(leptons_name)s:muons@+ %(leptons_name)s:muons@-',         'daughter(0).pdgId() + daughter(1).pdgId() == 0 && ((daughter(0).eta()>1.2 && daughter(1).eta()>=-1.2) || (daughter(1).eta()>1.2 && daughter(0).eta()>=-1.2))'),
-	('MuonsPlusMuonsMinusNegative',    '%(leptons_name)s:muons@+ %(leptons_name)s:muons@-',         'daughter(0).pdgId() + daughter(1).pdgId() == 0 && (daughter(0).eta()<-1.2 || daughter(1).eta()<-1.2)'),
+    ('MuonsPlusMuonsMinusBarrel',    '%(leptons_name)s:muons@+ %(leptons_name)s:muons@-',         'daughter(0).pdgId() + daughter(1).pdgId() == 0 && daughter(0).eta()<=1.2 && daughter(1).eta()<=1.2 && daughter(0).eta()>=-1.2 &&  daughter(1).eta()>=-1.2'),
+    ('MuonsPlusMuonsMinusPositive',    '%(leptons_name)s:muons@+ %(leptons_name)s:muons@-',         'daughter(0).pdgId() + daughter(1).pdgId() == 0 && ((daughter(0).eta()>1.2 && daughter(1).eta()>-1.2) || (daughter(1).eta()>1.2 && daughter(0).eta()>-1.2))'),
+    ('MuonsPlusMuonsMinusNegative',    '%(leptons_name)s:muons@+ %(leptons_name)s:muons@-',         'daughter(0).pdgId() + daughter(1).pdgId() == 0 && (daughter(0).eta()<=-1.2 || daughter(1).eta()<=-1.2)'),
     ('MuonsPlusMuonsMinus',          '%(leptons_name)s:muons@+ %(leptons_name)s:muons@-',         'daughter(0).pdgId() + daughter(1).pdgId() == 0'),
     ('MuonsPlusMuonsPlus',           '%(leptons_name)s:muons@+ %(leptons_name)s:muons@+',         'daughter(0).pdgId() + daughter(1).pdgId() == -26'),
     ('MuonsMinusMuonsMinus',         '%(leptons_name)s:muons@- %(leptons_name)s:muons@-',         'daughter(0).pdgId() + daughter(1).pdgId() == 26'),
@@ -75,20 +71,33 @@ cuts = {
 #    'OurEPS'   : OurSelection2011EPS,
     #'OurNew'   : OurSelectionNew,
 
+   # 'EtaBarrel' : OurSelectionDec2012,
+#    'EtaEpositive' : OurSelectionDec2012,
+#    'EtaNegative' : OurSelectionDec2012,
     'Our2012'  : OurSelectionDec2012,
     #'OurNoIso' : OurSelectionDec2012,
     #'EmuVeto'  : OurSelectionDec2012,
     'Simple'   : OurSelectionDec2012, # The selection cuts in the module listed here are ignored below.
 #    'VBTFMuPrescaled' : VBTFSelection,
     #'OurMuPrescaledNew'  : OurSelectionNew,
-   #'OurMuPrescaled2012' : OurSelectionDec2012
+  # 'OurMuPrescaled2012' : OurSelectionDec2012
     }
+
+
+process.DYGenMassFilter = cms.EDFilter('DibosonGenMass',
+                                       src = cms.InputTag('prunedMCLeptons'),
+                                       min_mass = cms.double(50),
+                                       max_mass = cms.double(200),
+                                       )
 
 # Loop over all the cut sets defined and make the lepton, allDilepton
 # (combinatorics only), and dilepton (apply cuts) modules for them.
 for cut_name, Selection in cuts.iteritems():
     # Keep track of modules to put in the path for this set of cuts.
     path_list = []
+   
+    
+    #path_list.append(DYGenMassFilter)
 
     # Clone the LeptonProducer to make leptons with the set of cuts
     # we're doing here flagged.  I.e., muon_cuts in LeptonProducer
@@ -98,20 +107,27 @@ for cut_name, Selection in cuts.iteritems():
     # LooseTightPairSelector in use for all the cuts above, at
     # present.
     leptons_name = cut_name + 'Leptons'
+    DYGenMassFilter_name = cut_name + 'GenFilter'
+
     if cut_name == 'Simple':
         muon_cuts = ''
-    elif 'MuPrescaled' in cut_name:
-        muon_cuts = Selection.loose_cut.replace('pt > %s' % offline_pt_threshold, 'pt > %s' % prescaled_offline_pt_threshold)
+   # elif 'MuPrescaled' in cut_name:
+      #  muon_cuts = Selection.loose_cut.replace('pt > %s' % offline_pt_threshold, 'pt > %s' % prescaled_offline_pt_threshold)
     else:
         muon_cuts = Selection.loose_cut
     leptons = process.leptons.clone(muon_cuts = muon_cuts)
+    DYGenMassFilter = process.DYGenMassFilter.clone()
+    
     if cut_name == 'EmuVeto':
         leptons.electron_muon_veto_dR = 0.1
     # Keep using old TuneP for past selections
     if 'Dec2012' not in Selection.__file__:
         leptons.muon_track_for_momentum = cms.string('TuneP')
     setattr(process, leptons_name, leptons)
-    path_list.append(leptons)
+    setattr(process, DYGenMassFilter_name, DYGenMassFilter)
+    
+    path_list.append(DYGenMassFilter*leptons)
+     #path_list.append(leptons)
 
     # Make all the combinations of dileptons we defined above.
     for dil_name, dil_decay, dil_cut in dils:
@@ -153,10 +169,10 @@ for cut_name, Selection in cuts.iteritems():
                 delattr(dil, 'dpt_over_pt_max')
         elif cut_name == 'OurNoIso':
             alldil.loose_cut = alldil.loose_cut.value().replace(' && isolationR03.sumPt / innerTrack.pt < 0.10', '')
-        elif 'MuPrescaled' in cut_name:
-        	alldil.loose_cut = alldil.loose_cut.value().replace('pt > %s' % offline_pt_threshold, 'pt > %s' % prescaled_offline_pt_threshold)
-        	assert alldil.tight_cut == trigger_match
-        	alldil.tight_cut = prescaled_trigger_match
+       # elif 'MuPrescaled' in cut_name:
+          #  alldil.loose_cut = alldil.loose_cut.value().replace('pt > %s' % offline_pt_threshold, 'pt > %s' % prescaled_offline_pt_threshold)
+         #   assert alldil.tight_cut == trigger_match
+         #   alldil.tight_cut = prescaled_trigger_match
 
         # Histos now just needs to know which leptons and dileptons to use.
         histos = HistosFromPAT.clone(lepton_src = cms.InputTag(leptons_name, 'muons'), dilepton_src = cms.InputTag(name))
@@ -165,6 +181,7 @@ for cut_name, Selection in cuts.iteritems():
         setattr(process, allname, alldil)
         setattr(process, name, dil)
         setattr(process, name + 'Histos', histos)
+       
         path_list.append(alldil * dil * histos)
 
     # Finally, make the path for this set of cuts.
@@ -176,6 +193,7 @@ for cut_name, Selection in cuts.iteritems():
         pobj = process.PrescaleToCommon * pobj ####### Now it seams that there are no prescaled path ########
     path = cms.Path(pobj)
     setattr(process, pathname, path)
+   
 
 
 def ntuplify(process, fill_gen_info=False):
@@ -230,11 +248,7 @@ def check_prescale(process, trigger_paths, hlt_process_name='HLT'):
     process.pCheckPrescale = cms.Path(process.CheckPrescale)
 
 def for_data(process):
-    #process.GlobalTag.globaltag ='GR_P_V56'
-    #process.GlobalTag.globaltag ='76X_dataRun2_v15'
-    process.GlobalTag.globaltag ='80X_dataRun2_Prompt_v10'
-    #process.GlobalTag.globaltag = 'GR_E_V47'
-    # process.GlobalTag.globaltag = 'GR_P_V54'
+    process.GlobalTag.globaltag = '80X_mcRun2_asymptotic_2016_v3'	
     ntuplify(process)
     #check_prescale(process, trigger_paths) ####### Now it seams that there are no prescaled path ########
 
@@ -297,7 +311,7 @@ config.General.workArea = 'crab'
 #config.General.transferLogs = True
 
 config.JobType.pluginName = 'Analysis'
-config.JobType.psetName = 'histos_crab.py'   
+config.JobType.psetName = 'histosWW.py'   
 #config.JobType.priority = 1
 
 config.Data.inputDataset =  '%(ana_dataset)s'
@@ -310,6 +324,7 @@ config.Data.ignoreLocality = True
 
 config.Site.whitelist = ["T2_IT_Bari"]
 config.Site.storageSite = 'T2_IT_Bari'
+
 
 '''
     
@@ -331,20 +346,6 @@ config.Site.storageSite = 'T2_IT_Bari'
                 #('SingleMuonRun2015C50ns-rereco76_254883_255899', '/SingleMuon/alfloren-SingleMuRun2015C50ns-Rereco_254883_255899_20160120153444-332cf72ab044858cbe7c1d1b03f22dbc/USER'),
                  ('SingleMuonRun2015C25ns-rereco76_254227_254907', '/SingleMuon/alfloren-SingleMuRun2015C25ns-Rereco_254227_254907_20160120153639-332cf72ab044858cbe7c1d1b03f22dbc/USER'),
                  ('SingleMuonRun2015D-rereco76_256630_260627', '/SingleMuon/rradogna-datamc_SingleMuonRun2015D-Rereco_256630_260627_20160204164737-843ac0dcce157982e3f7d22621d7dc4b/USER'),
-				# ('SingleMuonRun2015C25ns-rereco76_254227_254907', '/SingleMuon/alfloren-SingleMuRun2015C25ns-Rereco_254227_254907_20160120153639-332cf72ab044858cbe7c1d1b03f22dbc/USER'),
-				#('SingleMuonRun2015D-rereco76_256630_260627', '/SingleMuon/rradogna-datamc_SingleMuonRun2015D-Rereco_256630_260627_20160204164737-843ac0dcce157982e3f7d22621d7dc4b/USER'),
-# 				('SingleMuonRun2015C25ns-rereco76_254227_254907', '/SingleMuon/alfloren-SingleMuRun2015C25ns-Rereco_254227_254907_20160120153639-332cf72ab044858cbe7c1d1b03f22dbc/USER'),
-                #('SingleMuonRun2015D-rereco76_256630_260627', '/SingleMuon/rradogna-datamc_SingleMuonRun2015D-Rereco_256630_260627_20160204164737-843ac0dcce157982e3f7d22621d7dc4b/USER'),
-#             ('SingleMuonRun2016B-Prompt-v2_273150_273730_rradogna', '/SingleMuon/rradogna-datamc_SingleMuonRun2016B-Prompt-v2_273150_273730_20160530153025-02d6fdda0cfc6c7b5229d43ba172d9c1/USER'),
-#             ('SingleMuonRun2016B-Prompt-v2_273731_274421_rradogna', '/SingleMuon/rradogna-datamc_SingleMuonRun2016B-Prompt-v2_273731_274421_20160612232019-02d6fdda0cfc6c7b5229d43ba172d9c1/USER'),
-#                 ('SingleMuonRun2016B-Prompt_274422_275125_rradogna', '/SingleMuon/rradogna-datamc_SingleMuonRun2016B-Prompt-v2_274422_275125_20160622221102-02d6fdda0cfc6c7b5229d43ba172d9c1/USER'),
-#                     ('SingleMuonRun2016B-Prompt-v2_275126_275376_ferrico', '/SingleMuon/ferrico-datamc_SingleMuonRun2016B-Prompt-v2_275126_275376_20160711120527-7f32591e081501d235a2e7d076a95be6/USER'),
-#                     ('SingleMuonRun2016C-Prompt-v2_275420_275783_ferrico', '/SingleMuon/ferrico-datamc_SingleMuonRun2016C-Prompt-v2_275420_275783_20160711122627-a1f73a300c6211a99e029d4636d3051f/USER')
-#                             ('SingleMuonRun2016B-Prompt-v1_272007_273143_ferrico', '/SingleMuon/ferrico-datamc_SingleMuonRun2016B-Prompt-v1_NoL1T_272007_273143_20160721113740-7f32591e081501d235a2e7d076a95be6/USER'),
-#                             ('SingleMuonRun2016B-Prompt-v2_273150_275376_ferrico', '/SingleMuon/ferrico-datamc_SingleMuonRun2016B-Prompt-v2_NoL1T_273150_275376_20160721113836-7f32591e081501d235a2e7d076a95be6/USER'),
-#                             ('SingleMuonRun2016C-Prompt-v2_275377_276283_ferrico', '/SingleMuon/ferrico-datamc_SingleMuonRun2016C-Prompt-v2_NoL1T_275377_276283_20160721113904-a1f73a300c6211a99e029d4636d3051f/USER'),
-#                             ('SingleMuonRun2016D-Prompt-v2_276284_276811_ferrico', '/SingleMuon/ferrico-datamc_SingleMuonRun2016D-Prompt-v2_NoL1T_276284_276811_20160721113937-85b698921229ef55bf2e46d443c09d7b/USER'),
-                              ('SingleMuonRun2016E-Prompt-v2_276831_277420_ferrico','/SingleMuon/ferrico-datamc_SingleMuonRun2016E-Prompt-v2_276831_277420_20160801162452-85b698921229ef55bf2e46d443c09d7b/USER'),
 
             ]
 

@@ -9,15 +9,49 @@ from SUSYBSMAnalysis.Zprime2muAnalysis.MCSamples import *
 from SUSYBSMAnalysis.Zprime2muAnalysis.roottools import *
 set_zp2mu_style()
 
-lumiBCD = 2800.
+lumiBCD = 13066.191#6293.188#4409.061#4079.344#2231.20#1#2260.881 #2619.44
+
+#tipo = 'TuneP'
+#tipo = 'Inner'
+tipo = 'TriggerScale'
+
+#tt = 'tt pow'
+tt = 'tt lep'
+
+
+cartella = 'DimuonMassVertexConstrained'
+categoria = 'all'
+categoria_1 = ''
+# cartella = 'DimuonMassVertexConstrained_bb'
+# categoria = 'Barrel - Barrel'
+# categoria_1 = ''
+# cartella = 'DimuonMassVertexConstrained_ne'
+# categoria = 'Negative endicap'
+# categoria_1 = 'E^{-}B or E^{-}E^{-} or E^{-}E^{+}'
+# cartella = 'DimuonMassVertexConstrained_pe'
+# categoria = 'Positive endicap'
+# categoria_1 = 'E^{+}B or E^{+}E^{+}'
 
 styles = {
 #    'sample':    (color, draw/fill style),
-    'dataB':      (ROOT.kBlack,     -1),
+    'data':      (ROOT.kBlack,     -1),
     'dataCD':      (ROOT.kBlack,     -1),
     'dataBCD':      (ROOT.kBlack,     -1),
-    'mc_samples_50m120': (ROOT.kGreen+2,1001),
-    'mc_samples_120m': (ROOT.kGreen+2,1001),
+#     'mc_samples_50m120': (7,1001),
+#     'mc_samples_120m': (7,1001),
+#     'mc_samples_500m': (7,1001),
+#     'mc_samples_50m120_DY': (ROOT.kGreen+2,1001),
+#     'mc_samples_120m_DY': (ROOT.kGreen+2,1001),
+#     'mc_samples_500m_DY': (ROOT.kGreen+2,1001),
+#     'mc_samples_50m120_tt': (ROOT.kBlue+2,1001),
+#     'mc_samples_120m_tt': (ROOT.kBlue+2,1001),
+#     'mc_samples_500m_tt': (ROOT.kBlue+2,1001),
+#     'mc_samples_50m120_qcd': (ROOT.kRed+2,1001),
+#     'mc_samples_120m_qcd': (ROOT.kRed+2,1001),
+#     'mc_samples_500m_qcd': (ROOT.kRed+2,1001),
+#     'mc_samples_50m120_diboson': (ROOT.kOrange+2,1001),
+#     'mc_samples_120m_diboson': (ROOT.kOrange+2,1001),
+#     'mc_samples_500m_diboson': (ROOT.kOrange+2,1001),
     #'dy50to120':(ROOT.kGreen, 1001),
     #'dy120to200':(ROOT.kGreen-4, 1001),
     #'dy200to400':(ROOT.kGreen+1, 1001),
@@ -27,6 +61,7 @@ styles = {
     #'dy2300to3500':(ROOT.kGreen-9, 1001),
     #'dy3500to4500':(ROOT.kGreen-6, 1001),
     #'dy4500to6000':(ROOT.kGreen-2, 1001),
+    'dyInclusive50': (ROOT.kGreen+2,1001),
     'dy50to120':(ROOT.kGreen+2, 1001),
     'dy120to200':(ROOT.kGreen+2, 1001),
     'dy200to400':(ROOT.kGreen+2, 1001),
@@ -36,15 +71,26 @@ styles = {
     'dy2300to3500':(ROOT.kGreen+2, 1001),
     'dy3500to4500':(ROOT.kGreen+2, 1001),
     'dy4500to6000':(ROOT.kGreen+2, 1001),
-    'dy6000':(ROOT.kGreen+2, 1001),
+#    'dy6000':(ROOT.kGreen+2, 1001),
+    'ttbar_lep':(ROOT.kBlue,1001),
     'ttbar_pow':(ROOT.kBlue,1001),
-    'ww_incl':(ROOT.kOrange,1001),
-    'zz_incl':(ROOT.kOrange,1001),
-    'wz':(ROOT.kOrange,1001),
-    'tWtop':(ROOT.kYellow,1001),
-    'tWantitop':(ROOT.kYellow,1001),
-    'wjets':(ROOT.kViolet,1001),
-    'qcd50to80':(ROOT.kViolet,1001),
+    'WWinclusive':(ROOT.kOrange,1001),
+    'WW200to600':(ROOT.kOrange,1001),
+    'WW600to1200':(ROOT.kOrange,1001),
+    'WW1200to2500':(ROOT.kOrange,1001),
+    'WW2500':(ROOT.kOrange,1001),
+    'ZZ':(ROOT.kOrange,1001),
+    'WZ':(ROOT.kOrange,1001),
+    'tW':(ROOT.kYellow,1001),
+    'Wantitop':(ROOT.kYellow,1001),
+    'Wjets':(ROOT.kViolet,1001),
+#    'ww_incl':(ROOT.kOrange,1001),
+#    'zz_incl':(ROOT.kOrange,1001),
+#    'wz':(ROOT.kOrange,1001),
+#    'tWtop':(ROOT.kYellow,1001),
+#    'tWantitop':(ROOT.kYellow,1001),
+#    'wjets':(ROOT.kViolet,1001),
+#    'qcd50to80':(ROOT.kViolet,1001),
     'qcd80to120':(ROOT.kViolet,1001),
     'qcd120to170':(ROOT.kViolet,1001),
     'qcd170to300':(ROOT.kViolet,1001),
@@ -57,6 +103,8 @@ styles = {
     'qcd1800to2400':(ROOT.kViolet,1001),
     'qcd2400to3200':(ROOT.kViolet,1001),
     'qcd3200':(ROOT.kViolet,1001),
+
+
 }
 
 nminus1s = [
@@ -71,7 +119,7 @@ nminus1s = [
     'NoB2B',
     'NoDptPt',
     #'NoCosm',
-    'NoTrgMtch',
+    #'NoTrgMtch',
     ]
 
 tightnm1 = [
@@ -108,6 +156,7 @@ pretty = {
     'dataCD': 'Data RunC+D, %.1f fb^{-1}, MuonOnly',
     'dataBCD': 'Data, %.1f fb^{-1}, 2015 MuonOnly',
     '120m': 'm > 120 GeV',
+    '500m': 'm > 500 GeV',
     '60m120': '60 < m < 120 GeV',
     'zpsi5000': 'Z\'_{#psi}, M=5000 GeV',
     'dy50to120': 'DY#rightarrow#mu#mu 50 < m < 120 GeV',
@@ -120,6 +169,7 @@ pretty = {
     'dy3500to4500': 'DY#rightarrow#mu#mu 3500 < m < 4500 GeV',
     'dy4500to6000': 'DY#rightarrow#mu#mu 4500 < m < 6000 GeV',
     'dy6000': 'DY#rightarrow#mu#mu m > 6000 GeV',
+    'ttbar_lep': 't#bar{t} lep',
     'ttbar_pow': 't#bar{t} powheg',
     'ww_incl': 'WW',
     'zz_incl': 'ZZ',
@@ -234,8 +284,8 @@ def table_wald(entry,nminus1, mass_range):
             else:
                 errw = (eff*(1-eff)/den)**0.5
         if 'data' not in entry.name:
-            num = num*entry.partial_weight*lumiBCD
-            den = den*entry.partial_weight*lumiBCD
+        	num = num*entry.partial_weight*lumiBCD
+        	den = den*entry.partial_weight*lumiBCD
         print '%20s%15i%15i%20f%20f%15f%15f%15f%23f'     % (nminus1, mlow, mhigh, num, den, eff, eff-lcp, hcp-eff,        errw)
         print '%20s%15i%15i%20f%20f%15f%15f%15f%15f%16f' % (nminus1, mlow, mhigh, num, den, eff, lcp,     hcp,     eff-errw, eff+errw)
         print ' '
@@ -259,8 +309,9 @@ def table(entry,nminus1, mass_range):
 class nm1entry:
     def __init__(self, sample, is_data, lumi):
         if type(sample) == str:
-            self.name = sample
-            self.fn = 'data/ana_nminus1_%s.root' %sample
+            self.name = sample      
+            self.fn = '/afs/cern.ch/work/f/ferrico/private/Codice_ZPrime_8_NoTrigger/CMSSW_8_0_3_patch1/src/SUSYBSMAnalysis/Zprime2muAnalysis/test/NMinus1Effs/data/ana_nminus1_data.root' #%sample
+            #self.fn = 'data/ana_nminus1_%s_%s.root' % (sample, tipo)
             #self.fn = self.make_fn(sample) if is_data else None
             self.lumi = lumi if is_data else None
             self.is_data = is_data
@@ -272,15 +323,20 @@ class nm1entry:
         self.prepare_histos()
             
 
-    def make_fn(self, name):
-        return 'mc/ana_nminus1_%s.root' % name
+    def make_fn(self, name):   
+        #return 'mc/ana_nminus1_%s.root' % name
+        return '/afs/cern.ch/work/f/ferrico/private/Codice_ZPrime_8_NoTrigger/CMSSW_8_0_3_patch1/src/SUSYBSMAnalysis/Zprime2muAnalysis/test/NMinus1Effs/mc_%s/ana_nminus1_%s.root' % (tipo, name)        
+        #return 'mc_TriggerScale/ana_nminus1_%s.root' % name
+        
+        
     
     def prepare_histos(self):
         self.histos = {}
         if self.fn is not None:
             f = ROOT.TFile(self.fn)
             for nminus1 in nminus1s + ['NoNo']:
-                self.histos[nminus1] = f.Get(nminus1).Get('DimuonMassVertexConstrained').Clone()
+                self.histos[nminus1] = f.Get(nminus1).Get(cartella).Clone()
+#                self.histos[nminus1] = f.Get(nminus1).Get('DimuonMassVertexConstrained').Clone()
 
     # This function isn't used anymore, but keep for posterity? cjsbad
     def prepare_histos_sum(self, samples, lumi):
@@ -290,7 +346,8 @@ class nm1entry:
             print '%20s%20s%21s%20s%20s' % ('cut', 'sampe name', 'partial weight', 'scale(ref)','scale(lumi)')
             for sample in samples:
                 f = ROOT.TFile(self.make_fn(sample.name))
-                h = f.Get(nminus1).Get('DimuonMassVertexConstrained').Clone()
+                #h = f.Get(nminus1).Get('DimuonMassVertexConstrained').Clone()
+                h = f.Get(nminus1).Get(cartella).Clone()
                 if lumi>0:
                     # scale to luminosity for comparision of single dataset to MC
                     h.Scale(sample.partial_weight * lumi) 
@@ -302,5 +359,4 @@ class nm1entry:
             for h in hs[1:]:
                 hsum.Add(h)
             self.histos[nminus1] = hsum
-
 

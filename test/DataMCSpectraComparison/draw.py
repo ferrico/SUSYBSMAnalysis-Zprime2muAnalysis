@@ -9,7 +9,8 @@ from optparse import OptionParser
 # We have to optparse before ROOT does, or else it will eat our
 # options (at least -h/--help gets eaten). So don't move this!
 parser = OptionParser()
-parser.add_option('-d', '--histo-dir', dest='histo_dir', default='data/DCSOnly',
+#parser.add_option('-d', '--histo-dir', dest='histo_dir', default='data/DCSOnly',
+parser.add_option('-d', '--histo-dir', dest='histo_dir', default='/afs/cern.ch/work/f/ferrico/private/Codice_ZPrime_8_NoTrigger/CMSSW_8_0_3_patch1/src/SUSYBSMAnalysis/Zprime2muAnalysis/test/DataMCSpectraComparison/data/',
                   help='Directory containing the input files for the data. Default is %default. The files expected to be in this directory are ana_datamc_data.root, the ROOT file containing the input histograms, and ana_datamc_data.lumi, the log file from the output of LumiCalc. Optionally the directory can contain a link to a directory for MC histogram ROOT files; the link/directory must be named "mc".')
 parser.add_option('--no-print-table', action='store_false', dest='print_table', default=True,
                   help='Do not print out the ASCII table of event counts in specified mass ranges.')
@@ -113,12 +114,12 @@ class Drawer:
         # a given histo_dir. If none there, check if there is one
         # specified in options.  Else, use the general mc dir from the
         # current directory.
-        self.mc_dir = os.path.join(self.histo_dir, 'mc')
+        self.mc_dir = os.path.join(self.histo_dir, '/afs/cern.ch/work/f/ferrico/private/Codice_ZPrime_8_NoTrigger/CMSSW_8_0_3_patch1/src/SUSYBSMAnalysis/Zprime2muAnalysis/test/DataMCSpectraComparison/mc_TriggerScale/')
         if not os.path.isdir(self.mc_dir):
             if hasattr(options, 'mc_dir'):
                 self.mc_dir = options.mc_dir
             else:
-                self.mc_dir = 'mc'
+                self.mc_dir = '/afs/cern.ch/work/f/ferrico/private/Codice_ZPrime_8_NoTrigger/CMSSW_8_0_3_patch1/src/SUSYBSMAnalysis/Zprime2muAnalysis/test/DataMCSpectraComparison/mc_TriggerScale/'
         if not os.path.isdir(self.mc_dir):
             raise ValueError('mc_dir %s is not a directory' % self.mc_dir)
 
@@ -147,10 +148,14 @@ class Drawer:
 
         # Defaults for the dileptons, cutsets, and mass ranges for the
         # ASCII table.
-        self.quantities_to_compare = ['DileptonMass', 'DimuonMassVertexConstrained']
-        self.dileptons = ['MuonsPlusMuonsMinus', 'MuonsSameSign', 'MuonsAllSigns', 'MuonsElectronsOppSign', 'MuonsElectronsSameSign', 'MuonsElectronsAllSigns']
+#        self.quantities_to_compare = ['DileptonMass', 'DimuonMassVertexConstrained']
+#        self.dileptons = ['MuonsPlusMuonsMinusBarrel', 'MuonsPlusMuonsMinusPositive', 'MuonsPlusMuonsMinusNegative',
+#        				  'MuonsPlusMuonsMinus', 'MuonsSameSign', 'MuonsAllSigns', 'MuonsElectronsOppSign', 'MuonsElectronsSameSign', 'MuonsElectronsAllSigns']
+        self.quantities_to_compare = ['DileptonMass', 'DimuonMassVertexConstrained', 'DimuonMassVertexConstrained_bb', 'DimuonMassVertexConstrained_ne', 'DimuonMassVertexConstrained_pe']
+        self.dileptons = ['MuonsPlusMuonsMinusBarrel']
+
 #        self.cutsets = ['VBTF', 'OurNew', 'OurOld', 'Simple', 'EmuVeto', 'OurNoIso', 'OurMuPrescaled', 'VBTFMuPrescaled']
-        self.cutsets = ['Our2012', 'Simple']
+        self.cutsets = ['Our2012']#, 'Simple']
         self.mass_ranges_for_table = [(50,)]
 #        self.mass_ranges_for_table = [(60,120), (120,200), (200,400), (400,600), (600,900), (900,1300), (1300,1800), (1800,), (120,), (200,), (400,), (600,),]
 
@@ -231,7 +236,9 @@ class Drawer:
         if dilepton == 'MuonsSameSign':
             if quantity_to_compare == 'DileptonMass':
                 return 5
-        if quantity_to_compare in ['DileptonMass', 'DimuonMassVertexConstrained', 'DileptonPt', 'LeptonPt']:
+        if quantity_to_compare in ['DileptonMass', 'DimuonMassVertexConstrained', 'DimuonMassVertexConstrained_bb',
+        								'DimuonMassVertexConstrained_ne', 'DimuonMassVertexConstrained_pe',
+        							 'DileptonPt', 'LeptonPt']:
             return 5
 #            return 50
 #        if quantity_to_compare in ['RelCombIso', 'RelIsoSumPt']:
@@ -266,12 +273,14 @@ class Drawer:
         if quantity_to_compare == 'RelIsoSumPt':
             return 0,0.1
         if 'Electron' in dilepton:
-            return 100, 1000
+            return 100, 3500
         if 'MuonsSameSign' in dilepton:
-            if quantity_to_compare in ['DileptonMass', 'DimuonMassVertexConstrained']:
-                return 50, 1000
-        if quantity_to_compare in ['DileptonMass', 'DimuonMassVertexConstrained']:
-            return 50, 1000
+            if quantity_to_compare in ['DileptonMass', 'DimuonMassVertexConstrained', 'DimuonMassVertexConstrained_bb',
+        								'DimuonMassVertexConstrained_ne', 'DimuonMassVertexConstrained_pe',]:
+                return 50, 3500
+        if quantity_to_compare in ['DileptonMass', 'DimuonMassVertexConstrained', 'DimuonMassVertexConstrained_bb',
+        								'DimuonMassVertexConstrained_ne', 'DimuonMassVertexConstrained_pe',]:
+            return 50, 3500
 #            return 60, 2000
 #            return 120, 1120
         elif quantity_to_compare in ['DileptonPt', 'LeptonPt']:
@@ -343,6 +352,9 @@ class Drawer:
 
     def subtitleize(self, dilepton):
         return {
+        	'MuonsPlusMuonsMinusBarrel':  '#mu^{+}#mu^{-} ----> BB',
+  			'MuonsPlusMuonsMinusPositive':'#mu^{+}#mu^{-} ----> E+',
+    		'MuonsPlusMuonsMinusNegative':'#mu^{+}#mu^{-} ----> E-',
             'MuonsPlusMuonsMinus': '#mu^{+}#mu^{-}',
             'MuonsPlusMuonsPlus':  '#mu^{+}#mu^{+}',
             'MuonsMinusMuonsMinus': '#mu^{-}#mu^{-}',
@@ -366,6 +378,9 @@ class Drawer:
         return {
             'DileptonMass': 'm(%s)%s',
             'DimuonMassVertexConstrained': 'm(%s)%s',
+            'DimuonMassVertexConstrained_bb': 'm(%s)%s',
+            'DimuonMassVertexConstrained_ne': 'm(%s)%s',
+            'DimuonMassVertexConstrained_pe': 'm(%s)%s',
             'DimuonMassVtxConstrainedLog': 'm(%s)%s',
             'DileptonPt': '%s p_{T}%s',
             'DileptonRap': '%s rapidity%s',
@@ -379,6 +394,9 @@ class Drawer:
         return {
             'DileptonMass': ' [GeV]',
             'DimuonMassVertexConstrained': ' [GeV]',
+            'DimuonMassVertexConstrained_bb': ' [GeV]',
+            'DimuonMassVertexConstrained_ne': ' [GeV]',
+            'DimuonMassVertexConstrained_pe': ' [GeV]',
             'DimuonMassVtxConstrainedLog': ' [GeV]',
             'DileptonPt': ' [GeV]',
             'LeptonPt': ' [GeV]',
@@ -411,7 +429,7 @@ class Drawer:
         # it, rebin/scale/otherwise manipulate it as necessary, and
         # store the result as The Histogram in the sample object.
         for sample in self.samples:
-            if (self.qcd_from_data and 'MuPrescaled' not in cutset and 'Electron' not in dilepton and sample.name == 'inclmu15' and quantity_to_compare in ['DileptonMass', 'DimuonMassVertexConstrained', 'DimuonMassVtxConstrainedLog']):
+            if (self.qcd_from_data and 'MuPrescaled' not in cutset and 'Electron' not in dilepton and sample.name == 'inclmu15' and quantity_to_compare in ['DileptonMass', 'DimuonMassVertexConstrained', 'DimuonMassVertexConstrained_bb', 'DimuonMassVertexConstrained_ne','DimuonMassVertexConstrained_pe','DimuonMassVtxConstrainedLog']):
                 # Replace QCD MC prediction by that obtained from data.
                 mc_fn = os.path.join('./', 'qcd_from_data.root')
                 f = ROOT.TFile(mc_fn)
@@ -479,7 +497,7 @@ class Drawer:
                     sample.scaled_by = sample.scaled_by / overall_prescale
 
             # Assume that the QCD histogram includes W+jets as well.
-            if (self.qcd_from_data and 'MuPrescaled' not in cutset and 'Electron' not in dilepton and sample.name in ('wmunu', 'wjets') and quantity_to_compare in ['DileptonMass', 'DimuonMassVertexConstrained', 'DimuonMassVtxConstrainedLog']):
+            if (self.qcd_from_data and 'MuPrescaled' not in cutset and 'Electron' not in dilepton and sample.name in ('wmunu', 'wjets') and quantity_to_compare in ['DileptonMass', 'DimuonMassVertexConstrained', 'DimuonMassVertexConstrained_bb', 'DimuonMassVertexConstrained_ne','DimuonMassVertexConstrained_pe','DimuonMassVtxConstrainedLog']):
                 nbins = sample.histogram.GetNbinsX()
                 for ibin in range(1, nbins+1):
                     sample.histogram.SetBinContent(ibin, 0.)
@@ -754,6 +772,7 @@ class Drawer:
                 mymax = yrange[1]
 
         mymin = 0.05
+        mymin = 0.0000005
     
         if mymin is not None: s.SetMinimum(mymin)
         if mymax is not None: s.SetMaximum(mymax)
@@ -812,8 +831,8 @@ class Drawer:
 
         # Adorn the plot with legend and labels.
         l = self.draw_legend(dilepton, cumulative, log_x)
-#        t = ROOT.TPaveLabel(0.20, 0.89, 0.86, 0.99, 'CMS Preliminary   #sqrt{s} = 8 TeV    #int L dt = %.f pb^{-1}' % round(self.int_lumi), 'brNDC')
-        t = ROOT.TPaveLabel(0.30, 0.89, 0.96, 0.99, 'CMS Preliminary   #sqrt{s} = 13 TeV   #int L dt = 10.9 pb^{-1}', 'brNDC')
+        t = ROOT.TPaveLabel(0.20, 0.89, 0.86, 0.99, 'CMS Preliminary   #sqrt{s} = 13 TeV    #int L dt = %.f pb^{-1}' % round(self.int_lumi), 'brNDC')
+#        t = ROOT.TPaveLabel(0.30, 0.89, 0.96, 0.99, 'CMS Preliminary   #sqrt{s} = 13 TeV   #int L dt = 10.9 pb^{-1}', 'brNDC')
         t.SetTextSize(0.35)
         t.SetBorderSize(0)
         t.SetFillColor(0)
@@ -895,7 +914,7 @@ class Drawer:
         if dilepton != 'MuonsPlusMuonsMinus':
             return
 #        if quantity_to_compare != 'DimuonMassVtxConstrainedLog':
-        if quantity_to_compare != 'DimuonMassVertexConstrained':
+        if quantity_to_compare != 'DimuonMassVertexConstrained' or quantity_to_compare != 'DimuonMassVertexConstrained_bb' or quantity_to_compare != 'DimuonMassVertexConstrained_ne' or quantity_to_compare != 'DimuonMassVertexConstrained_pe':
             return
 
         zdy_ifois = 0

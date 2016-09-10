@@ -3,8 +3,7 @@
 import os
 from SUSYBSMAnalysis.Zprime2muAnalysis.roottools import ROOT
 
-path = 'data/Run2015MuonsOnly/ana_datamc_data.root'
-#path = './zp2mu_histos.root'
+path = '/afs/cern.ch/work/f/ferrico/private/Codice_ZPrime_8/CMSSW_8_0_3_patch1/src/SUSYBSMAnalysis/Zprime2muAnalysis/test/DataMCSpectraComparison/data/Run2016MuonsOnly/ana_datamc_data.root'#path = './zp2mu_histos.root'
 tmp_fn = 'micro_ntupleNew.temp.txt'
 #branch_spec = 'vertex_m'
 branch_spec = 'run:lumi:event:vertex_m:'#dil_mass
@@ -45,7 +44,7 @@ for x in lines:
 lines = ['\t'.join(y.strip() for y in x) for x in cleaned_lines]
 open(tmp_fn, 'wt').write('\n'.join(lines))
 
-f = ROOT.TFile(path.replace('.root', '.microtuple.root'), 'CREATE')
+f = ROOT.TFile(path.replace('.root', '.microtuple.root'), 'RECREATE')
 t = ROOT.TTree('t','')
 t.ReadFile(tmp_fn, 'vertex_m')
 f.Write()

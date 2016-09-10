@@ -13,17 +13,13 @@ ROOT.gStyle.SetTitleX(0.12)
 #ROOT.gStyle.SetTitleH(0.07)
 ROOT.TH1.AddDirectory(0)
 
-from nm1entry import *
-
-print cartella
-
 outfile = ROOT.TFile("whargl_mass.root","recreate")
 iarp=0
 mcN=0
 drawDY = True
 do_tight = 'tight' in sys.argv
 #psn = 'plots/nminus1effs'
-psn = 'plots/TuneP_13_pb_TriggerScale/' + cartella + '/mass/'
+psn = 'plots/categories/pe/mass'
 #psn = 'plots/paper2016/mass_onlyDY'
 # 'plots' = '/afs/cern.ch/work/c/cschnaib/NMinus1Effs/plots/TAG/'
 if do_tight:
@@ -59,6 +55,97 @@ else:
         'NoTrgMtch',
         ]
 
+pretty = {
+    'NoPt': 'p_{T} > 53 GeV',
+    'NoTkLayers': '# tk lay > 5',
+    'NoPxHits': '# px hits > 0',
+    'NoMuStns': '# mu segs > 1',
+    'NoDB': '|dxy| < 0.2',
+    'NoGlbChi2': 'glb #chi^{2}/ndf < 10',
+    'NoTkMuon': 'isTrackerMuon',
+    'NoMuHits': '# mu hits > 0',
+    'NoMuMatch': '# matched stations > 1',
+    'NoCosm': 'anti-cosmic',
+    'NoTrgMtch': 'HLT match',
+    'NoB2B': 'back-to-back',
+    'NoVtxProb': '#chi^{2} #mu#mu vtx < 20',
+    'NoDptPt': 'dpT/pT',
+    'NoIso': 'rel. tk. iso.',
+    #'data': 'Data, %.1f fb^{-1}',
+    'data': 'Data, %.1f fb^{-1}, MuonOnly',
+    'dataB': 'Data RunB, %.1f fb^{-1}, MuonOnly',
+    #'data': 'Data RunC+D, %.1f fb^{-1}, MuonOnly',
+    'dataBCD': 'Data RunB+C+D, %.1f fb^{-1}, MuonOnly',
+    'mcsum_lumi': 'Simulation',
+    'mcsum_ref': 'Simulation',
+    'mc50m120_lumi': 'Simulation 60 < M < 120 GeV',
+    'mc50m120_ref': 'Simulation 60 < M < 120 GeV',
+    'mc120m_lumi': 'Simulation M > 120 GeV',
+    'mc120m_ref': 'Simulation M > 120 GeV',
+    'mc800m2300_lumi': 'Simulation 800 < M < 2300 GeV',
+    'mc800m2300_ref': 'Simulation 800 < M < 2300 GeV',
+    'mc400m2300_lumi': 'Simulation 400 < M < 2300 GeV',
+    'mc400m2300_ref': 'Simulation 400 < M < 2300 GeV',
+    'zmumu': 'Z#rightarrow#mu#mu, 60 < M < 120 GeV',
+    'dy120_c1': 'DY#rightarrow#mu#mu, M > 120 GeV',
+    'dy200_c1': 'DY#rightarrow#mu#mu, M > 200 GeV',
+    'dy500_c1': 'DY#rightarrow#mu#mu, M > 500 GeV',
+    'dy1000_c1': 'DY#rightarrow#mu#mu, M > 1000 GeV',
+    'dy50': 'DY#rightarrow#mu#mu madgraph',
+#    'dy50': 'DY#rightarrow#mu#mu, M > 50 GeV',
+    'dy50to120': 'DY#rightarrow#mu#mu 50 < m < 120 GeV',
+    'dy120to200': 'DY#rightarrow#mu#mu 120 < m < 200 GeV',
+    'dy200to400': 'DY#rightarrow#mu#mu 200 < m < 400 GeV',
+    'dy400to800': 'DY#rightarrow#mu#mu 400 < m < 800 GeV',
+    'dy800to1400': 'DY#rightarrow#mu#mu 800 < m < 1400 GeV',
+    'dy1400to2300': 'DY#rightarrow#mu#mu 1400 < m < 2300 GeV',
+    'dy2300to3500': 'DY#rightarrow#mu#mu 2300 < m < 3500 GeV',
+    'dy3500to4500': 'DY#rightarrow#mu#mu 3500 < m < 4500 GeV',
+    'dy4500to6000': 'DY#rightarrow#mu#mu 4500 < m < 6000 GeV',
+    'dy50_startup': 'DY#rightarrow#mu#mu startup',
+    'ttbar': 't#bar{t}',
+    'ttbar_pow': 't#bar{t} powheg',
+    'ttbar_startup': 't#bar{t} startup',
+    'WWinclusive': 'WW: 50 < m < 200',
+    'WW200to600': 'WW: 200 < m < 600',
+    'WW600to1200': 'WW: 600 < m < 1200',
+    'WW1200to2500': 'WW: 1200 < m < 2500',
+    'WW2500': 'WW: m > 2500',    'ZZ': 'ZZ',
+    'WZ' : 'WZ',
+    'dyInclusive' : 'TauTau',
+    'inclmu15': 'QCD',
+    'zssm1000': 'Z\' SSM, M=1000 GeV',
+    'zpsi5000': 'Z\'_{#psi}, M=5000 GeV',
+    'zpsi5000_m1TeV': 'Z\'_{#psi}, M=5000 GeV',
+    'zpsi5000_1m3TeV': 'Z\'_{#psi}, M=5000 GeV',
+    'zpsi5000_3mTeV': 'Z\'_{#psi}, M=5000 GeV',
+    '60m120_BCD': '60 < m < 120 GeV',
+    '60m120_CD': '60 < m < 120 GeV',
+    '60m120': '60 < m < 120 GeV',
+    '70m110': '70 < m < 110 GeV',
+    '120m200': '120 < m < 200 GeV', 
+    '200m400': '200 < m < 400 GeV',
+    '400m600': '400 < m < 600 GeV',
+    '200m': 'm > 200 GeV',
+    '50m': 'm > 50 GeV',
+    '70m': 'm > 70 GeV',
+    '120m_BCD': 'm > 120 GeV',
+    '120m_CD': 'm > 120 GeV',
+    '120m': 'm > 120 GeV',
+    'DY120to200Powheg': 'DY#rightarrow#mu#mu 120 < m < 200 GeV',
+    'DY200to400Powheg': 'DY#rightarrow#mu#mu 200 < m < 400 GeV',
+    'DY400to800Powheg': 'DY#rightarrow#mu#mu 400 < m < 800 GeV',
+    'DY800to1400Powheg': 'DY#rightarrow#mu#mu 800 < m < 1400 GeV',
+    'dy1400to2300': 'DY#rightarrow#mu#mu 1400 < m < 2300 GeV',
+    '400m800' : '400 < m < 800 GeV',
+    '800m1400': '800 < m < 1400 GeV',
+    '1400m2300':'1400 < m < 2300 GeV',
+    '800m2300':'800 < m < 2300 GeV',
+    '400m2300':'400 < m < 2300 GeV',
+    'all_lumi':'Simulation M > 120 GeV',
+    'all_ref':'Simulation M > 120 GeV',
+    '120m1400':'120 < M < 1400 GeV',
+    }
 
 class nm1entry:
     def __init__(self, sample, is_data, lumi):
@@ -76,20 +163,21 @@ class nm1entry:
         self.prepare_histos()
             
     def make_fn(self, name):
-        return 'mc_TriggerScale/ana_nminus1_%s.root' % name
+        return 'mc/ana_nminus1_%s.root' % name
     
     def prepare_histos(self):
         self.histos = {}
         if self.fn is not None:
             f = ROOT.TFile(self.fn)
             for nminus1 in nminus1s + ['NoNo']:
-                self.histos[nminus1] = f.Get(nminus1).Get(cartella).Clone()#DileptonMass
+                self.histos[nminus1] = f.Get(nminus1).Get('DimuonMassVertexConstrained_pe').Clone()#DileptonMass
                 '''
                 if nminus1=='NoVtxProb':
                     #self.histos[nminus1] = f.Get(nminus1).Get('DileptonMass').Clone()
-                    self.histos[nminus1] = f.Get(nminus1).Get(cartella).Clone()
+                    self.histos[nminus1] = f.Get(nminus1).Get('DimuonMassVertexConstrained_pe').Clone()#DileptonMass
+
                 else:
-                    self.histos[nminus1] = f.Get(nminus1).Get(cartella).Clone()#DileptonMass
+                    self.histos[nminus1] = f.Get(nminus1).Get('DimuonMassVertexConstrained_pe').Clone()#DileptonMass
                 '''
 
     def prepare_histos_sum(self, samples, lumi):
@@ -101,9 +189,9 @@ class nm1entry:
                 f = ROOT.TFile(self.make_fn(sample.name))
                 if nminus1 == 'NoVtxProb':
                     #h = f.Get(nminus1).Get('DileptonMass').Clone()
-                    h = f.Get(nminus1).Get(cartella).Clone()
+                	h = f.Get(nminus1).Get('DimuonMassVertexConstrained_pe').Clone()
                 else:
-                    h = f.Get(nminus1).Get(cartella).Clone()
+                    h = f.Get(nminus1).Get('DimuonMassVertexConstrained_pe').Clone()
                 #print '%20s%20s%20.15f%20f%20f' % (nminus1, sample.name, sample.partial_weight, refN/refXS, lumiBCD)
                 # partial_weight = cross_section * k_factor / Nevents
                 if lumi>0:
@@ -125,7 +213,7 @@ class nm1entry:
 #data, lumi = nm1entry('data', True), 242.8 # lumi in pb
 nolumi = -1
 #lumiB = 50.7 
-lumi = 13066.191#6293.188#4079.344#2231.20#1#2260.881 #2619.44
+lumi = 4079.344#2231.20#1#2260.881 #2619.44
 #lumiD = 2572.19
 #lumiBCD = 2660.14
 #lumiBCD = 2800.
@@ -140,13 +228,41 @@ data = nm1entry('data', True, lumi)#lumiCD )
 #wjets = nm1entry('wjets',False,lumiBCD)
 
 from SUSYBSMAnalysis.Zprime2muAnalysis.MCSamples import *
+#raw_samples = [dy50to120,DY120to200Powheg,DY200to400Powheg,DY400to800Powheg,DY800to1400Powheg,dy1400to2300,dy2300to3500,DY3500to4500Powheg,dy4500to6000,ttbar_pow_s,ww_incl_s,zz_incl,wz,tWtop,tWantitop,wjets]#inclmu15,
+#,qcd600to800,qcd120to170
+#raw_samples = [dy50to120_s,dy120to200_s,dy200to400_s,dy400to800_s,dy800to1400_s,dy1400to2300_s,dy2300to3500_s,dy3500to4500_s,dy4500to6000_s,dy6000_s,ttbar_pow,ww_incl,zz_incl,wz,wjets,tWtop,tWantitop,inclmu15,zpsi5000,qcd50to80,qcd80to120,qcd170to300,qcd300to470,qcd470to600,qcd800to1000,qcd1000to1400,qcd1400to1800,qcd1800to2400,qcd3200]
 
 #raw_samples = [dy50to120,dy120to200,dy200to400,dy400to800,dy800to1400,dy1400to2300,dy2300to3500,dy3500to4500,dy4500to6000,ttbar_pow,WWinclusive,ZZ,WZ,tW,Wantitop]
-raw_samples = [dy50to120,dy120to200,dy200to400,dy400to800,dy800to1400,dy1400to2300,dy2300to3500,dy3500to4500,dy4500to6000,WWinclusive, WW200to600, WW600to1200, WW1200to2500, WW2500, WZ,ZZ,Wantitop,tW,Wjets, ttbar_lep, dyInclusive50,qcd80to120,qcd120to170,qcd170to300,qcd300to470,qcd470to600,qcd600to800,qcd800to1000,qcd1000to1400,qcd1400to1800,qcd1800to2400,qcd2400to3200,qcd3200]#,
-#use_samples = [tW,Wantitop,WWinclusive,WZ,ZZ,ttbar_lep,dy50to120,dy120to200,dy200to400,dy400to800,dy800to1400,dy1400to2300,dy2300to3500,dy3500to4500,dy4500to6000]
-use_samples = [dy50to120,dy120to200,dy200to400,dy400to800,dy800to1400,dy1400to2300,dy2300to3500,dy3500to4500,dy4500to6000,WWinclusive, WW200to600, WW600to1200, WW1200to2500, WW2500, WZ,ZZ,Wantitop,tW,Wjets,ttbar_lep, dyInclusive50, qcd80to120,qcd120to170,qcd170to300,qcd300to470,qcd470to600,qcd600to800,qcd800to1000,qcd1000to1400,qcd1400to1800,qcd1800to2400,qcd2400to3200,qcd3200]#,ttbar_lep, dyInclusive50print lumi
+raw_samples = [dy50to120,dy120to200,dy200to400,dy400to800,dy800to1400,dy1400to2300,dy2300to3500,dy3500to4500,dy4500to6000,WWinclusive, WW200to600, WW600to1200, WW1200to2500, WW2500, WZ,ZZ,Wantitop,tW,Wjets, ttbar_pow, dyInclusive50,qcd80to120,qcd120to170,qcd170to300,qcd300to470,qcd470to600,qcd600to800,qcd800to1000,qcd1000to1400,qcd1400to1800,qcd1800to2400,qcd2400to3200,qcd3200]#,
+#use_samples = [tW,Wantitop,WWinclusive,WZ,ZZ,ttbar_pow,dy50to120,dy120to200,dy200to400,dy400to800,dy800to1400,dy1400to2300,dy2300to3500,dy3500to4500,dy4500to6000]
+use_samples = [dy50to120,dy120to200,dy200to400,dy400to800,dy800to1400,dy1400to2300,dy2300to3500,dy3500to4500,dy4500to6000,WWinclusive, WW200to600, WW600to1200, WW1200to2500, WW2500, WZ,ZZ,Wantitop,tW,Wjets,ttbar_pow, dyInclusive50, qcd80to120,qcd120to170,qcd170to300,qcd300to470,qcd470to600,qcd600to800,qcd800to1000,qcd1000to1400,qcd1400to1800,qcd1800to2400,qcd2400to3200,qcd3200]#,ttbar_pow, dyInclusive50print lumi
 
 
+#dy_samples = [dy50to120,dy120to200,dy200to400,dy400to800,dy800to1400,dy1400to2300,dy2300to3500,dy3500to4500,dy4500to6000]#dy6000,
+
+#nonDY_samples = [ttbar_pow,ww_incl,zz_incl,wz,wjets,tWtop,tWantitop,qcd50to80,qcd80to120,qcd170to300,qcd300to470,qcd470to600,qcd800to1000,qcd1000to1400,qcd1400to1800,qcd1800to2400,qcd3200]#dy6000_s,
+
+#EWKnoDY_samples = [ttbar_pow,ww_incl,zz_incl,wz,tWtop,tWantitop]#dy6000_s,
+
+#noQCD_samples = [dy50to120_s,dy120to200_s,dy200to400_s,dy400to800_s,dy800to1400_s,dy1400to2300_s,dy2300to3500_s,dy3500to4500_s,dy4500to6000_s,ttbar_pow,ww_incl,zz_incl,wz,wjets,tWtop,tWantitop]
+
+#QCD_samples = [qcd50to80,qcd80to120,qcd170to300,qcd300to470,qcd470to600,qcd800to1000,qcd1000to1400,qcd1400to1800,qcd1800to2400,qcd3200]
+
+#diboson_samples = [ww_incl, zz_incl, wz]
+
+#stop_samples = [tWtop, tWantitop]
+
+#ttbar_samples = [ttbar_pow]
+
+#wjets_samples = [wjets]
+
+#noQCDwjets_samples = [dy50to120_s,dy120to200_s,dy200to400_s,dy400to800_s,dy800to1400_s,dy1400to2300_s,dy2300to3500_s,dy3500to4500_s,dy4500to6000_s,ttbar_pow,ww_incl,zz_incl,wz,tWtop,tWantitop]
+
+#QCDwjets_samples = [qcd50to80,qcd80to120,qcd170to300,qcd300to470,qcd470to600,qcd800to1000,qcd1000to1400,qcd1400to1800,qcd1800to2400,qcd3200,wjets]
+
+#zpsi5000_samples = [zpsi5000]
+
+#EWKnoDYwjets_samples = [ttbar_pow,ww_incl,zz_incl,wz,tWtop,tWantitop]
 
 #refXS = dy50to120_s.cross_section
 #refN = dy50to120_s.nevents
@@ -250,6 +366,56 @@ to_use = {
     #'NoTrgMtch':[EWKnoDY,Zpsi5000,noDY,dy,dataBCD],
     }
 
+styles = {
+#    'sample':    (color, draw/fill style),
+    'dataB':      (ROOT.kBlack,     -1),
+    'data':      (ROOT.kBlack,     -1),
+    'dataBCD':      (ROOT.kBlack,     -1),
+    'dy50to120':(ROOT.kGreen+2, 1001),
+    'dy120to200':(ROOT.kGreen+2, 1001),
+    'dy200to400':(ROOT.kGreen+2, 1001),
+    'dy400to800':(ROOT.kGreen+2, 1001),
+    'dy800to1400':(ROOT.kGreen+2, 1001),
+    'dy1400to2300':(ROOT.kGreen+2, 1001),
+    'dy2300to3500':(ROOT.kGreen+2, 1001),
+    'dy3500to4500':(ROOT.kGreen+2, 1001),
+    'dy4500to6000':(ROOT.kGreen+2, 1001),
+    #'dy50to120':(ROOT.kGreen+2, 1001),
+    #'dy120to200':(ROOT.kBlue, 1001),
+    #'dy200to400':(ROOT.kRed, 1001),
+    #'dy400to800':(ROOT.kYellow, 1001),
+    #'dy800to1400':(ROOT.kSpring, 1001),
+    #'dy1400to2300':(ROOT.kCyan, 1001),
+    #'dy2300to3500':(ROOT.kPink, 1001),
+    #'dy3500to4500':(ROOT.kOrange, 1001),
+    #'dy4500to6000':(ROOT.kTeal-6, 1001),
+    #'dy6000_s':(ROOT.kGreen+3, 1001),
+    'dyInclusive50': (ROOT.kGreen+2,1001),
+    'ttbar_pow':(ROOT.kBlue,1001),
+    'WWinclusive':(ROOT.kOrange,1001),
+    'WW200to600':(ROOT.kOrange,1001),
+    'WW600to1200':(ROOT.kOrange,1001),
+    'WW1200to2500':(ROOT.kOrange,1001),
+    'WW2500':(ROOT.kOrange,1001),
+    'ZZ':(ROOT.kOrange,1001),
+    'WZ':(ROOT.kOrange,1001),
+    'tW':(ROOT.kYellow,1001),
+    'Wantitop':(ROOT.kYellow,1001),
+    'Wjets':(ROOT.kViolet,1001),
+    'qcd50to80':(ROOT.kViolet,1001),
+    'qcd80to120':(ROOT.kViolet,1001),
+    'qcd120to170':(ROOT.kViolet,1001),
+    'qcd170to300':(ROOT.kViolet,1001),
+    'qcd300to470':(ROOT.kViolet,1001),
+    'qcd470to600':(ROOT.kViolet,1001),
+    'qcd600to800':(ROOT.kViolet,1001),
+    'qcd800to1000':(ROOT.kViolet,1001),
+    'qcd1000to1400':(ROOT.kViolet,1001),
+    'qcd1400to1800':(ROOT.kViolet,1001),
+    'qcd1800to2400':(ROOT.kViolet,1001),
+    'qcd2400to3200':(ROOT.kViolet,1001),
+    'qcd3200':(ROOT.kViolet,1001),
+    }
 
 yrange = {
 #   'sample':    (ymin,ymax),
@@ -491,25 +657,14 @@ for nminus1 in nminus1s:
         eff.Write("arp%d"%iarp)
         iarp+=1
     # end for entry in to_use[name]: # entry is a specific sample
-    
-    
-    t = ROOT.TPaveLabel(0.50, 0.525, 0.90, 0.625, categoria, 'brNDC')
+    t = ROOT.TPaveLabel(0.60, 0.425, 0.95, 0.525, 'category: E+', 'brNDC')
     t.SetTextFont(42)
     t.SetTextSize(0.5)
     t.SetBorderSize(0)
     t.SetFillColor(0)
     t.SetFillStyle(0)
-    tt = ROOT.TPaveLabel(0.50, 0.425, 0.90, 0.525, categoria_1, 'brNDC')
-    tt.SetTextFont(42)
-    tt.SetTextSize(0.5)
-    tt.SetBorderSize(0)
-    tt.SetFillColor(0)
-    tt.SetFillStyle(0)
-    tt.Draw() 
     t.Draw() 
-    
     lg.Draw()
     ps.save(nminus1+'_mass')
     print
-    print cartella
 # end for name, mass_range in mass_bins:

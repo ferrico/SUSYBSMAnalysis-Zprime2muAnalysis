@@ -24,8 +24,7 @@ def draw_test(tag, printStats, lumi, do_tight=False):
 
     # 'plots' = '/afs/cern.ch/work/c/cschnaib/Zprime2muAnalysis/NMinus1Effs/plots/TAG/tag'
     # TAG = MC/Data production TAG
-    psn = 'plots/TuneP_13_pb_TriggerScale/' + cartella + '/'
-
+    psn = 'plots/categories/bb/'
 #    psn = 'plots/fatti_con_80X_SAME_EVENT'
     if tag:
         psn = 'plots/%s'%tag
@@ -41,20 +40,22 @@ def draw_test(tag, printStats, lumi, do_tight=False):
     data = nm1entry('data', True, lumi)#lumiCD )
 
     # 50 < m < 120 GeV
-    samples50m120 = [dy50to120,dy120to200,dy200to400,dy400to800,dy800to1400,dy1400to2300,dy2300to3500,dy3500to4500,dy4500to6000,WWinclusive, WW200to600, WW600to1200, WW1200to2500, WW2500, WZ,ZZ,Wantitop,tW,Wjets,qcd80to120,qcd120to170,qcd170to300,qcd300to470,qcd470to600,qcd600to800,qcd800to1000,qcd1000to1400,qcd1400to1800,qcd1800to2400,qcd2400to3200,qcd3200,ttbar_lep, dyInclusive50]
+    samples50m120 = [dy50to120,dy120to200,dy200to400,dy400to800,dy800to1400,dy1400to2300,dy2300to3500,dy3500to4500,dy4500to6000,WWinclusive, WW200to600, WW600to1200, WW1200to2500, WW2500, WZ,ZZ,Wantitop,tW,Wjets,qcd80to120,qcd120to170,qcd170to300,qcd300to470,qcd470to600,qcd600to800,qcd800to1000,qcd1000to1400,qcd1400to1800,qcd1800to2400,qcd2400to3200,qcd3200,ttbar_pow, dyInclusive50]#,ttbar_pow, dyInclusive50
 #    samples50m120 = [dy200to400,dy400to800,dy800to1400, dy3500to4500,dy4500to6000]
     mc_samples_50m120 = [nm1entry(sample,False,lumi) for sample in samples50m120]
 
 
     # m > 120 GeV
-    samples120m = [dy50to120,dy120to200,dy200to400,dy400to800,dy800to1400,dy1400to2300,dy2300to3500,dy3500to4500,dy4500to6000,WWinclusive, WW200to600, WW600to1200, WW1200to2500, WW2500, WZ,ZZ,Wantitop,tW,Wjets,qcd80to120,qcd120to170,qcd170to300,qcd300to470,qcd470to600,qcd600to800,qcd800to1000,qcd1000to1400,qcd1400to1800,qcd1800to2400,qcd2400to3200,qcd3200,ttbar_lep, dyInclusive50]
+    samples120m = [dy50to120,dy120to200,dy200to400,dy400to800,dy800to1400,dy1400to2300,dy2300to3500,dy3500to4500,dy4500to6000,WWinclusive, WW200to600, WW600to1200, WW1200to2500, WW2500, WZ,ZZ,Wantitop,tW,Wjets,qcd80to120,qcd120to170,qcd170to300,qcd300to470,qcd470to600,qcd600to800,qcd800to1000,qcd1000to1400,qcd1400to1800,qcd1800to2400,qcd2400to3200,qcd3200,ttbar_pow, dyInclusive50]#,ttbar_pow, dyInclusive50
 #    samples120m = [dy200to400,dy400to800,dy800to1400, dy3500to4500,dy4500to6000]
     mc_samples_120m = [nm1entry(sample,False,lumi) for sample in samples120m]
 
     # m > 500 GeV
-    samples500m = [dy50to120,dy120to200,dy200to400,dy400to800,dy800to1400,dy1400to2300,dy2300to3500,dy3500to4500,dy4500to6000,WWinclusive, WW200to600, WW600to1200, WW1200to2500, WW2500, WZ,ZZ,Wantitop,tW,Wjets,qcd80to120,qcd120to170,qcd170to300,qcd300to470,qcd470to600,qcd600to800,qcd800to1000,qcd1000to1400,qcd1400to1800,qcd1800to2400,qcd2400to3200,qcd3200,ttbar_lep, dyInclusive50]
+    samples500m = [dy50to120,dy120to200,dy200to400,dy400to800,dy800to1400,dy1400to2300,dy2300to3500,dy3500to4500,dy4500to6000,WWinclusive, WW200to600, WW600to1200, WW1200to2500, WW2500, WZ,ZZ,Wantitop,tW,Wjets,qcd80to120,qcd120to170,qcd170to300,qcd300to470,qcd470to600,qcd600to800,qcd800to1000,qcd1000to1400,qcd1400to1800,qcd1800to2400,qcd2400to3200,qcd3200,ttbar_pow, dyInclusive50]#,ttbar_pow, dyInclusive50
 #    samples120m = [dy200to400,dy400to800,dy800to1400, dy3500to4500,dy4500to6000]
     mc_samples_500m = [nm1entry(sample,False,lumi) for sample in samples500m]
+
+
 
     mass_ranges = [
          ('60m120',(60,120)),
@@ -158,27 +159,16 @@ def draw_test(tag, printStats, lumi, do_tight=False):
             eff.Write("arp%d"%iarp)
             iarp+=1
 
-        t = ROOT.TPaveLabel(0.50, 0.525, 0.90, 0.625, categoria, 'brNDC')
-    	t.SetTextFont(42)
-    	t.SetTextSize(0.5)
-    	t.SetBorderSize(0)
-    	t.SetFillColor(0)
-    	t.SetFillStyle(0)
-    	tt = ROOT.TPaveLabel(0.50, 0.425, 0.90, 0.525, categoria_1, 'brNDC')
-    	tt.SetTextFont(42)
-    	tt.SetTextSize(0.5)
-    	tt.SetBorderSize(0)
-    	tt.SetFillColor(0)
-    	tt.SetFillStyle(0)
-    	tt.Draw() 
-    	t.Draw() 
-    	
-        
+	t = ROOT.TPaveLabel(0.50, 0.425, 0.90, 0.525, 'category: BB', 'brNDC')
+	t.SetTextFont(42)
+	t.SetTextSize(0.5)
+	t.SetBorderSize(0)
+	t.SetFillColor(0)
+	t.SetFillStyle(0)
+	t.Draw() 
         lg.Draw()
         ps.save(name)
         print(name, pretty_name)
-
-print cartella, tipo
 
 # ************************************************************************
 # Main

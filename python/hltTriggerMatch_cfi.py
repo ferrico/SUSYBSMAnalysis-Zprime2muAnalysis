@@ -20,7 +20,16 @@ trigger_paths = ['HLT_Mu50_v%i' % i for i in (1,2)]
 #trigger_paths = ['HLT_Mu45_eta2p1_v1']
 #trigger_paths = ['HLT_Mu50_v1']
 #trigger_match = 'userFloat("TriggerMatchPt") > %(trigger_pt_threshold)i && abs(userFloat("TriggerMatchEta")) < 2.1' % locals()
+
+##############################################################################
+# to add trigger match in MC production - change also TriggerDecision_cff.py #
+##############################################################################
 trigger_match = 'userFloat("TriggerMatchPt") > %(trigger_pt_threshold)i ' % locals()
+
+#################################################################################
+# to remove trigger match in MC production - change also TriggerDecision_cff.py #
+#################################################################################
+#trigger_match = '1>0' % locals()
 
 #overall_prescale = 1
 overall_prescale = 350

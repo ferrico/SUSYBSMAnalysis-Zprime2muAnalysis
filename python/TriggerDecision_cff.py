@@ -1,7 +1,14 @@
 import FWCore.ParameterSet.Config as cms
 
 triggerDecision = cms.PSet(doingElectrons = cms.bool(False),
+##############################################################################
+# to add trigger match in MC production - change also hltTriggerMatch_cfi.py #
+##############################################################################
                            useTrigger = cms.bool(True),
+#################################################################################
+# to remore trigger match in MC production - change also hltTriggerMatch_cfi.py #
+#################################################################################
+                           #useTrigger = cms.bool(False),
                            l1GtObjectMap = cms.InputTag('hltL1GtObjectMap'),
                            hltResults = cms.InputTag('TriggerResults', '', 'HLT'),
                            # Note: these next two paths should not be
@@ -13,4 +20,4 @@ triggerDecision = cms.PSet(doingElectrons = cms.bool(False),
                            # path in the Spring11/Summer11 MC.
                            l1Paths = cms.vstring('L1_SingleMu16er'),
                            hltPaths = cms.vstring('HLT_Mu50_v2')
-                           )
+)

@@ -193,7 +193,7 @@ config.Site.storageSite = 'T2_IT_Legnaro'
         lumi_lists = [
 #            'NoLumiMask'
 #            'DCSOnly',
-            'Run2015MuonsOnly',
+            'Run2016MuonsOnly',
 #            'Run2015',
             ]
 

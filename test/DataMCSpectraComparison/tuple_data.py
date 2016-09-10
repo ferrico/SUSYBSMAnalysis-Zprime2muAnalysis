@@ -11,7 +11,7 @@ process.source.fileNames = [
 #                            '/store/data/Run2015C/SingleMuon/AOD/PromptReco-v1/000/254/879/00000/72684170-9B4B-E511-A3BE-02163E0127FF.root',
                             ]
 #process.GlobalTag.globaltag = 'FT_53_V6C_AN4::All'
-process.GlobalTag.globaltag = '74X_dataRun2_Prompt_v2'
+process.GlobalTag.globaltag = '80X_dataRun2_Prompt_v8'
 #process.GlobalTag.globaltag = 'GR_P_V56'
 ##process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:com10_2013', '')
 process.maxEvents.input = -1
@@ -74,65 +74,87 @@ config.Data.ignoreLocality = True #x runD to avoid blacklist issue
         open('tmp.json', 'wt').write('{' + ', '.join(json) + '}')
         lumi_mask = 'tmp.json'
 
-        if run1 == 190782 and run2 == 190949:
-            # Special settings for 6-Aug reprocessing of 5 runs
-            dataset = '/SingleMu/Run2012A-recover-06Aug2012-v1/AOD'
-            name    = 'SingleMuRun2012A-recover-06Aug2012'
-            tag     = 'FT_53_V6C_AN4'
-        elif run1 >= 190450 and run1 < 193752:
-            dataset = '/SingleMu/Run2012A-13Jul2012-v1/AOD'
-            name    = 'SingleMuRun2012A-13Jul2012'
-            tag     = 'FT_53_V6C_AN4'
-        elif run1 >= 193752 and run1 < 196532:
-            dataset = '/SingleMu/Run2012B-13Jul2012-v1/AOD'
-            name    = 'SingleMuRun2012B-13Jul2012'
-            tag     = 'FT_53_V6C_AN4'
-        elif run1 >= 197556 and run1 < 198914:
-            dataset = '/SingleMu/Run2012C-24Aug2012-v1/AOD'
-            name    = 'SingleMuRun2012C-24Aug2012'
-            tag     = 'FT53_V10A_AN4'
-        elif run1 == 201191 and run2 == 201191:
-            # Special settings for Dec-11 reprocessing of 1 run
-            # (Recovery of 134/pb for Golden JSON.)
-            dataset = '/SingleMu/Run2012C-EcalRecover_11Dec2012-v1/AOD'
-            name    = 'SingleMuRun2012C-EcalRecover_11Dec2012'
-            tag     = 'GR_P_V42_AN2'            
-        elif run1 >= 198934 and run1 < 203773:
-            dataset = '/SingleMu/Run2012C-PromptReco-v2/AOD'
-            name    = 'SingleMuRun2012C-Prompt'
-            tag     = 'GR_P_V42_AN2'
-        elif run1 == 206066 and run2 == 206066:
-            dataset = '/SingleMu/Run2012D-PromptReco-v1/AOD'
-            name    = 'SingleMuRun2012D-Prompt'
-            tag     = 'GR_P_V42_AN2'
-#        elif run1 >= 203773:
-#            dataset = '/SingleMu/Run2012D-PromptReco-v1/AOD'
-#            name    = 'SingleMuRun2012D-Prompt'
-#            tag     = 'GR_P_V42_AN2'
 
-        #### Run2015A ###
-        if run1 == 246864 and run2 ==247068:
-            dataset = '/SingleMu/Run2015A-PromptReco-v1/AOD'
-            name    = 'SingleMuRun2015A-Prompt'
-            tag     = 'GR_P_V56'
-        #### Run2015B ###
-#        if run1 >= 250985 :
-#            dataset = '/ExpressPhysics/Run2015B-Express-v1/FEVT'
-#            name    = 'ExpressPhysicsRun2015B-Express'
-##            tag     = '74X_dataRun2_Express_v0'
-#            tag     = 'GR_E_V49'
-        if run1 >= 250985 and run2 < 253888:
-            dataset = '/SingleMuon/Run2015B-PromptReco-v1/AOD'
-            name    = 'SingleMuonRun2015B-Prompt'
-            tag     = 'GR_P_V56'
-        if run1 >= 253888 and run2 <= 254914:
-            dataset = '/SingleMuon/Run2015C-PromptReco-v1/AOD'
-            name    = 'SingleMuonRun2015C-Prompt'
-            tag     = '74X_dataRun2_Prompt_v1'
-        if run1 >= 256629:
-            dataset = '/SingleMuon/Run2015D-PromptReco-v3/AOD'
-            name    = 'SingleMuonRun2015D-Prompt'
-            tag     = '74X_dataRun2_Prompt_v2'
+>         if run1 >= 272007 and run2 <=273143:
+>             dataset = '/SingleMuon/Run2016B-PromptReco-v1/AOD'
+>             name    = 'SingleMuonRun2016B-Prompt-v1'
+>             tag     = '80X_dataRun2_Prompt_v8'
+>         elif run1 >= 273150 and run2 <=275376:
+>             dataset = '/SingleMuon/Run2016B-PromptReco-v2/AOD'
+>             name    = 'SingleMuonRun2016B-Prompt-v2'
+>             tag     = '80X_dataRun2_Prompt_v8'
+>         elif run1 >= 275377 and run2 <=276283:
+>             dataset = '/SingleMuon/Run2016C-PromptReco-v2/AOD'
+>             name    = 'SingleMuonRun2016C-Prompt-v2'
+>             tag     = '80X_dataRun2_Prompt_v9'
+>         elif run1 >= 276284 and run2 <=276811:
+>             dataset = '/SingleMuon/Run2016D-PromptReco-v2/AOD'
+>             name    = 'SingleMuonRun2016D-Prompt-v2'
+>             tag     = '80X_dataRun2_Prompt_v10'
+>         elif run1 >= 276831 and run2 <=277420:
+>             dataset = '/SingleMuon/Run2016E-PromptReco-v2/AOD'
+>             name    = 'SingleMuonRun2016E-Prompt-v2'
+>             tag     = '80X_dataRun2_Prompt_v10'
+
+#         if run1 == 190782 and run2 == 190949:
+#             # Special settings for 6-Aug reprocessing of 5 runs
+#             dataset = '/SingleMu/Run2012A-recover-06Aug2012-v1/AOD'
+#             name    = 'SingleMuRun2012A-recover-06Aug2012'
+#             tag     = 'FT_53_V6C_AN4'
+#         elif run1 >= 190450 and run1 < 193752:
+#             dataset = '/SingleMu/Run2012A-13Jul2012-v1/AOD'
+#             name    = 'SingleMuRun2012A-13Jul2012'
+#             tag     = 'FT_53_V6C_AN4'
+#         elif run1 >= 193752 and run1 < 196532:
+#             dataset = '/SingleMu/Run2012B-13Jul2012-v1/AOD'
+#             name    = 'SingleMuRun2012B-13Jul2012'
+#             tag     = 'FT_53_V6C_AN4'
+#         elif run1 >= 197556 and run1 < 198914:
+#             dataset = '/SingleMu/Run2012C-24Aug2012-v1/AOD'
+#             name    = 'SingleMuRun2012C-24Aug2012'
+#             tag     = 'FT53_V10A_AN4'
+#         elif run1 == 201191 and run2 == 201191:
+#             # Special settings for Dec-11 reprocessing of 1 run
+#             # (Recovery of 134/pb for Golden JSON.)
+#             dataset = '/SingleMu/Run2012C-EcalRecover_11Dec2012-v1/AOD'
+#             name    = 'SingleMuRun2012C-EcalRecover_11Dec2012'
+#             tag     = 'GR_P_V42_AN2'            
+#         elif run1 >= 198934 and run1 < 203773:
+#             dataset = '/SingleMu/Run2012C-PromptReco-v2/AOD'
+#             name    = 'SingleMuRun2012C-Prompt'
+#             tag     = 'GR_P_V42_AN2'
+#         elif run1 == 206066 and run2 == 206066:
+#             dataset = '/SingleMu/Run2012D-PromptReco-v1/AOD'
+#             name    = 'SingleMuRun2012D-Prompt'
+#             tag     = 'GR_P_V42_AN2'
+# #        elif run1 >= 203773:
+# #            dataset = '/SingleMu/Run2012D-PromptReco-v1/AOD'
+# #            name    = 'SingleMuRun2012D-Prompt'
+# #            tag     = 'GR_P_V42_AN2'
+# 
+#         #### Run2015A ###
+#         if run1 == 246864 and run2 ==247068:
+#             dataset = '/SingleMu/Run2015A-PromptReco-v1/AOD'
+#             name    = 'SingleMuRun2015A-Prompt'
+#             tag     = 'GR_P_V56'
+#         #### Run2015B ###
+# #        if run1 >= 250985 :
+# #            dataset = '/ExpressPhysics/Run2015B-Express-v1/FEVT'
+# #            name    = 'ExpressPhysicsRun2015B-Express'
+# ##            tag     = '74X_dataRun2_Express_v0'
+# #            tag     = 'GR_E_V49'
+#         if run1 >= 250985 and run2 < 253888:
+#             dataset = '/SingleMuon/Run2015B-PromptReco-v1/AOD'
+#             name    = 'SingleMuonRun2015B-Prompt'
+#             tag     = 'GR_P_V56'
+#         if run1 >= 253888 and run2 <= 254914:
+#             dataset = '/SingleMuon/Run2015C-PromptReco-v1/AOD'
+#             name    = 'SingleMuonRun2015C-Prompt'
+#             tag     = '74X_dataRun2_Prompt_v1'
+#         if run1 >= 256629:
+#             dataset = '/SingleMuon/Run2015D-PromptReco-v3/AOD'
+#             name    = 'SingleMuonRun2015D-Prompt'
+#             tag     = '74X_dataRun2_Prompt_v2'
         else:
             raise ValueError("don't know how to do a run_limits production for run range [%i,%i]" % run_limits)
 

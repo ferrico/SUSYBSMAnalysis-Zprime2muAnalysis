@@ -13,9 +13,8 @@ rec_levels(process, tracks)
 readFiles = cms.untracked.vstring()
 secFiles = cms.untracked.vstring() 
 process.source.fileNames =[#'file:PAT_SingleMuRun2015B-Rereco-Suite_251162_251559_20160120153115/crab_SingleMuRun2015B-Rereco-Suite_251162_251559_20160120153115/results/Zprime_123.root',
-#                          'file:root://xrootd-cms.infn.it///store/user/alfloren/PAATuples/WWTo2L2Nu_13TeV-powheg/datamc_WWinclusive/160524_124813/0000/pat_1.root'                          
-#'file:root://xrootd-cms.infn.it//store/user/ferrico/SingleMuon/datamc_SingleMuonRun2016E-Prompt-v2_276831_277420_20160801162452/160801_142532/0000/pat_101.root'
-	'file:root://xrootd-cms.infn.it///store/user/rradogna/ZToMuMu_NNPDF30_13TeV-powheg_M_50_120/datamc_dy50to120/160509_211446/0000/pat_1.root',
+                          'file:root://xrootd-cms.infn.it///store/user/alfloren/PAATuples/WWTo2L2Nu_13TeV-powheg/datamc_WWinclusive/160524_124813/0000/pat_1.root'                          
+#'file:root://xrootd-cms.infn.it///store/user/rradogna/ZToMuMu_NNPDF30_13TeV-powheg_M_50_120/datamc_dy50to120/160509_211446/0000/pat_1.root',
 #                         'file:root://xrootd-cms.infn.it///store/user/rradogna/ZToMuMu_NNPDF30_13TeV-powheg_M_50_120/datamc_dy50to120/160509_211446/0000/pat_2.root', 
                         #'file:root://xrootd-cms.infn.it///store/user/rradogna/ZToMuMu_NNPDF30_13TeV-powheg_M_50_120/datamc_dy50to120/160509_211446/0000/pat_3.root',
 #       'file:root://xrootd-cms.infn.it///store/user/rradogna/ZToMuMu_NNPDF30_13TeV-powheg_M_50_120/datamc_dy50to120/160509_211446/0000/pat_4.root',                         
@@ -42,6 +41,13 @@ process.maxEvents.input = -1
 # the cut).  "NoNo" means remove nothing (i.e. the numerator). This
 # will break if loose_, tight_cut strings are changed upstream, so we
 # try to check those with a simple string test below.
+
+process.DYGenMassFilter = cms.EDFilter('DibosonGenMass',
+                                       src = cms.InputTag('prunedMCLeptons'),
+                                       min_mass = cms.double(50),
+                                       max_mass = cms.double(200),
+                                       )
+
 
 cuts = [
     ('Pt',      'pt > 53'),
@@ -83,7 +89,7 @@ for x in alldimus:
     o = getattr(process, x)
     assert o.loose_cut.value() != loose_cut or o.tight_cut.value() != tight_cut
 
-process.p = cms.Path(process.goodDataFilter * process.muonPhotonMatch * process.leptons * reduce(lambda x,y: x*y, [getattr(process, x) for x in alldimus]))
+process.p = cms.Path(process.goodDataFilter * process.DYGenMassFilter * process.muonPhotonMatch * process.leptons * reduce(lambda x,y: x*y, [getattr(process, x) for x in alldimus]))
 
 # For all the allDimuons producers, make dimuons producers, and
 # analyzers to make the histograms.
@@ -137,7 +143,7 @@ config.General.workArea = 'crab'
 #config.General.transferLogs = True
 
 config.JobType.pluginName = 'Analysis'
-config.JobType.psetName = 'nminus1effs.py'
+config.JobType.psetName = 'nminus1effs_WW.py'
 #config.JobType.priority = 1
 
 config.Data.inputDataset =  '%(ana_dataset)s'
@@ -164,23 +170,16 @@ config.Site.storageSite = 'T2_IT_Bari'
 #            ('SingleMuonRun2015C-Prompt_253888_254914',    '/SingleMuon/rradogna-datamc_SingleMuonRun2015C-Prompt_253888_254914_20150831150018-681693e882ba0f43234b3b41b1bbc39d/USER'),
 #			 ('SingleMuonRun2015C25ns-rereco76_254227_254907', '/SingleMuon/alfloren-SingleMuRun2015C25ns-Rereco_254227_254907_20160120153639-332cf72ab044858cbe7c1d1b03f22dbc/USER'),
 #             ('SingleMuonRun2015D-rereco76_256630_260627_cschnaib', '/SingleMuon/cschnaib-datamc_SingleMuRun2015D-Rereco76X_PAT-843ac0dcce157982e3f7d22621d7dc4b/USER'),
-#             ('SingleMuonRun2016B-Prompt-v2_273150_273730_rradogna', '/SingleMuon/rradogna-datamc_SingleMuonRun2016B-Prompt-v2_273150_273730_20160530153025-02d6fdda0cfc6c7b5229d43ba172d9c1/USER'),
-#             ('SingleMuonRun2016B-Prompt-v2_273731_274421_rradogna', '/SingleMuon/rradogna-datamc_SingleMuonRun2016B-Prompt-v2_273731_274421_20160612232019-02d6fdda0cfc6c7b5229d43ba172d9c1/USER'),
-#                 ('SingleMuonRun2016B-Prompt_274422_275125_rradogna', '/SingleMuon/rradogna-datamc_SingleMuonRun2016B-Prompt-v2_274422_275125_20160622221102-02d6fdda0cfc6c7b5229d43ba172d9c1/USER'),
-#                     ('SingleMuonRun2016B-Prompt-v2_275126_275376_ferrico', '/SingleMuon/ferrico-datamc_SingleMuonRun2016B-Prompt-v2_275126_275376_20160711120527-7f32591e081501d235a2e7d076a95be6/USER'),
-#                     ('SingleMuonRun2016C-Prompt-v2_275420_275783_ferrico', '/SingleMuon/ferrico-datamc_SingleMuonRun2016C-Prompt-v2_275420_275783_20160711122627-a1f73a300c6211a99e029d4636d3051f/USER')
-#                             ('SingleMuonRun2016B-Prompt-v1_272007_273143_ferrico', '/SingleMuon/ferrico-datamc_SingleMuonRun2016B-Prompt-v1_NoL1T_272007_273143_20160721113740-7f32591e081501d235a2e7d076a95be6/USER'),
-#                             ('SingleMuonRun2016B-Prompt-v2_273150_275376_ferrico', '/SingleMuon/ferrico-datamc_SingleMuonRun2016B-Prompt-v2_NoL1T_273150_275376_20160721113836-7f32591e081501d235a2e7d076a95be6/USER'),
-#                             ('SingleMuonRun2016C-Prompt-v2_275377_276283_ferrico', '/SingleMuon/ferrico-datamc_SingleMuonRun2016C-Prompt-v2_NoL1T_275377_276283_20160721113904-a1f73a300c6211a99e029d4636d3051f/USER'),
-#                             ('SingleMuonRun2016D-Prompt-v2_276284_276811_ferrico', '/SingleMuon/ferrico-datamc_SingleMuonRun2016D-Prompt-v2_NoL1T_276284_276811_20160721113937-85b698921229ef55bf2e46d443c09d7b/USER'),
-                              ('SingleMuonRun2016E-Prompt-v2_276831_277420_ferrico','/SingleMuon/ferrico-datamc_SingleMuonRun2016E-Prompt-v2_276831_277420_20160801162452-85b698921229ef55bf2e46d443c09d7b/USER'),
+            ('SingleMuonRun2016B-Prompt-v2_273150_273730_rradogna', '/SingleMuon/rradogna-datamc_SingleMuonRun2016B-Prompt-v2_273150_273730_20160530153025-02d6fdda0cfc6c7b5229d43ba172d9c1/USER'),
+            ('SingleMuonRun2016B-Prompt-v2_273731_274421_rradogna', '/SingleMuon/rradogna-datamc_SingleMuonRun2016B-Prompt-v2_273731_274421_20160612232019-02d6fdda0cfc6c7b5229d43ba172d9c1/USER'),
+
             ]
 
         for name, ana_dataset in dataset_details:
             print name
 
             new_py = open('nminus1effs.py').read()
-            new_py += "\nprocess.GlobalTag.globaltag = '80X_dataRun2_Prompt_v10'\n"
+            new_py += "\nprocess.GlobalTag.globaltag = '80X_mcRun2_asymptotic_2016_v3'\n"
             open('nminus1effs_crab.py', 'wt').write(new_py)
 
             new_crab_cfg = crab_cfg % locals()
@@ -190,7 +189,7 @@ config.Data.totalUnits = -1
 config.Data.unitsPerJob = 100
 #config.Data.lumiMask = 'tmp.json' #######
 #config.Data.lumiMask = 'https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions15/13TeV/Cert_254833_13TeV_PromptReco_Collisions15_JSON.txt'
-config.Data.lumiMask = '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions16/13TeV/Cert_271036-277148_13TeV_PromptReco_Collisions16_JSON_MuonPhys.txt'
+config.Data.lumiMask = '/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions16/13TeV/Cert_271036-274421_13TeV_PromptReco_Collisions16_JSON_MuonPhys.txt'
 '''
             new_crab_cfg = new_crab_cfg.replace('job_control', job_control)
             open('crabConfig.py', 'wt').write(new_crab_cfg)
@@ -218,10 +217,9 @@ config.Data.unitsPerJob  = 10000
 
         
         #tutti i samples
-        samples =[dyInclusive50, dy50to120, dy120to200,dy200to400, dy400to800, dy800to1400,dy1400to2300, dy2300to3500, dy3500to4500, dy4500to6000, 
-        			WW200to600, WW600to1200, WW1200to2500, WW2500,  
-        			WZ, ZZ, Wantitop, tW, Wjets, ttbar_lep, ttbar_pow,
-        			qcd80to120,qcd120to170,qcd170to300,qcd300to470,qcd470to600,qcd600to800,qcd800to1000,qcd1000to1400,qcd1400to1800,qcd1800to2400,qcd2400to3200,qcd3200]
+        samples =[WWinclusive]
+		#dyInclusive50,WW200to600, WW600to1200, WW1200to2500, WW2500,
+
 		########################
 
 
@@ -230,7 +228,6 @@ config.Data.unitsPerJob  = 10000
 
 
 		########################
-
 
         for sample in samples:
             print sample.name
