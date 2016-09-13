@@ -75,26 +75,26 @@ config.Data.ignoreLocality = True #x runD to avoid blacklist issue
         lumi_mask = 'tmp.json'
 
 
->         if run1 >= 272007 and run2 <=273143:
->             dataset = '/SingleMuon/Run2016B-PromptReco-v1/AOD'
->             name    = 'SingleMuonRun2016B-Prompt-v1'
->             tag     = '80X_dataRun2_Prompt_v8'
->         elif run1 >= 273150 and run2 <=275376:
->             dataset = '/SingleMuon/Run2016B-PromptReco-v2/AOD'
->             name    = 'SingleMuonRun2016B-Prompt-v2'
->             tag     = '80X_dataRun2_Prompt_v8'
->         elif run1 >= 275377 and run2 <=276283:
->             dataset = '/SingleMuon/Run2016C-PromptReco-v2/AOD'
->             name    = 'SingleMuonRun2016C-Prompt-v2'
->             tag     = '80X_dataRun2_Prompt_v9'
->         elif run1 >= 276284 and run2 <=276811:
->             dataset = '/SingleMuon/Run2016D-PromptReco-v2/AOD'
->             name    = 'SingleMuonRun2016D-Prompt-v2'
->             tag     = '80X_dataRun2_Prompt_v10'
->         elif run1 >= 276831 and run2 <=277420:
->             dataset = '/SingleMuon/Run2016E-PromptReco-v2/AOD'
->             name    = 'SingleMuonRun2016E-Prompt-v2'
->             tag     = '80X_dataRun2_Prompt_v10'
+        if run1 >= 272007 and run2 <=273143:
+           dataset = '/SingleMuon/Run2016B-PromptReco-v1/AOD'
+            name    = 'SingleMuonRun2016B-Prompt-v1'
+            tag     = '80X_dataRun2_Prompt_v8'
+        elif run1 >= 273150 and run2 <=275376:
+            dataset = '/SingleMuon/Run2016B-PromptReco-v2/AOD'
+            name    = 'SingleMuonRun2016B-Prompt-v2'
+            tag     = '80X_dataRun2_Prompt_v8'
+        elif run1 >= 275377 and run2 <=276283:
+            dataset = '/SingleMuon/Run2016C-PromptReco-v2/AOD'
+            name    = 'SingleMuonRun2016C-Prompt-v2'
+            tag     = '80X_dataRun2_Prompt_v9'
+        elif run1 >= 276284 and run2 <=276811:
+            dataset = '/SingleMuon/Run2016D-PromptReco-v2/AOD'
+            name    = 'SingleMuonRun2016D-Prompt-v2'
+            tag     = '80X_dataRun2_Prompt_v10'
+        elif run1 >= 276831 and run2 <=277420:
+            dataset = '/SingleMuon/Run2016E-PromptReco-v2/AOD'
+            name    = 'SingleMuonRun2016E-Prompt-v2'
+            tag     = '80X_dataRun2_Prompt_v10'
 
 #         if run1 == 190782 and run2 == 190949:
 #             # Special settings for 6-Aug reprocessing of 5 runs
