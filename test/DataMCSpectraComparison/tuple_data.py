@@ -76,7 +76,7 @@ config.Data.ignoreLocality = True #x runD to avoid blacklist issue
 
 
         if run1 >= 272007 and run2 <=273143:
-           dataset = '/SingleMuon/Run2016B-PromptReco-v1/AOD'
+            dataset = '/SingleMuon/Run2016B-PromptReco-v1/AOD'
             name    = 'SingleMuonRun2016B-Prompt-v1'
             tag     = '80X_dataRun2_Prompt_v8'
         elif run1 >= 273150 and run2 <=275376:
