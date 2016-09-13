@@ -11,7 +11,7 @@ process.source.fileNames = [
 #                            '/store/data/Run2015C/SingleMuon/AOD/PromptReco-v1/000/254/879/00000/72684170-9B4B-E511-A3BE-02163E0127FF.root',
                             ]
 #process.GlobalTag.globaltag = 'FT_53_V6C_AN4::All'
-process.GlobalTag.globaltag = '80X_dataRun2_Prompt_v8'
+process.GlobalTag.globaltag = '80X_dataRun2_Prompt_v11'
 #process.GlobalTag.globaltag = 'GR_P_V56'
 ##process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:com10_2013', '')
 process.maxEvents.input = -1
