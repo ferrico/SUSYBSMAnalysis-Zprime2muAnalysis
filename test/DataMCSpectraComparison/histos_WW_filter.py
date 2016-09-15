@@ -311,7 +311,7 @@ config.General.workArea = 'crab'
 #config.General.transferLogs = True
 
 config.JobType.pluginName = 'Analysis'
-config.JobType.psetName = 'histosWW.py'   
+config.JobType.psetName = 'histos_WW_filter.py'   
 #config.JobType.priority = 1
 
 config.Data.inputDataset =  '%(ana_dataset)s'
