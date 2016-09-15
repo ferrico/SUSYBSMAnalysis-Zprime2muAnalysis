@@ -218,7 +218,7 @@ config.Data.unitsPerJob  = 10000
 
         
         #tutti i samples
-        samples =[dyInclusive50, dy50to120, dy120to200,dy200to400, dy400to800, dy800to1400,dy1400to2300, dy2300to3500, dy3500to4500, dy4500to6000, 
+        samples =[dy50to120, dy120to200,dy200to400, dy400to800, dy800to1400,dy1400to2300, dy2300to3500, dy3500to4500, dy4500to6000, 
         			WW200to600, WW600to1200, WW1200to2500, WW2500,  
         			WZ, ZZ, Wantitop, tW, Wjets, ttbar_lep, ttbar_pow,
         			qcd80to120,qcd120to170,qcd170to300,qcd300to470,qcd470to600,qcd600to800,qcd800to1000,qcd1000to1400,qcd1400to1800,qcd1800to2400,qcd2400to3200,qcd3200]
