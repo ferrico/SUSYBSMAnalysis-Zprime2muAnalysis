@@ -52,9 +52,7 @@ class tupleonlysample(sample):
 # Single-top cross sections are from https://twiki.cern.ch/twiki/bin/viewauth/CMS/SingleTopSigma
 # K factor for Drell-Yan samples is the ratio of the NNLO to POWHEG cross sections for M > 20 GeV bin, 1915/1871=1.024
 samples = [
-		#sample('dyInclusive50',          'DYInclusive50', '/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISpring16DR80-PUSpring16_80X_mcRun2_asymptotic_2016_v3-v1/AODSIM', 28696958, 209 , 1., 6025.2,    k_factor=1., is_madgraph=True),  #(I will update the number of events)
-		
-		sample('dy50to120',          'DY50to120', '/ZToMuMu_NNPDF30_13TeV-powheg_M_50_120/RunIISpring16DR80-PUSpring16_80X_mcRun2_asymptotic_2016_v3-v1/AODSIM', 2967200, 209 , 1., 1975,   k_factor=1.006),#NLO xs and k-factor applied to reach NLO
+	sample('dy50to120',          'DY50to120', '/ZToMuMu_NNPDF30_13TeV-powheg_M_50_120/RunIISpring16DR80-PUSpring16_80X_mcRun2_asymptotic_2016_v3-v1/AODSIM', 2967200, 209 , 1., 1975,   k_factor=1.006),#NLO xs and k-factor applied to reach NLO
         sample('dy120to200',     'DY120to200', '/ZToMuMu_NNPDF30_13TeV-powheg_M_120_200/RunIISpring16DR80-PUSpring16_80X_mcRun2_asymptotic_2016_v3-v1/AODSIM', 99200, 210, 1., 19.32, k_factor=1.006),#mcm 19.32
         sample('dy200to400',  'DY200to400', '/ZToMuMu_NNPDF30_13TeV-powheg_M_200_400/RunIISpring16DR80-PUSpring16_80X_mcRun2_asymptotic_2016_v3-v1/AODSIM', 100000, 211, 1., 2.731, k_factor=1.006),#mcm 2.731
         sample('dy400to800',  'DY400to800', '/ZToMuMu_NNPDF30_13TeV-powheg_M_400_800/RunIISpring16DR80-PUSpring16_80X_mcRun2_asymptotic_2016_v3-v2/AODSIM', 100000, 212, 1., 0.241, k_factor=1.006),
@@ -73,7 +71,7 @@ samples = [
         sample('WW1200to2500', 'WW1200to2500','/WWTo2L2Nu_Mll_1200To2500_13TeV-powheg/RunIISpring16DR80-PUSpring16_80X_mcRun2_asymptotic_2016_v3-v2/AODSIM', 200000, 208, 1., 0.0035, k_factor=1.),#already NNLO xs
         sample('WW2500', 'WW2500','/WWTo2L2Nu_Mll_2500ToInf_13TeV-powheg/RunIISpring16DR80-PUSpring16_80X_mcRun2_asymptotic_2016_v3-v4/AODSIM', 38969, 208, 1., 0.00005, k_factor=1.),#already NNLO xs
   		
-  		sample('dyInclusive50',          'DYInclusive50', '/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISpring16DR80-PUSpring16_80X_mcRun2_asymptotic_2016_v3-v1/AODSIM', 28696958, 209 , 1., 6025.2,    k_factor=1., is_madgraph=True),  #(I will update the number of events)
+  	sample('dyInclusive50',          'DYInclusive50', '/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISpring16DR80-PUSpring16_80X_mcRun2_asymptotic_2016_v3-v1/AODSIM', 28696958, 209 , 1., 6025.2,    k_factor=1., is_madgraph=True),  #(I will update the number of events)
 
         sample('Wjets', 'Wjets', '/WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring16DR80-PUSpring16_80X_mcRun2_asymptotic_2016_v3-v2/AODSIM',18995071,52,1.,61526.7,k_factor=1),#already NNLO xs     
         
