@@ -125,7 +125,7 @@ elif cmd == 'gatherdata':
     for lumi_mask in lumi_masks:
         print lumi_mask
 #        dirs = glob.glob('crab/crab_ana_datamc_%s_ExpressPhysicsRun2015B*' % lumi_mask)
-        dirs = glob.glob('crab/crab_ana_nminus1_SingleMuonRun2015C*' )
+        dirs = glob.glob('crab/crab_ana_nminus1_SingleMuonRun2016*' )
 #        dirs = glob.glob('crab/crab_ana_datamc_%s_ExpressPhysicsRun2015B-Express_251161_251252' % lumi_mask)
         files = []
         for d in dirs:
