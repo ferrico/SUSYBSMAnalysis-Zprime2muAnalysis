@@ -78,7 +78,7 @@ elif cmd == 'getoutput':
     from SUSYBSMAnalysis.Zprime2muAnalysis.MCSamples import samples
     for sample in samples:
         print sample.name
-        do('crab getoutput -d crab/crab_ana_datamc_%(name)s --checksum=no ' % sample)
+        do('crab getoutput -d crab/crab_ana_datamc_%(name)s* --checksum=no ' % sample)
 
 #elif cmd == 'publishmc':
 #    from SUSYBSMAnalysis.Zprime2muAnalysis.MCSamples import samples
