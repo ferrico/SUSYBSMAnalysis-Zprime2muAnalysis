@@ -71,19 +71,19 @@ elif cmd == 'checkstatus':
     from SUSYBSMAnalysis.Zprime2muAnalysis.MCSamples import samples
     for sample in samples:
         print sample.name
-        do('crab status -d crab/crab_ana_nminus1_%(name)s ' % sample)
+        do('crab status -d crab/crab_ana_nminus1_%(name)s* ' % sample)
         
 elif cmd == 'resubmit':
      from SUSYBSMAnalysis.Zprime2muAnalysis.MCSamples import samples
      for sample in samples:
          print sample.name
-         do('crab resubmit -d crab/crab_ana_nminus1_%(name)s ' % sample)
+         do('crab resubmit -d crab/crab_ana_nminus1_%(name)s* ' % sample)
 
 elif cmd == 'getoutput':
     from SUSYBSMAnalysis.Zprime2muAnalysis.MCSamples import samples
     for sample in samples:
         print sample.name
-        do('crab getoutput -d crab/crab_ana_nminus1_%(name)s --checksum=no' % sample)
+        do('crab getoutput -d crab/crab_ana_nminus1_%(name)s* --checksum=no' % sample)
 
 #elif cmd == 'publishmc':
 #    from SUSYBSMAnalysis.Zprime2muAnalysis.MCSamples import samples
