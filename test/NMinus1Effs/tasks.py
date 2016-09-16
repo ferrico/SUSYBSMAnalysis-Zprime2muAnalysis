@@ -138,7 +138,7 @@ elif cmd == 'gatherdata':
         for dir in dirs:
             do('crab status -d %(dir)s ; crab report -d %(dir)s ' % locals())
 
-        jsons = [os.path.join(dir, 'results/lumiSummary.json') for dir in dirs]
+        jsons = [os.path.join(dir, 'results/processedLumis.json') for dir in dirs]
         print jsons
         lls = [(j, LumiList(j)) for j in jsons]
         for (j1, ll1), (j2, ll2) in combinations(lls, 2):
