@@ -131,7 +131,7 @@ elif cmd == 'gatherdata':
         for d in dirs:
             files += glob.glob(os.path.join(d, 'results/*.root'))
 
-        wdir = os.path.join('nminus1_histos', lumi_mask)
+        wdir = os.path.join('data', lumi_mask)
         os.mkdir(wdir)
         hadd(os.path.join(wdir, 'ana_nminus1_data.root'), files)
 
@@ -152,8 +152,11 @@ elif cmd == 'gatherdata':
        reduce(lambda x,y: x|y, (LumiList(j) for j in jsons)).writeJSON('%(wdir)s/ana_nminus1_data.forlumi.json' % locals())
 		#do('lumiCalc2.py -i %(wdir)s/ana_nminus1_data.forlumi.json overview > %(wdir)s/ana_nminus1_data.lumi' % locals())
 		#do('pixelLumiCalc.py -i %(wdir)s/ana_nminus1_data.forlumi.json overview > %(wdir)s/ana_nminus1_data.lumi' % locals())
-		do('brilcalc lumi -i %(wdir)s/ana_nminus1_data.forlumi.json -n 0.962 > %(wdir)s/ana_nminus1_data.lumi' % locals())
+		#do('brilcalc lumi -i %(wdir)s/ana_nminus1_data.forlumi.json -n 0.962 > %(wdir)s/ana_nminus1_data.lumi' % locals())
+		do('brilcalc lumi --normtag /afs/cern.ch/user/l/lumipro/public/normtag_file/normtag_DATACERT.json -u /pb  -i %(wdir)s/ana_nminus1_data.forlumi.json  > %(wdir)s/ana_nminus1_data.lumi -b "STABLE BEAMS" ' % locals())
+
 		do('tail -5 %(wdir)s/ana_nminus1_data.lumi' % locals())
+		   print 'done with', lumi_mask, '\n'
 
 elif cmd == 'runrange':
     #cmd = 'dbs search --query="find min(run),max(run) where dataset=%s"' % latest_dataset
