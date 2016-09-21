@@ -117,7 +117,7 @@ elif cmd == 'gathermc':
             big_warn('no files matching %s' % pattern)
         else:
             files = glob.glob('crab/crab_ana%(extra)s_nminus1_%(name)s/results/zp2mu_histos*root' % locals())
-            hadd('nminus1_histos/ana_nminus1_%s.root' % name, files)
+            hadd('mc/ana_nminus1_%s.root' % name, files)
 
 elif cmd == 'gatherdata':
     extra = (extra[0] + '_') if extra else ''
