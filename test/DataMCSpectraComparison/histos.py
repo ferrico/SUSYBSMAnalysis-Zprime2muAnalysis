@@ -419,7 +419,7 @@ config.Data.unitsPerJob  = 10000
             print sample.name
 
             new_py = open('histos.py').read()
-            sample.fill_gen_info = sample.name in ['dy50', 'dy100to200', 'dy200to400', 'dy400', 'dy800', 'dy1400', 'dy2300', 'dy3500', 'dy4500', 'dy6000', 'dy7500', 'dy8500', 'dy9500', 'zpsi5000']
+            sample.fill_gen_info = sample.name in ['dy50', 'dy100to200', 'ddy200to400', 'dy400', 'dy800', 'dy1400', 'dy2300', 'dy3500', 'dy4500', 'dy6000', 'dy7500', 'dy8500', 'dy9500', 'zpsi5000']
             new_py += "\nfor_mc(process, hlt_process_name='%(hlt_process_name)s', fill_gen_info=%(fill_gen_info)s)\n" % sample
 
             if combine_dy_samples and (sample.name == 'zmumu' or 'dy' in sample.name):
