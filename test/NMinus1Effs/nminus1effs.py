@@ -5,10 +5,10 @@ from SUSYBSMAnalysis.Zprime2muAnalysis.Zprime2muAnalysis_cfg import process
 from SUSYBSMAnalysis.Zprime2muAnalysis.HistosFromPAT_cfi import HistosFromPAT
 from SUSYBSMAnalysis.Zprime2muAnalysis.OurSelectionDec2012_cff import loose_cut, trigger_match, tight_cut, allDimuons
 
-from SUSYBSMAnalysis.Zprime2muAnalysis.Zprime2muAnalysis_cff import rec_levels, rec_level_module
-#tracks = ['global', 'inner', 'tpfms', 'picky', 'tunep', 'tmr', 'tunepnew']
-tracks = ['tunepnew', 'inner']
-rec_levels(process, tracks)
+# from SUSYBSMAnalysis.Zprime2muAnalysis.Zprime2muAnalysis_cff import rec_levels, rec_level_module
+# tracks = ['global', 'inner', 'tpfms', 'picky', 'tunep', 'tmr', 'tunepnew']
+# tracks = ['tunepnew', 'inner']
+# rec_levels(process, tracks)
 
 readFiles = cms.untracked.vstring()
 secFiles = cms.untracked.vstring() 
@@ -124,7 +124,7 @@ process.NoCosm = HistosFromPAT.clone(dilepton_src = 'dimuonsNoCosm', leptonsFrom
 process.p *= process.allDimuonsNoCosm * process.dimuonsNoCosm * process.NoCosm
 
 
-process.p *= rec_level_module(process, HistosFromPAT,     'Histos',     tracks)
+#process.p *= rec_level_module(process, HistosFromPAT,     'Histos',     tracks)
 #process.p *= rec_level_module(process, process.ResolutionUsingMC, 'Resolution', tracks)
 
 if __name__ == '__main__' and 'submit' in sys.argv:
