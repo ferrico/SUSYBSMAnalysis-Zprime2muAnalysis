@@ -2,11 +2,11 @@ import FWCore.ParameterSet.Config as cms
 
 triggerDecision = cms.PSet(doingElectrons = cms.bool(False),
 ##############################################################################
-# to add trigger match in MC production - change also hltTriggerMatch_cfi.py #
+# to add trigger match in MC/Data production - change also hltTriggerMatch_cfi.py #
 ##############################################################################
                            useTrigger = cms.bool(True),
 #################################################################################
-# to remore trigger match in MC production - change also hltTriggerMatch_cfi.py #
+# to remore trigger match in MC/Data production - change also hltTriggerMatch_cfi.py #
 #################################################################################
                            #useTrigger = cms.bool(False),
                            l1GtObjectMap = cms.InputTag('hltL1GtObjectMap'),
