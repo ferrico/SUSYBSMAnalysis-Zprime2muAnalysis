@@ -53,8 +53,7 @@ private:
   edm::EDGetTokenT<edm::TriggerResults> triggerBits_;
   edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> trigger_summary_src_;
   edm::EDGetTokenT<pat::PackedTriggerPrescales> triggerPrescales_;
-  
-  
+    
   pat::TriggerObjectStandAloneCollection L3_muons;
   pat::TriggerObjectStandAloneCollection L3_muons_2;
   pat::TriggerObjectStandAloneCollection prescaled_L3_muons;
@@ -64,6 +63,7 @@ private:
 
   edm::EDGetTokenT<edm::View<pat::Electron> > electronToken_;  
   edm::EDGetTokenT<edm::ValueMap<bool> > vidToken_;
+  
   
   
 };
@@ -420,7 +420,7 @@ edm::OrphanHandle<std::vector<T> > Zprime2muLeptonProducer_miniAOD::doLeptons(ed
   edm::Handle<reco::CandidateView> lepton_view;
   event.getByLabel(view_src, lepton_view);
 
-  std::auto_ptr<TCollection> new_leptons(new TCollection);
+  std::unique_ptr<TCollection> new_leptons(new TCollection);
 
   for (size_t i = 0; i < leptons->size(); ++i) {
     std::pair<T*,int> res = doLepton(event, leptons->at(i), lepton_view->refAt(i));
@@ -431,7 +431,7 @@ edm::OrphanHandle<std::vector<T> > Zprime2muLeptonProducer_miniAOD::doLeptons(ed
     delete res.first;
   }
 
-  return event.put(new_leptons, instance_label);
+  return event.put(std::move(new_leptons), instance_label);
 }
 
 
@@ -450,7 +450,7 @@ edm::OrphanHandle<std::vector<T> > Zprime2muLeptonProducer_miniAOD::doLeptons(ed
   }
   
   
-  std::auto_ptr<TCollection> new_leptons(new TCollection);
+  std::unique_ptr<TCollection> new_leptons(new TCollection);
   
   if(patEles.isValid()){ 
     for(auto ele=patEles->begin();ele!=patEles->end();++ele){
@@ -473,8 +473,7 @@ edm::OrphanHandle<std::vector<T> > Zprime2muLeptonProducer_miniAOD::doLeptons(ed
       
     }
   }
-
-  return event.put(new_leptons, instance_label);
+  return event.put(std::move(new_leptons), instance_label);
 }
 
 
@@ -483,6 +482,7 @@ void Zprime2muLeptonProducer_miniAOD::produce(edm::Event& event, const edm::Even
   // Grab the match map between PAT photons and PAT muons so we can
   // embed the photon candidates later.
   //std::cout << event.id() << std::endl;
+    
   event.getByLabel(muon_photon_match_src, muon_photon_match_map);
   static bool warned = false;
   if (!warned && !muon_photon_match_map.isValid()) {
@@ -518,25 +518,27 @@ void Zprime2muLeptonProducer_miniAOD::produce(edm::Event& event, const edm::Even
     int j = 0;
     
     L3_muons.clear();
-    L3_muons_2.clear();
+//     L3_muons_2.clear();
     prescaled_L3_muons.clear();
+        
     for (pat::TriggerObjectStandAlone obj : *trigger_summary_src) { // note: not "const &" since we want to call unpackPathNames
         obj.unpackPathNames(names);
+		obj.unpackFilterLabels(event, *triggerBits); 
 	
 	//if (obj.collection() == "hltL3MuonCandidates::HLT"){
 	for (unsigned h = 0; h < obj.filterLabels().size(); ++h) {
 	  
 	  
 	 //this should not be hard coded! 
-	//std::cout << obj.filterLabels()[h] << std::endl;   
+// 	std::cout << obj.filterLabels()[h] << std::endl;   
 	if (obj.filterLabels()[h] == pandf.filter){ 
 	    //FilterMatched[j] = 1;
 	    L3_muons.push_back(obj);
     }
-    if (obj.filterLabels()[h] == pandf.filter_2){
-         //FilterMatched[j] = 1;
-         L3_muons_2.push_back(obj);
-    }
+//     if (obj.filterLabels()[h] == pandf.filter_2){
+//          //FilterMatched[j] = 1;
+//          L3_muons_2.push_back(obj);
+//     }
     
 	  if (obj.filterLabels()[h] ==	pandf.prescaled_filter){
 	    //FilterMatched[j] = 1;
@@ -553,14 +555,14 @@ void Zprime2muLeptonProducer_miniAOD::produce(edm::Event& event, const edm::Even
     
     L3_muons_matched.clear();
     L3_muons_matched.resize(L3_muons.size(), 0);
-    L3_muons_matched_2.clear();
-    L3_muons_matched_2.resize(L3_muons_2.size(), 0);
+//     L3_muons_matched_2.clear();
+//     L3_muons_matched_2.resize(L3_muons_2.size(), 0);
     prescaled_L3_muons_matched.clear();
     prescaled_L3_muons_matched.resize(prescaled_L3_muons.size(), 0);
 //    std::cout<<"filter "<<pandf.filter<<std::endl;
-//    std::cout<<"L3_muons.size()"<<L3_muons.size()<<std::endl;
+//    std::cout<<"L3_muons.size() "<<L3_muons.size()<<std::endl;
 //    std::cout<<"prescaled filter "<<pandf.prescaled_filter<<std::endl;
-//    std::cout<<"prescaled_L3_muons.size()"<<prescaled_L3_muons.size()<<std::endl;
+//    std::cout<<"prescaled_L3_muons.size() "<<prescaled_L3_muons.size()<<std::endl;
     
     // Using the main choice for momentum assignment, make the primary
     // collection of muons, which will have branch name
@@ -586,8 +588,8 @@ void Zprime2muLeptonProducer_miniAOD::produce(edm::Event& event, const edm::Even
       // Reset the flags so the matching can be redone.
         L3_muons_matched.clear();
         L3_muons_matched.resize(L3_muons.size(), 0);
-        L3_muons_matched_2.clear();
-        L3_muons_matched_2.resize(L3_muons_2.size(), 0);
+//         L3_muons_matched_2.clear();
+//         L3_muons_matched_2.resize(L3_muons_2.size(), 0);
         prescaled_L3_muons_matched.clear();
         prescaled_L3_muons_matched.resize(prescaled_L3_muons.size(), 0);
       
@@ -598,8 +600,7 @@ void Zprime2muLeptonProducer_miniAOD::produce(edm::Event& event, const edm::Even
     // And now make the HEEP electron collection, which will be
     // e.g. leptons:electrons.
     // doLeptons<pat::Electron>(event, electron_src, electron_view_src, "electrons");
-   
-       
+         
     edm::Handle<edm::ValueMap<bool> > vid;
     event.getByToken(vidToken_,vid);
         
@@ -607,6 +608,8 @@ void Zprime2muLeptonProducer_miniAOD::produce(edm::Event& event, const edm::Even
     event.getByToken(electronToken_,patEles);
 
     doLeptons<pat::Electron>(event, vid, patEles,"electrons");
+    
+//  std::cout<<"-----------------  FINE trigger -----------------"<<std::endl;
    
 }
 
