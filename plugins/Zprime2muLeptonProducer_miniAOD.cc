@@ -53,6 +53,7 @@ private:
   edm::EDGetTokenT<edm::TriggerResults> triggerBits_;
   edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> trigger_summary_src_;
   edm::EDGetTokenT<pat::PackedTriggerPrescales> triggerPrescales_;
+
     
   pat::TriggerObjectStandAloneCollection L3_muons;
   pat::TriggerObjectStandAloneCollection L3_muons_2;
@@ -63,7 +64,6 @@ private:
 
   edm::EDGetTokenT<edm::View<pat::Electron> > electronToken_;  
   edm::EDGetTokenT<edm::ValueMap<bool> > vidToken_;
-  
   
   
 };
@@ -473,6 +473,7 @@ edm::OrphanHandle<std::vector<T> > Zprime2muLeptonProducer_miniAOD::doLeptons(ed
       
     }
   }
+  
   return event.put(std::move(new_leptons), instance_label);
 }
 
@@ -481,8 +482,7 @@ edm::OrphanHandle<std::vector<T> > Zprime2muLeptonProducer_miniAOD::doLeptons(ed
 void Zprime2muLeptonProducer_miniAOD::produce(edm::Event& event, const edm::EventSetup& setup) {
   // Grab the match map between PAT photons and PAT muons so we can
   // embed the photon candidates later.
-  //std::cout << event.id() << std::endl;
-    
+  //std::cout << event.id() << std::endl;    
   event.getByLabel(muon_photon_match_src, muon_photon_match_map);
   static bool warned = false;
   if (!warned && !muon_photon_match_map.isValid()) {
@@ -601,6 +601,7 @@ void Zprime2muLeptonProducer_miniAOD::produce(edm::Event& event, const edm::Even
     // e.g. leptons:electrons.
     // doLeptons<pat::Electron>(event, electron_src, electron_view_src, "electrons");
          
+         
     edm::Handle<edm::ValueMap<bool> > vid;
     event.getByToken(vidToken_,vid);
         
@@ -608,9 +609,7 @@ void Zprime2muLeptonProducer_miniAOD::produce(edm::Event& event, const edm::Even
     event.getByToken(electronToken_,patEles);
 
     doLeptons<pat::Electron>(event, vid, patEles,"electrons");
-    
-//  std::cout<<"-----------------  FINE trigger -----------------"<<std::endl;
-   
+       
 }
 
 DEFINE_FWK_MODULE(Zprime2muLeptonProducer_miniAOD);

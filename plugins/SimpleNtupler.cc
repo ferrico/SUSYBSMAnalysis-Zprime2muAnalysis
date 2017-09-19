@@ -1226,10 +1226,8 @@ void SimpleNtupler::analyze(const edm::Event& event, const edm::EventSetup&) {
         t.lep_stationMask[w] = mu->stationMask();
         // number of chambers
         t.lep_numberOfChambers[w] = mu->numberOfChambers();
-
         // number of chambers not including RPC matches
-//         t.lep_numberOfChambersNoRPC[w] = mu->numberOfChambersNoRPC();
-
+        t.lep_numberOfChambersNoRPC[w] = mu->numberOfChambersCSCorDT();
         // distanceCut = 10cm by default (distance in cm)
         t.lep_stationGapMaskDistance[w] = mu->stationGapMaskDistance();
         // sigmaCut = 3 by default (in # sigmas)
