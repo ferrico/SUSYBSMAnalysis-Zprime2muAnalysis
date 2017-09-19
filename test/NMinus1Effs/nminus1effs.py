@@ -173,8 +173,8 @@ config.Site.storageSite = 'T2_IT_Bari'
     just_testing = 'testing' in sys.argv
     if not 'no_data' in sys.argv:
         #running on miniaod we don't need of googlumis as it was
-        #from SUSYBSMAnalysis.Zprime2muAnalysis.goodlumis import Run2017G_ll
-        #Run2017G_ll.writeJSON('tmp.json')
+        #from SUSYBSMAnalysis.Zprime2muAnalysis.goodlumis import Run2016G_ll
+        #Run2016G_ll.writeJSON('tmp.json')
 
         from SUSYBSMAnalysis.Zprime2muAnalysis.goodlumis import *
         

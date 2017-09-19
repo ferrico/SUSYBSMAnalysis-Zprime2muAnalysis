@@ -53,8 +53,8 @@ private:
   edm::EDGetTokenT<edm::TriggerResults> triggerBits_;
   edm::EDGetTokenT<pat::TriggerObjectStandAloneCollection> trigger_summary_src_;
   edm::EDGetTokenT<pat::PackedTriggerPrescales> triggerPrescales_;
-
-    
+  
+  
   pat::TriggerObjectStandAloneCollection L3_muons;
   pat::TriggerObjectStandAloneCollection L3_muons_2;
   pat::TriggerObjectStandAloneCollection prescaled_L3_muons;
@@ -163,28 +163,27 @@ pat::Muon* Zprime2muLeptonProducer_miniAOD::cloneAndSwitchMuonTrack(const pat::M
   reco::Particle::Point vtx(newTrack->vx(), newTrack->vy(), newTrack->vz());
   reco::Particle::LorentzVector p4;
 
-  //////////   Comment following lines to apply pt bias correction /////
-   const double p = newTrack->p();  
-   p4.SetXYZT(newTrack->px(), newTrack->py(), newTrack->pz(), sqrt(p*p + mass*mass));  
-  //////////   Comment previous lines to apply pt bias correction ----->  Uncomment following lines /////
+  //////////   For not applying pt scale correction /////
+  const double p = newTrack->p();  
+  p4.SetXYZT(newTrack->px(), newTrack->py(), newTrack->pz(), sqrt(p*p + mass*mass));  
+  //////////   For not applying pt scale correction /////
 
 
   
-	///////// uncomment following lines to apply pt bias correction -----> comment previous lines /////////
-//  float phi = newTrack->phi()*TMath::RadToDeg();
-
-//  float mupt = GeneralizedEndpoint().GeneralizedEndpointPt(newTrack->pt(),newTrack->charge(),newTrack->eta(),phi,-1,1); //for DATA
-//  float mupt = GeneralizedEndpoint().GeneralizedEndpointPt(newTrack->pt(),newTrack->charge(),newTrack->eta(),phi,0,1);  // for MC
-
-
-//	float px = mupt*TMath::Cos(newTrack->phi());
-//	float py = mupt*TMath::Sin(newTrack->phi());
-//	float pz = mupt*TMath::SinH(newTrack->eta());
-//	float p = mupt*TMath::CosH(newTrack->eta());
-//	p4.SetXYZT(px, py, pz, sqrt(p*p + mass*mass));
-
-// 	std::cout<<"my definition = "<<mupt<<std::endl;
-	/////// uncomment previous lines to apply pt bias correction /////////
+	///////// only for scaling /////////
+//   float phi = newTrack->phi()*TMath::RadToDeg();
+//   
+// //   float mupt = GeneralizedEndpoint().GeneralizedEndpointPt(newTrack->pt(),newTrack->charge(),newTrack->eta(),phi,-1,1); //for DATA
+//   float mupt = GeneralizedEndpoint().GeneralizedEndpointPt(newTrack->pt(),newTrack->charge(),newTrack->eta(),phi,0,1);  // for MC
+// 
+// 	float px = mupt*TMath::Cos(newTrack->phi());
+// 	float py = mupt*TMath::Sin(newTrack->phi());
+// 	float pz = mupt*TMath::SinH(newTrack->eta());
+// 	float p = mupt*TMath::CosH(newTrack->eta());
+// 	p4.SetXYZT(px, py, pz, sqrt(p*p + mass*mass));
+// 
+//  	std::cout<<"my definition = "<<mupt<<std::endl;
+	/////// only for scaling data /////////
 
 
   mu->setP4(p4);  
@@ -473,7 +472,7 @@ edm::OrphanHandle<std::vector<T> > Zprime2muLeptonProducer_miniAOD::doLeptons(ed
       
     }
   }
-  
+
   return event.put(std::move(new_leptons), instance_label);
 }
 
@@ -482,7 +481,7 @@ edm::OrphanHandle<std::vector<T> > Zprime2muLeptonProducer_miniAOD::doLeptons(ed
 void Zprime2muLeptonProducer_miniAOD::produce(edm::Event& event, const edm::EventSetup& setup) {
   // Grab the match map between PAT photons and PAT muons so we can
   // embed the photon candidates later.
-  //std::cout << event.id() << std::endl;    
+  //std::cout << event.id() << std::endl;
   event.getByLabel(muon_photon_match_src, muon_photon_match_map);
   static bool warned = false;
   if (!warned && !muon_photon_match_map.isValid()) {
@@ -520,17 +519,16 @@ void Zprime2muLeptonProducer_miniAOD::produce(edm::Event& event, const edm::Even
     L3_muons.clear();
 //     L3_muons_2.clear();
     prescaled_L3_muons.clear();
-        
     for (pat::TriggerObjectStandAlone obj : *trigger_summary_src) { // note: not "const &" since we want to call unpackPathNames
         obj.unpackPathNames(names);
-		obj.unpackFilterLabels(event, *triggerBits); 
+        obj.unpackFilterLabels(event, *triggerBits); 
 	
 	//if (obj.collection() == "hltL3MuonCandidates::HLT"){
 	for (unsigned h = 0; h < obj.filterLabels().size(); ++h) {
 	  
 	  
 	 //this should not be hard coded! 
-// 	std::cout << obj.filterLabels()[h] << std::endl;   
+	//std::cout << obj.filterLabels()[h] << std::endl;   
 	if (obj.filterLabels()[h] == pandf.filter){ 
 	    //FilterMatched[j] = 1;
 	    L3_muons.push_back(obj);
@@ -560,9 +558,9 @@ void Zprime2muLeptonProducer_miniAOD::produce(edm::Event& event, const edm::Even
     prescaled_L3_muons_matched.clear();
     prescaled_L3_muons_matched.resize(prescaled_L3_muons.size(), 0);
 //    std::cout<<"filter "<<pandf.filter<<std::endl;
-//    std::cout<<"L3_muons.size() "<<L3_muons.size()<<std::endl;
+//    std::cout<<"L3_muons.size()"<<L3_muons.size()<<std::endl;
 //    std::cout<<"prescaled filter "<<pandf.prescaled_filter<<std::endl;
-//    std::cout<<"prescaled_L3_muons.size() "<<prescaled_L3_muons.size()<<std::endl;
+//    std::cout<<"prescaled_L3_muons.size()"<<prescaled_L3_muons.size()<<std::endl;
     
     // Using the main choice for momentum assignment, make the primary
     // collection of muons, which will have branch name
@@ -600,8 +598,8 @@ void Zprime2muLeptonProducer_miniAOD::produce(edm::Event& event, const edm::Even
     // And now make the HEEP electron collection, which will be
     // e.g. leptons:electrons.
     // doLeptons<pat::Electron>(event, electron_src, electron_view_src, "electrons");
-         
-         
+   
+       
     edm::Handle<edm::ValueMap<bool> > vid;
     event.getByToken(vidToken_,vid);
         
@@ -609,7 +607,7 @@ void Zprime2muLeptonProducer_miniAOD::produce(edm::Event& event, const edm::Even
     event.getByToken(electronToken_,patEles);
 
     doLeptons<pat::Electron>(event, vid, patEles,"electrons");
-       
+   
 }
 
 DEFINE_FWK_MODULE(Zprime2muLeptonProducer_miniAOD);

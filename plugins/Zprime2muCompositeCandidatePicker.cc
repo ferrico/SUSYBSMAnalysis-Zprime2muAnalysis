@@ -140,7 +140,7 @@ Zprime2muCompositeCandidatePicker::Zprime2muCompositeCandidatePicker(const edm::
 {
  consumes<pat::CompositeCandidateCollection>(src); 
  produces<pat::CompositeCandidateCollection>();
- 
+  
 }
 
 void Zprime2muCompositeCandidatePicker::remove_overlap(pat::CompositeCandidateCollection& cands) const {
@@ -158,6 +158,7 @@ void Zprime2muCompositeCandidatePicker::remove_overlap(pat::CompositeCandidateCo
       // Check to see if any of the leptons in p is in q also. If so,
       // remove q (e.g. the one with lower invariant mass since we
       // have sorted the vector already), reset pointers and restart.
+
       // To do this we need the unique ids of the daughters, i.e. the
       // refs into the original lepton collections.
       typedef std::vector<reco::CandidateBaseRef> refs;
@@ -204,7 +205,6 @@ std::vector<reco::TransientTrack> Zprime2muCompositeCandidatePicker::get_transie
 }
 
 std::pair<bool, float> Zprime2muCompositeCandidatePicker::back_to_back_cos_angle(const pat::CompositeCandidate& dil) const {
-
   // Back-to-back cut to kill cosmics.
   assert(dil.numberOfDaughters() == 2);
   const float cos_angle = dil.daughter(0)->momentum().Dot(dil.daughter(1)->momentum()) / dil.daughter(0)->p() / dil.daughter(1)->p();
@@ -212,7 +212,6 @@ std::pair<bool, float> Zprime2muCompositeCandidatePicker::back_to_back_cos_angle
 }
 
 std::pair<bool, CachingVertex<5> > Zprime2muCompositeCandidatePicker::vertex_constrained_fit(const pat::CompositeCandidate& dil) const {
-
   // Loose common vertex chi2 cut.
   assert(dil.numberOfDaughters() == 2);
   if (abs(dil.daughter(0)->pdgId()) != 13 || abs(dil.daughter(1)->pdgId()) != 13)
@@ -225,7 +224,6 @@ std::pair<bool, CachingVertex<5> > Zprime2muCompositeCandidatePicker::vertex_con
 }
 
 void Zprime2muCompositeCandidatePicker::embed_vertex_constrained_fit(pat::CompositeCandidate& dil, const CachingVertex<5>& vtx) const {
-
   if (!vtx.isValid()) {
     dil.addUserFloat("vertex_chi2", 1e8);
     return;
@@ -254,7 +252,6 @@ void Zprime2muCompositeCandidatePicker::embed_vertex_constrained_fit(pat::Compos
 }
 
 std::pair<bool, float> Zprime2muCompositeCandidatePicker::dpt_over_pt(const pat::CompositeCandidate& dil) const {
-
   // Cut on sigma(pT)/pT to reject grossly mismeasured tracks.
   float dpt_over_pt_largest = -1.;
   const size_t n = dil.numberOfDaughters();
@@ -278,7 +275,6 @@ std::pair<bool, float> Zprime2muCompositeCandidatePicker::dpt_over_pt(const pat:
 }
 
 void Zprime2muCompositeCandidatePicker::produce(edm::Event& event, const edm::EventSetup& setup) {
-
   edm::Handle<pat::CompositeCandidateCollection> cands;
   event.getByLabel(src, cands);
   
@@ -320,6 +316,7 @@ void Zprime2muCompositeCandidatePicker::produce(edm::Event& event, const edm::Ev
     embed_vertex_constrained_fit(new_cands->back(), vertex.second);
     new_cands->back().addUserFloat("dpt_over_pt", dpt_over_pt_largest.second);
   }
+
   // Sort candidates so we keep either the ones with higher-pT
   // muons or the ones with larger invariant mass.
   if(sort_by_pt)
@@ -335,9 +332,7 @@ void Zprime2muCompositeCandidatePicker::produce(edm::Event& event, const edm::Ev
   // Only return the maximum number of candidates specified.
   if (new_cands->size() > max_candidates)
     new_cands->erase(new_cands->begin() + max_candidates, new_cands->end());
-    
   
-//   event.put(std::move(new_cands), "new_cands");
   event.put(move(new_cands));
 }
 
