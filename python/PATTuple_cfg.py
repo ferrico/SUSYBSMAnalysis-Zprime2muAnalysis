@@ -4,7 +4,8 @@ import FWCore.ParameterSet.Config as cms
 process = cms.Process('PAT')
 process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
 process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True))
-process.source = cms.Source('PoolSource', fileNames = cms.untracked.vstring('file:PlaceHolder.root'))
+process.source = cms.Source('PoolSource',
+                            fileNames = cms.untracked.vstring('file:PlaceHolder.root'))
 
 # Load services needed to run the PAT.
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
@@ -33,7 +34,7 @@ process.out = cms.OutputModule('PoolOutputModule',
                                # fileName = cms.untracked.string('file:PlaceHolder.root'),
                                SelectEvents   = cms.untracked.PSet(SelectEvents = cms.vstring('p')),
                                outputCommands = cms.untracked.vstring('drop *',
-                                                                      'keep patElectrons_cleanPatElectrons__*',
+                                                                      'keep patElectrons_*_*_*',
                                                                       'keep patMuons_cleanPatMuons__*',
                                                                       'keep patJets_cleanPatJets__*',
                                                                       'keep patPhotons_cleanPatPhotons__*',
@@ -59,9 +60,6 @@ process.out = cms.OutputModule('PoolOutputModule',
                                                                       'keep *_patMETsPF_*_*',
                                                                       )
                                )
-# PAT electrons
-from PATTools import addHEEPId
-addHEEPId(process)
 
 # PAT taus
 del process.patTaus.tauIDSources.againstElectronMVA6Raw
@@ -114,27 +112,20 @@ process.cleanPatJets.finalCut = 'pt > 30.0'
 # Met filters
 process.load("PhysicsTools.PatAlgos.slimming.metFilterPaths_cff")
 process.goodDataHBHENoiseFilter       = cms.Path(process.HBHENoiseFilter)
-process.goodDataCSCTightHaloFilter    = cms.Path(process.CSCTightHaloFilter)
-process.goodDataHcalLaserFilter       = cms.Path(process.hcalLaserEventFilter)
+process.goodDataHBHEIsoNoiseFilter       = cms.Path(process.HBHENoiseIsoFilter)
+process.goodDataCSCTightHaloFilter    = cms.Path(process.globalTightHalo2016Filter)
 process.goodDataEcalTPFilter          = cms.Path(process.EcalDeadCellTriggerPrimitiveFilter)
-process.trackingFailureFilter.VertexSource = cms.InputTag('offlinePrimaryVertices')
-process.goodDataTrackingFailureFilter = cms.Path(process.trackingFailureFilter)
 process.goodDataEeBadScFilter         = cms.Path(process.eeBadScFilter)
-process.goodDataEcalLaserFilter       = cms.Path(process.ecalLaserCorrFilter)
-process.goodDataTrackingPOGFilter     = cms.Path(process.trkPOGFilters)
 
 ##if you want to filter the event: define a sequence and include it in the pocess.p
 #process.goodDataMETFilter =  cms.Sequence(process.HBHENoiseFilter * process.CSCTightHaloFilter * process.hcalLaserEventFilter * process.EcalDeadCellTriggerPrimitiveFilter * process.trackingFailureFilter * process.eeBadScFilter * process.ecalLaserCorrFilter *process.trkPOGFilters)
 
 ##if you want just to tag the event: define a path
-process.goodDataMETFilter =  cms.Path(process.HBHENoiseFilter * 
-                                      process.CSCTightHaloFilter * 
-                                      process.hcalLaserEventFilter * 
+process.goodDataMETFilter =  cms.Path(process.HBHENoiseFilter *
+				      process.HBHENoiseIsoFilter *  
+                                      process.globalTightHalo2016Filter * 
                                       process.EcalDeadCellTriggerPrimitiveFilter * 
-                                      process.trackingFailureFilter * 
-                                      process.eeBadScFilter * 
-                                      process.ecalLaserCorrFilter *
-                                      process.trkPOGFilters)
+                                      process.eeBadScFilter)
 
 process.load('SUSYBSMAnalysis.Zprime2muAnalysis.goodData_cff')
 process.goodDataHLTPhysicsDeclared = cms.Path(process.hltPhysicsDeclared)

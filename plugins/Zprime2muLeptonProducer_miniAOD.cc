@@ -11,6 +11,11 @@
 #include "DataFormats/Common/interface/TriggerResults.h"
 #include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
 #include "DataFormats/PatCandidates/interface/PackedTriggerPrescales.h"
+#include "DataFormats/Common/interface/ValueMap.h"
+#include "DataFormats/Common/interface/View.h"
+#include "SUSYBSMAnalysis/Zprime2muAnalysis/src/GeneralizedEndpoint.h"
+#include "TLorentzVector.h"
+
 
 class Zprime2muLeptonProducer_miniAOD : public edm::EDProducer {
 public:
@@ -23,18 +28,19 @@ private:
   pat::Muon*     cloneAndSwitchMuonTrack     (const pat::Muon&, const edm::Event& event)     const;
 
   void embedTriggerMatch(pat::Muon*, const std::string&, const pat::TriggerObjectStandAloneCollection&, std::vector<int>&);
-
-  std::pair<pat::Electron*, int> doLepton(const edm::Event&, const pat::Electron&, const reco::CandidateBaseRef&);
+  void embedTriggerMatch_or(pat::Muon*, const std::string&, const pat::TriggerObjectStandAloneCollection&, const pat::TriggerObjectStandAloneCollection&, std::vector<int>&, std::vector<int>&);
+    
+  // std::pair<pat::Electron*, int> doLepton(const edm::Event&, const pat::Electron&, const reco::CandidateBaseRef&);
+  std::pair<pat::Electron*, int> doLepton(const edm::Event&, const pat::Electron&);
   std::pair<pat::Muon*,     int> doLepton(const edm::Event&, const pat::Muon&,     const reco::CandidateBaseRef&);
 
   template <typename T> edm::OrphanHandle<std::vector<T> > doLeptons(edm::Event&, const edm::InputTag&, const edm::InputTag&, const std::string&);
 
+  template <typename T> edm::OrphanHandle<std::vector<T> > doLeptons(edm::Event&, edm::Handle<edm::ValueMap<bool> >&, edm::Handle<edm::View<pat::Electron> >&, const std::string&);
+
   edm::InputTag muon_src;
   edm::InputTag muon_view_src;
-  edm::InputTag electron_src;
-  edm::InputTag electron_view_src;
   StringCutObjectSelector<pat::Muon> muon_selector;
-  StringCutObjectSelector<pat::Electron> electron_selector;
   std::string muon_track_for_momentum;
   std::string muon_track_for_momentum_primary;
   std::vector<std::string> muon_tracks_for_momentum;
@@ -50,22 +56,22 @@ private:
   
   
   pat::TriggerObjectStandAloneCollection L3_muons;
-  
-  //std::vector<int> L3_muons_matched;
+  pat::TriggerObjectStandAloneCollection L3_muons_2;
   pat::TriggerObjectStandAloneCollection prescaled_L3_muons;
-  //std::vector<int> prescaled_L3_muons_matched;
+  std::vector<int> L3_muons_matched;
+  std::vector<int> L3_muons_matched_2;
+  std::vector<int> prescaled_L3_muons_matched;
+
+  edm::EDGetTokenT<edm::View<pat::Electron> > electronToken_;  
+  edm::EDGetTokenT<edm::ValueMap<bool> > vidToken_;
   
-  std::vector<int> FilterMatched;
-  std::vector<int> PrescaleFilterMatched;
+  
 };
 
 Zprime2muLeptonProducer_miniAOD::Zprime2muLeptonProducer_miniAOD(const edm::ParameterSet& cfg)
   : muon_src(cfg.getParameter<edm::InputTag>("muon_src")),
     muon_view_src(cfg.getParameter<edm::InputTag>("muon_src")),
-    electron_src(cfg.getParameter<edm::InputTag>("electron_src")),
-    electron_view_src(cfg.getParameter<edm::InputTag>("electron_src")),
     muon_selector(cfg.getParameter<std::string>("muon_cuts")),
-    electron_selector(cfg.getParameter<std::string>("electron_cuts")),
     muon_track_for_momentum(cfg.getParameter<std::string>("muon_track_for_momentum")),
     muon_track_for_momentum_primary(muon_track_for_momentum),
     muon_photon_match_src(cfg.getParameter<edm::InputTag>("muon_photon_match_src")),
@@ -75,12 +81,12 @@ Zprime2muLeptonProducer_miniAOD::Zprime2muLeptonProducer_miniAOD(const edm::Para
     
     triggerBits_(consumes<edm::TriggerResults>(cfg.getParameter<edm::InputTag>("bits"))),
     trigger_summary_src_(consumes<pat::TriggerObjectStandAloneCollection>(cfg.getParameter<edm::InputTag>("trigger_summary"))),
-    triggerPrescales_(consumes<pat::PackedTriggerPrescales>(cfg.getParameter<edm::InputTag>("prescales")))
+    triggerPrescales_(consumes<pat::PackedTriggerPrescales>(cfg.getParameter<edm::InputTag>("prescales"))),
+    electronToken_(consumes<edm::View<pat::Electron> >(cfg.getParameter<edm::InputTag>("electron_src"))),
+    vidToken_(consumes<edm::ValueMap<bool> >(cfg.getParameter<edm::InputTag>("electron_id")))
 {
   consumes<edm::View<reco::Candidate>>(muon_view_src);
-  consumes<edm::View<reco::Candidate>>(electron_view_src);
   consumes<pat::MuonCollection>(muon_src);
-  consumes<pat::ElectronCollection>(electron_src);
   consumes<reco::CandViewMatchMap >(muon_photon_match_src);
 
   if (cfg.existsAs<std::vector<std::string> >("muon_tracks_for_momentum"))
@@ -119,7 +125,30 @@ pat::Muon* Zprime2muLeptonProducer_miniAOD::cloneAndSwitchMuonTrack(const pat::M
   // Start with null track/invalid type before we find the right one.
   reco::TrackRef newTrack;
   newTrack = muon.tunePMuonBestTrack();
+  patmuon::TrackType type = patmuon::nTrackTypes;
 
+  // If the muon has the track embedded using the UserData mechanism,
+  // take it from there first. Otherwise, try to get the track the
+  // standard way.
+
+
+  if (muon.pt() > 100.) {
+	mu->addUserInt("hasTeVMuons", 1);
+  }
+  else{
+
+	 mu->addUserInt("hasTeVMuons", 0); 
+  }
+  if (muon.hasUserData(muon_track_for_momentum))
+    newTrack = patmuon::userDataTrack(muon, muon_track_for_momentum);
+  else {
+ 
+	type = patmuon::trackNameToType(muon_track_for_momentum);
+    	newTrack = patmuon::trackByType(*mu, type);
+  }
+  
+  // If we didn't find the appropriate track, indicate failure by a
+  // null pointer.
   
   if (newTrack.isNull()){
     std::cout << "No TuneP" << std::endl;
@@ -133,16 +162,38 @@ pat::Muon* Zprime2muLeptonProducer_miniAOD::cloneAndSwitchMuonTrack(const pat::M
   
   reco::Particle::Point vtx(newTrack->vx(), newTrack->vy(), newTrack->vz());
   reco::Particle::LorentzVector p4;
+
+  //////////   Comment following lines to apply pt bias correction /////
+   const double p = newTrack->p();  
+   p4.SetXYZT(newTrack->px(), newTrack->py(), newTrack->pz(), sqrt(p*p + mass*mass));  
+  //////////   Comment previous lines to apply pt bias correction ----->  Uncomment following lines /////
+
+
   
-  const double p = newTrack->p();
-  
-  p4.SetXYZT(newTrack->px(), newTrack->py(), newTrack->pz(), sqrt(p*p + mass*mass));  
-  
+	///////// uncomment following lines to apply pt bias correction -----> comment previous lines /////////
+//  float phi = newTrack->phi()*TMath::RadToDeg();
+
+//  float mupt = GeneralizedEndpoint().GeneralizedEndpointPt(newTrack->pt(),newTrack->charge(),newTrack->eta(),phi,-1,1); //for DATA
+//  float mupt = GeneralizedEndpoint().GeneralizedEndpointPt(newTrack->pt(),newTrack->charge(),newTrack->eta(),phi,0,1);  // for MC
+
+
+//	float px = mupt*TMath::Cos(newTrack->phi());
+//	float py = mupt*TMath::Sin(newTrack->phi());
+//	float pz = mupt*TMath::SinH(newTrack->eta());
+//	float p = mupt*TMath::CosH(newTrack->eta());
+//	p4.SetXYZT(px, py, pz, sqrt(p*p + mass*mass));
+
+// 	std::cout<<"my definition = "<<mupt<<std::endl;
+	/////// uncomment previous lines to apply pt bias correction /////////
+
+
+  mu->setP4(p4);  
+
   mu->setCharge(newTrack->charge());
-  
-  mu->setP4(p4);
-  
+
   mu->setVertex(vtx);
+
+  mu->addUserInt("trackUsedForMomentum", type);
   
   return mu;
 }
@@ -151,8 +202,9 @@ pat::Muon* Zprime2muLeptonProducer_miniAOD::cloneAndSwitchMuonTrack(const pat::M
 void Zprime2muLeptonProducer_miniAOD::embedTriggerMatch(pat::Muon* new_mu, const std::string& ex, const pat::TriggerObjectStandAloneCollection& L3, std::vector<int>& L3_matched) {
   
   int best = -1;
+  float defaultpTvalue = 20.;
   float best_dR = trigger_match_max_dR;
-  std::cout << "size of L3 collection: " << L3.size() << std::endl;
+  //std::cout << "size of L3 collection: " << L3.size() << std::endl;
   for (size_t i = 0; i < L3.size(); ++i) {
     // Skip those already used.
     if (L3_matched[i])
@@ -165,9 +217,9 @@ void Zprime2muLeptonProducer_miniAOD::embedTriggerMatch(pat::Muon* new_mu, const
     }
   }
 
-  if (best < 0)
-    return;
- 
+//  if (best < 0)
+//    return;
+  if (best >= 0) {
   const pat::TriggerObjectStandAlone& L3_mu = L3[best];
   L3_matched[best] = 1;
   
@@ -176,12 +228,100 @@ void Zprime2muLeptonProducer_miniAOD::embedTriggerMatch(pat::Muon* new_mu, const
   new_mu->addUserFloat(ex + "TriggerMatchPt",     L3_mu.pt());
   new_mu->addUserFloat(ex + "TriggerMatchEta",    L3_mu.eta());
   new_mu->addUserFloat(ex + "TriggerMatchPhi",    L3_mu.phi());
-  
+  }
+    else{
+        new_mu->addUserFloat(ex + "TriggerMatchPt",    defaultpTvalue);
+    }
   
   
 }
 
-std::pair<pat::Electron*,int> Zprime2muLeptonProducer_miniAOD::doLepton(const edm::Event& event, const pat::Electron& el, const reco::CandidateBaseRef&) {
+void Zprime2muLeptonProducer_miniAOD::embedTriggerMatch_or(pat::Muon* new_mu, const std::string& ex, const pat::TriggerObjectStandAloneCollection& L3, const pat::TriggerObjectStandAloneCollection& L3_or, std::vector<int>& L3_matched, std::vector<int>& L3_matched_2) {
+    int best_1 = -1;
+    int best_2 = -1;
+    float defaultpTvalue = 20.;
+    float best_dR_1 = trigger_match_max_dR;
+    float best_dR_2 = trigger_match_max_dR;
+    //    std::cout<<"embedded trigger function"<<std::endl;
+    for (size_t i = 0; i < L3.size(); ++i) {
+        // Skip those already used.
+        if (L3_matched[i])
+        continue;
+        
+        const float dR = reco::deltaR(L3[i], *new_mu);
+        if (dR < best_dR_1) {
+            best_1 = int(i);
+            best_dR_1 = dR;
+        }
+    }
+    //std::cout<<"filtro2"<<std::endl;
+    for (size_t i = 0; i < L3_or.size(); ++i) {
+        // Skip those already used.
+        if (L3_matched_2[i])
+        continue;
+        
+        const float dR = reco::deltaR(L3_or[i], *new_mu);
+        if (dR < best_dR_2) {
+            best_2 = int(i);
+            best_dR_2 = dR;
+        }
+    }
+    //    std::cout<<" best1 "<<best_1<<" best2 "<<best_2<<" best_dR_1 "<<best_dR_1<<" best_dR_2 "<<best_dR_2<<std::endl;
+    //    if (best_1 < 0 && best_2 < 0 )
+    //    return;
+    
+    if (best_2 <0 && best_1 >= 0){
+        const pat::TriggerObjectStandAlone& L3_mu = L3[best_1];
+        L3_matched[best_1] = 1;
+        
+        int id = L3_mu.pdgId();
+        new_mu->addUserFloat(ex + "TriggerMatchCharge", -id/abs(id));
+        new_mu->addUserFloat(ex + "TriggerMatchPt",     L3_mu.pt());
+        new_mu->addUserFloat(ex + "TriggerMatchEta",    L3_mu.eta());
+        new_mu->addUserFloat(ex + "TriggerMatchPhi",    L3_mu.phi());
+//        std::cout<<"ex + trigger match = "<<ex<<"...TriggerMatchPt = "<<L3_mu.pt()<<std::endl;
+//        std::cout<<"TriggerMatchPt muon producer = "<<new_mu->hasUserFloat(ex + "TriggerMatchPt")<<std::endl;
+    }
+    else if (best_1 <0 && best_2 >= 0){
+        const pat::TriggerObjectStandAlone& L3_mu = L3_or[best_2];
+        L3_matched_2[best_2] = 1;
+        
+        int id = L3_mu.pdgId();
+        new_mu->addUserFloat(ex + "TriggerMatchCharge", -id/abs(id));
+        new_mu->addUserFloat(ex + "TriggerMatchPt",     L3_mu.pt());
+        new_mu->addUserFloat(ex + "TriggerMatchEta",    L3_mu.eta());
+        new_mu->addUserFloat(ex + "TriggerMatchPhi",    L3_mu.phi());
+    }
+    else if (best_1 >=0 && best_2 >=0 && best_dR_1 <= best_dR_2){
+        const pat::TriggerObjectStandAlone& L3_mu = L3[best_1];
+        L3_matched[best_1] = 1;
+        
+        int id = L3_mu.pdgId();
+        new_mu->addUserFloat(ex + "TriggerMatchCharge", -id/abs(id));
+        new_mu->addUserFloat(ex + "TriggerMatchPt",     L3_mu.pt());
+        new_mu->addUserFloat(ex + "TriggerMatchEta",    L3_mu.eta());
+        new_mu->addUserFloat(ex + "TriggerMatchPhi",    L3_mu.phi());
+    }
+    else if (best_1 >=0 && best_2 >=0 && best_dR_1 > best_dR_2){
+        const pat::TriggerObjectStandAlone& L3_mu = L3_or[best_2];
+        L3_matched_2[best_2] = 1;
+        
+        int id = L3_mu.pdgId();
+        new_mu->addUserFloat(ex + "TriggerMatchCharge", -id/abs(id));
+        new_mu->addUserFloat(ex + "TriggerMatchPt",     L3_mu.pt());
+        new_mu->addUserFloat(ex + "TriggerMatchEta",    L3_mu.eta());
+        new_mu->addUserFloat(ex + "TriggerMatchPhi",    L3_mu.phi());
+    }
+    else {
+        // std::cout<<"embedded trigger function 4"<<std::endl;
+        new_mu->addUserFloat(ex + "TriggerMatchPt",    defaultpTvalue);
+        //std::cout<<"TriggerMatchPt muon producer own = "<<new_mu->hasUserFloat(ex + "TriggerMatchPt")<<std::endl;
+    }
+}
+
+
+std::pair<pat::Electron*,int> Zprime2muLeptonProducer_miniAOD::doLepton(const edm::Event& event, const pat::Electron& el) {
+
   // Electrons can be faked by muons leaving energy in the ECAL. Don't
   // keep the electron if it's within the dR specified of any global
   // muon (a la HEEP). Also keep track of the minimum such dR for
@@ -208,7 +348,11 @@ std::pair<pat::Electron*,int> Zprime2muLeptonProducer_miniAOD::doLepton(const ed
   // Evaluate cuts here with string object selector, and any code that
   // cannot be done in the string object selector (so far, just the
   // minimum muon dR above).
-  int cutFor = electron_selector(*new_el) ? 0 : 1;
+  // int cutFor = electron_selector(*new_el) ? 0 : 1;
+  
+  //legacy variable keept as 0, which means that the lepton passes the cuts
+  int cutFor = 0; //selection moved to doLeptons where this function doLepton is called only for electrons passes EleID
+  
 
   return std::make_pair(new_el, cutFor);
 }
@@ -218,9 +362,8 @@ std::pair<pat::Muon*,int> Zprime2muLeptonProducer_miniAOD::doLepton(const edm::E
   // pair.
 
   // To use one of the refit tracks, we have to have a global muon.
-  
-    
-  if (!mu.isGlobalMuon())// && mu.pt()<= 20.) // federica
+      
+  if (!mu.isGlobalMuon())
     return std::make_pair((pat::Muon*)(0), -1);
 
   // Copy the input muon, and switch its p4/charge/vtx out for that of
@@ -248,8 +391,9 @@ std::pair<pat::Muon*,int> Zprime2muLeptonProducer_miniAOD::doLepton(const edm::E
   // {TriggerMatch, prescaledTriggerMatch} x {Pt, Eta, Phi,
   // Charge}. (Maybe embed whole candidates later.)
   
-  embedTriggerMatch(new_mu, "",          L3_muons,           FilterMatched);
-  embedTriggerMatch(new_mu, "prescaled", prescaled_L3_muons, PrescaleFilterMatched);
+  //  embedTriggerMatch(new_mu, "",          L3_muons,           L3_muons_matched);
+  embedTriggerMatch_or(new_mu, "",         L3_muons, L3_muons_2,        L3_muons_matched, L3_muons_matched_2);
+  embedTriggerMatch(new_mu, "prescaled", prescaled_L3_muons, prescaled_L3_muons_matched);
 
   // Evaluate cuts here with string object selector, and any code that
   // cannot be done in the string object selector (none so far).
@@ -290,10 +434,55 @@ edm::OrphanHandle<std::vector<T> > Zprime2muLeptonProducer_miniAOD::doLeptons(ed
   return event.put(new_leptons, instance_label);
 }
 
+
+template <typename T>
+edm::OrphanHandle<std::vector<T> > Zprime2muLeptonProducer_miniAOD::doLeptons(edm::Event& event, edm::Handle<edm::ValueMap<bool> > &vid, edm::Handle<edm::View<pat::Electron> > &patEles, const std::string& instance_label) {
+ 
+  typedef std::vector<T> TCollection;
+ 
+  static std::map<std::string, bool> warned;
+  if(!patEles.isValid()){
+    if (!warned[instance_label]) {
+      edm::LogWarning("LeptonsNotFound") << patEles << " for " << instance_label << " not found, not producing anything -- not warning any more either.";
+      warned[instance_label] = true;
+    }
+    return edm::OrphanHandle<std::vector<T> >();
+  }
+  
+  
+  std::auto_ptr<TCollection> new_leptons(new TCollection);
+  
+  if(patEles.isValid()){ 
+    for(auto ele=patEles->begin();ele!=patEles->end();++ele){
+      const edm::Ptr<pat::Electron> elePtr(patEles,ele-patEles->begin()); //value map is keyed of edm::Ptrs so we need to make one
+     
+      //Electron selection is done here using VID
+      //A bool true is returned if electron passes ID
+      //and only in this case a new lepton is created
+      bool passID = (*vid)[elePtr];
+      if(passID) {	
+	const pat::Electron Electrons = *ele;
+	std::pair<T*,int> res = doLepton(event, Electrons);
+	if (res.first == 0)
+	  continue;
+	
+	res.first->addUserInt("cutFor", res.second);
+	new_leptons->push_back(*res.first);
+	delete res.first;
+      }
+      
+    }
+  }
+
+  return event.put(new_leptons, instance_label);
+}
+
+
+
 void Zprime2muLeptonProducer_miniAOD::produce(edm::Event& event, const edm::EventSetup& setup) {
   // Grab the match map between PAT photons and PAT muons so we can
   // embed the photon candidates later.
-  std::cout << event.id() << std::endl;
+  //std::cout << event.id() << std::endl;
   event.getByLabel(muon_photon_match_src, muon_photon_match_map);
   static bool warned = false;
   if (!warned && !muon_photon_match_map.isValid()) {
@@ -315,8 +504,6 @@ void Zprime2muLeptonProducer_miniAOD::produce(edm::Event& event, const edm::Even
     throw cms::Exception("Zprime2muLeptonProducer_miniAOD") << "could not determine the HLT path and filter names for this event\n";
  
 
-//TESTING!
-
     edm::Handle<edm::TriggerResults> triggerBits;
     edm::Handle<pat::TriggerObjectStandAloneCollection> trigger_summary_src;
     edm::Handle<pat::PackedTriggerPrescales> triggerPrescales;
@@ -331,34 +518,49 @@ void Zprime2muLeptonProducer_miniAOD::produce(edm::Event& event, const edm::Even
     int j = 0;
     
     L3_muons.clear();
+    L3_muons_2.clear();
     prescaled_L3_muons.clear();
     for (pat::TriggerObjectStandAlone obj : *trigger_summary_src) { // note: not "const &" since we want to call unpackPathNames
         obj.unpackPathNames(names);
 	
-	if (obj.collection() == "hltL3MuonCandidates::HLT"){
+	//if (obj.collection() == "hltL3MuonCandidates::HLT"){
 	for (unsigned h = 0; h < obj.filterLabels().size(); ++h) {
 	  
 	  
 	 //this should not be hard coded! 
-	  if (obj.filterLabels()[h] == "hltL3fL1sMu22Or25L1f0L2f10QL3Filtered50Q"){ 
+	//std::cout << obj.filterLabels()[h] << std::endl;   
+	if (obj.filterLabels()[h] == pandf.filter){ 
 	    //FilterMatched[j] = 1;
 	    L3_muons.push_back(obj);
-	  }  
-	  if (obj.filterLabels()[h] ==	"hltL3fL1sMu22Or25L1f0L2f10QL3Filtered27Q"){
+    }
+    if (obj.filterLabels()[h] == pandf.filter_2){
+         //FilterMatched[j] = 1;
+         L3_muons_2.push_back(obj);
+    }
+    
+	  if (obj.filterLabels()[h] ==	pandf.prescaled_filter){
 	    //FilterMatched[j] = 1;
 	    prescaled_L3_muons.push_back(obj);
 	  } 
 	 }
-        }
+       // }
 	j++;
     }
-    FilterMatched.clear();
-    FilterMatched.resize(L3_muons.size(), 0);
+//    std::cout<<"quel trigger path = "<<pandf.filter<<std::endl;
+//    std::cout<<"nombre de muon that triggered HLT_50 = "<<L3_muons.size()<<std::endl;
+//    std::cout<<"quel trigger path = "<<pandf.filter_2<<std::endl;
+//    std::cout<<"nombre de muon that triggered HLT_Tk50 = "<<L3_muons_2.size()<<std::endl;
     
-    
-    PrescaleFilterMatched.clear();
-    PrescaleFilterMatched.resize(prescaled_L3_muons.size(), 0);
-     
+    L3_muons_matched.clear();
+    L3_muons_matched.resize(L3_muons.size(), 0);
+    L3_muons_matched_2.clear();
+    L3_muons_matched_2.resize(L3_muons_2.size(), 0);
+    prescaled_L3_muons_matched.clear();
+    prescaled_L3_muons_matched.resize(prescaled_L3_muons.size(), 0);
+//    std::cout<<"filter "<<pandf.filter<<std::endl;
+//    std::cout<<"L3_muons.size()"<<L3_muons.size()<<std::endl;
+//    std::cout<<"prescaled filter "<<pandf.prescaled_filter<<std::endl;
+//    std::cout<<"prescaled_L3_muons.size()"<<prescaled_L3_muons.size()<<std::endl;
     
     // Using the main choice for momentum assignment, make the primary
     // collection of muons, which will have branch name
@@ -382,18 +584,30 @@ void Zprime2muLeptonProducer_miniAOD::produce(edm::Event& event, const edm::Even
     // leptons:picky, ...
     for (size_t i = 0; i < muon_tracks_for_momentum.size(); ++i) {
       // Reset the flags so the matching can be redone.
-      FilterMatched.clear();
-      FilterMatched.resize(L3_muons.size(), 0);
-      PrescaleFilterMatched.clear();
-      PrescaleFilterMatched.resize(prescaled_L3_muons.size(), 0);
+        L3_muons_matched.clear();
+        L3_muons_matched.resize(L3_muons.size(), 0);
+        L3_muons_matched_2.clear();
+        L3_muons_matched_2.resize(L3_muons_2.size(), 0);
+        prescaled_L3_muons_matched.clear();
+        prescaled_L3_muons_matched.resize(prescaled_L3_muons.size(), 0);
       
       muon_track_for_momentum = muon_tracks_for_momentum[i];
       doLeptons<pat::Muon>(event, muon_src, muon_view_src, muon_track_for_momentum);
     }
-//
+    
     // And now make the HEEP electron collection, which will be
     // e.g. leptons:electrons.
-    doLeptons<pat::Electron>(event, electron_src, electron_view_src, "electrons");
+    // doLeptons<pat::Electron>(event, electron_src, electron_view_src, "electrons");
+   
+       
+    edm::Handle<edm::ValueMap<bool> > vid;
+    event.getByToken(vidToken_,vid);
+        
+    edm::Handle<edm::View<pat::Electron> > patEles;
+    event.getByToken(electronToken_,patEles);
+
+    doLeptons<pat::Electron>(event, vid, patEles,"electrons");
+   
 }
 
 DEFINE_FWK_MODULE(Zprime2muLeptonProducer_miniAOD);

@@ -6,20 +6,11 @@ process.p = cms.Path(process.countPatLeptons)
 
 # Loose cut on muons; stronger cuts to be applied for different
 # sets of plots (e.g. add our isolation cut, or apply VBTF).
-process.selectedPatMuons.cut = 'isGlobalMuon && pt > 20'
+process.selectedPatMuons.cut = 'isGlobalMuon && tunePMuonBestTrack().pt > 20'
 
-# Want to select only events that have at least two leptons (=
-# muons+electrons), where the electrons must pass HEEP id, but don't
-# want to force HEEP id on selectedPatElectrons so as not to screw up
-# the jet cleaning until we study this.
-process.heepPatElectrons = cms.EDFilter('PATElectronSelector',
-                                        src = cms.InputTag('patElectrons'),
-                                        cut = cms.string('userInt("HEEPId") == 0')
-                                        )
-
-process.patDefaultSequence.replace(process.selectedPatElectrons, process.selectedPatElectrons * process.heepPatElectrons)
 process.countPatMuons.minNumber = 0
-process.countPatLeptons.electronSource = cms.InputTag('heepPatElectrons')
+#process.countPatLeptons.electronSource = cms.InputTag('heepPatElectrons')
+process.countPatLeptons.electronSource = cms.InputTag('patElectrons')
 process.countPatLeptons.minNumber = 2
 
 crab_cfg = '''
@@ -40,11 +31,11 @@ config.Data.inputDBS = 'global'
 config.Data.publication = True
 #config.Data.publishDBS = 'https://cmsweb.cern.ch/dbs/prod/phys03/DBSWriter/'
 config.Data.publishDBS = 'phys03'
-config.Data.publishDataName = 'datamc_%(name)s'
-config.Data.outLFNDirBase = '/store/user/rradogna'
+config.Data.outputDatasetTag = 'datamc_%(name)s'
+config.Data.outLFNDirBase = '/store/user/jschulte'
 
 #config.Site.storageSite = 'T2_IT_Bari'
-config.Site.storageSite = 'T2_IT_Legnaro'
+config.Site.storageSite = 'T2_DE_RWTH'
 '''
 
 os.system('mkdir -p crab/psets')
