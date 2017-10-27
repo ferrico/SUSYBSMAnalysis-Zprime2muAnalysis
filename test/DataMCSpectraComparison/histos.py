@@ -18,8 +18,8 @@ process.source.fileNames =[#'file:./pat.root'
 process.maxEvents.input = -1
 # process.GlobalTag.globaltag ='90X_upgrade2017_realistic_v6_C1' # MC --- change line 440
 # process.GlobalTag.globaltag ='92X_dataRun2_Prompt_v4' # Run 2017 #change line 440
-process.GlobalTag.globaltag ='92X_dataRun2_Prompt_v8' # Run 2017D #change line 440
-
+# process.GlobalTag.globaltag ='92X_dataRun2_Prompt_v8' # Run 2017CD #change line 440
+process.GlobalTag.globaltag ='92X_dataRun2_Prompt_v9' # Run 2017E #change line 52
 #process.options.wantSummary = cms.untracked.bool(True)# false di default
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000 # default 1000
 
@@ -469,8 +469,10 @@ def for_data(process):
     
 #     process.GlobalTag.globaltag ='90X_upgrade2017_realistic_v6_C1' # MC  --- #change line 52 
 #     process.GlobalTag.globaltag ='92X_dataRun2_Prompt_v4' # Run 2017 #change line 52
-    process.GlobalTag.globaltag ='92X_dataRun2_Prompt_v8' # Run 2017D #change line 52
-    ntuplify(process)
+# 	   process.GlobalTag.globaltag ='92X_dataRun2_Prompt_v8' # Run 2017CD #change line 440
+	
+	process.GlobalTag.globaltag ='92X_dataRun2_Prompt_v9' # Run 2017E #change line 52
+	ntuplify(process)
     #check_prescale(process, trigger_paths) ####### Now it seams that there are no prescaled path ########
 
 def for_mc(process, hlt_process_name, fill_gen_info):
@@ -554,7 +556,8 @@ config.Site.storageSite = 'T2_IT_Bari'
 # 						('SingleMuonRun2017C-PromptReco-v1', '/SingleMuon/Run2017C-PromptReco-v1/MINIAOD'),
 # 						('SingleMuonRun2017C-PromptReco-v2', '/SingleMuon/Run2017C-PromptReco-v2/MINIAOD'),
 #						('SingleMuonRun2017C-PromptReco-v3', '/SingleMuon/Run2017C-PromptReco-v3/MINIAOD'),
-						('SingleMuonRun2017D-PromptReco-v1', '/SingleMuon/Run2017D-PromptReco-v1/MINIAOD'),
+# 						('SingleMuonRun2017D-PromptReco-v1', '/SingleMuon/Run2017D-PromptReco-v1/MINIAOD'),
+						('SingleMuonRun2017E-PromptReco-v1', '/SingleMuon/Run2017E-PromptReco-v1/MINIAOD'),
 
             ]
 
