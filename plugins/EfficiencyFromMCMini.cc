@@ -277,6 +277,7 @@ void EfficiencyFromMCMini::analyze(const edm::Event& event, const edm::EventSetu
 
     for (pat::TriggerObjectStandAlone obj : *trigger_summary_src) { // note: not "const &" since we want to call unpackPathNames
         obj.unpackPathNames(names);
+		obj.unpackFilterLabels(event, *triggerBits); 
 
          for (unsigned h = 0; h < obj.filterLabels().size(); ++h) {
            if (checking_prescaled_path && obj.filterLabels()[h] ==  pandf.prescaled_filter){

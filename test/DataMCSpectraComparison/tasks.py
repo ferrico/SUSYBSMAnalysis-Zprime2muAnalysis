@@ -42,7 +42,7 @@ def do(cmd):
 latest_dataset = '/SingleMuon/Run2016C-PromptReco-v2/AOD'
 #lumi_masks = ['Run2012PlusDCSOnlyMuonsOnly', 'Run2012MuonsOnly'] #, 'DCSOnly', 'Run2012']
 #lumi_masks = ['DCSOnly', 'Run2015', 'Run2015MuonsOnly'] #, 'Run2012PlusDCSOnlyMuonsOnly', 'DCSOnly']
-lumi_masks = ['Run2016MuonsOnly'] #, 'Run2012PlusDCSOnlyMuonsOnly', 'DCSOnly']
+lumi_masks = ['Run2017MuonsOnly'] #, 'Run2012PlusDCSOnlyMuonsOnly', 'DCSOnly']
 #lumi_masks = ['DCSOnly'] #, 'Run2012PlusDCSOnlyMuonsOnly', 'DCSOnly']
 
 
@@ -72,7 +72,8 @@ elif cmd == 'checkstatus':
     from SUSYBSMAnalysis.Zprime2muAnalysis.MCSamples import samples
     for sample in samples:
         print sample.name
-        do('crab status -d crab/crab_ana_datamc_%(name)s ' % sample)
+#         do('crab status -d crab/crab_ana_datamc_%(name)s ' % sample)
+        do('crab status -d crab_kFactor/crab_ana_datamc_%(name)s ' % sample)
         
 elif cmd == 'report':
     from SUSYBSMAnalysis.Zprime2muAnalysis.MCSamples import samples
@@ -84,19 +85,22 @@ elif cmd == 'resubmit':
     from SUSYBSMAnalysis.Zprime2muAnalysis.MCSamples import samples
     for sample in samples:
         print sample.name
-        do('crab resubmit -d crab/crab_ana_datamc_%(name)s ' % sample)
+#         do('crab resubmit -d crab/crab_ana_datamc_%(name)s ' % sample)
+        do('crab resubmit -d crab_kFactor/crab_ana_datamc_%(name)s ' % sample)
 
 elif cmd == 'kill':
     from SUSYBSMAnalysis.Zprime2muAnalysis.MCSamples import samples
     for sample in samples:
         print sample.name
         do('crab kill -d crab/crab_ana_datamc_%(name)s ' % sample)
+#         do('crab kill -d crab_kFactor/crab_ana_datamc_%(name)s ' % sample)
 
 elif cmd == 'getoutput':
     from SUSYBSMAnalysis.Zprime2muAnalysis.MCSamples import samples
     for sample in samples:
         print sample.name
-        do('crab getoutput -d crab/crab_ana_datamc_%(name)s --checksum=no ' % sample)
+#         do('crab getoutput -d crab/crab_ana_datamc_%(name)s --checksum=no ' % sample)
+        do('crab getoutput -d crab_kFactor/crab_ana_datamc_%(name)s --checksum=no ' % sample)
 
 #elif cmd == 'publishmc':
 #    from SUSYBSMAnalysis.Zprime2muAnalysis.MCSamples import samples
@@ -129,7 +133,9 @@ elif cmd == 'gathermc':
         if n == 0:
             big_warn('no files matching %s' % pattern)
         else:
-            files = glob.glob('crab/crab_ana%(extra)s_datamc_%(name)s/results/zp2mu_histos*root' % locals())
+#             files = glob.glob('crab/crab_ana%(extra)s_datamc_%(name)s/results/zp2mu_histos*root' % locals())
+            files = glob.glob('crab_kFactor/crab_ana%(extra)s_datamc_%(name)s/results/zp2mu_histos*root' % locals())
+
             hadd('mc/ana_datamc_%s.root' % name, files)
 
 elif cmd == 'gatherdata':
@@ -138,7 +144,7 @@ elif cmd == 'gatherdata':
     for lumi_mask in lumi_masks:
         print lumi_mask
 #        dirs = glob.glob('crab/crab_ana_datamc_%s_ExpressPhysicsRun2015B*' % lumi_mask)
-        dirs = glob.glob('crab/crab_ana_datamc_%s_SingleMuonRun2016*' % lumi_mask)
+        dirs = glob.glob('crab/crab_ana_datamc_%s_SingleMuonRun2017*' % lumi_mask)
 #        dirs = glob.glob('crab/crab_ana_datamc_%s_ExpressPhysicsRun2015B-Express_251161_251252' % lumi_mask)
         files = []
         for d in dirs:
@@ -163,9 +169,9 @@ elif cmd == 'gatherdata':
                 print cl
                                         
         reduce(lambda x,y: x|y, (LumiList(j) for j in jsons)).writeJSON('%(wdir)s/ana_datamc_data.forlumi.json' % locals())
-        do('brilcalc lumi --normtag /afs/cern.ch/user/l/lumipro/public/normtag_file/normtag_DATACERT.json -u /pb  -i %(wdir)s/ana_datamc_data.forlumi.json  > %(wdir)s/ana_datamc_data.lumi -b "STABLE BEAMS" ' % locals())
-        do('tail -5 %(wdir)s/ana_datamc_data.lumi' % locals())
-        print 'done with', lumi_mask, '\n'
+#         do('brilcalc lumi --normtag /afs/cern.ch/user/l/lumipro/public/normtag_file/normtag_DATACERT.json -u /pb  -i %(wdir)s/ana_datamc_data.forlumi.json  > %(wdir)s/ana_datamc_data.lumi -b "STABLE BEAMS" ' % locals())
+#         do('tail -5 %(wdir)s/ana_datamc_data.lumi' % locals())
+#         print 'done with', lumi_mask, '\n'
 
         #do('lumiCalc2.py -i %(wdir)s/ana_datamc_data.forlumi.json overview > %(wdir)s/ana_datamc_data.lumi' % locals())
         #do('pixelLumiCalc.py -i %(wdir)s/ana_datamc_data.forlumi.json overview > %(wdir)s/ana_datamc_data.lumi' % locals())

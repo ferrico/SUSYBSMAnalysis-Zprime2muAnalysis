@@ -26,6 +26,7 @@
 #include "SUSYBSMAnalysis/Zprime2muAnalysis/src/PATUtilities.h"
 #include "SUSYBSMAnalysis/Zprime2muAnalysis/src/ToConcrete.h"
 #include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
+#include "DataFormats/TrackReco/interface/Track.h"
 
 class SimpleNtupler_miniAOD : public edm::EDAnalyzer {
 public:
@@ -70,6 +71,9 @@ private:
     float vertex_z;
     float vertex_z_err;
     int lep_id[2];
+    int lep_tk_charge[2];
+    int lep_glb_charge[2];
+    int lep_std_charge[2];
     float lep_p[2];
     float lep_pt[2];
     float lep_pt_err[2];
@@ -104,6 +108,12 @@ private:
     float lep_glb_chi2[2];
     float lep_glb_ndf[2];
     float lep_glb_qOverPt[2];
+    float lep_std_p[2];
+    float lep_std_pt[2];
+    float lep_std_pt_err[2];
+    float lep_std_eta[2];
+    float lep_std_phi[2];
+    float lep_std_qOverPt[2];
     float lep_tpfms_p[2];
     float lep_tpfms_pt[2];
     float lep_tpfms_pt_err[2];
@@ -126,6 +136,12 @@ private:
     float lep_picky_chi2[2];
     float lep_picky_ndf[2];
     float lep_picky_qOverPt[2];
+    float lep_dyt_p[2];
+    float lep_dyt_pt[2];
+    float lep_dyt_pt_err[2];
+    float lep_dyt_chi2[2];
+    float lep_dyt_ndf[2];
+    float lep_dyt_qOverPt[2];
     float lep_cocktail_p[2];
     float lep_cocktail_pt[2];
     float lep_cocktail_pt_err[2];
@@ -175,6 +191,13 @@ private:
     short lep_glb_numberOfValidTrackerLayers[2]; 
     short lep_glb_numberOfValidPixelHits[2];
     short lep_glb_numberOfValidMuonHits[2];
+    short lep_TuneP_numberOfValidMuonHits[2];
+    short lep_picky_numberOfValidMuonHits[2];
+    short lep_dyt_numberOfValidMuonHits[2];
+    short lep_tpfms_numberOfValidMuonHits[2];
+    short lep_stanAlone_numberOfValidMuonHits[2];
+    short lep_stanAlone_numberOfBadHits[2];
+    short lep_stanAlone_numberOfMuonHits[2];
     short lep_glb_numberOfValidMuonDTHits[2];
     short lep_glb_numberOfValidMuonCSCHits[2];
     short lep_glb_numberOfValidMuonRPCHits[2];
@@ -194,6 +217,8 @@ private:
     unsigned int lep_stationGapMaskPull[2];
     bool lep_isGlobalMuon[2];
     bool lep_isTrackerMuon[2];
+    bool lep_isStandAloneMuon[2];
+    bool lep_isPFMuon[2];
     bool GoodDataRan;
     bool GoodVtx;
     bool METFilter;
@@ -315,6 +340,9 @@ SimpleNtupler_miniAOD::SimpleNtupler_miniAOD(const edm::ParameterSet& cfg)
   tree->Branch("vertex_z", &t.vertex_z, "vertex_z/F");
   tree->Branch("vertex_z_err", &t.vertex_z_err, "vertex_z_err/F");
   tree->Branch("lep_id", t.lep_id, "lep_id[2]/I");
+  tree->Branch("lep_tk_charge", t.lep_tk_charge, "lep_tk_charge[2]/I");
+  tree->Branch("lep_glb_charge", t.lep_glb_charge, "lep_glb_charge[2]/I");
+  tree->Branch("lep_std_charge", t.lep_std_charge, "lep_std_charge[2]/I");
   tree->Branch("lep_heep_id", t.lep_heep_id, "lep_heep_id[2]/I");
   tree->Branch("lep_p", t.lep_p, "lep_p[2]/F");
   tree->Branch("lep_pt", t.lep_pt, "lep_pt[2]/F");
@@ -350,6 +378,12 @@ SimpleNtupler_miniAOD::SimpleNtupler_miniAOD(const edm::ParameterSet& cfg)
   tree->Branch("lep_glb_chi2", t.lep_glb_chi2, "lep_glb_chi2[2]/F");
   tree->Branch("lep_glb_ndf", t.lep_glb_ndf, "lep_glb_ndf[2]/F");
   tree->Branch("lep_glb_qOverPt", t.lep_glb_qOverPt, "lep_glb_qOverPt[2]/F");
+  tree->Branch("lep_std_p", t.lep_std_p, "lep_std_p[2]/F");
+  tree->Branch("lep_std_pt", t.lep_std_pt, "lep_std_pt[2]/F");
+  tree->Branch("lep_std_pt_err", t.lep_std_pt_err, "lep_std_pt_err[2]/F");
+  tree->Branch("lep_std_eta", t.lep_std_eta, "lep_std_eta[2]/F");
+  tree->Branch("lep_std_phi", t.lep_std_phi, "lep_std_phi[2]/F");
+  tree->Branch("lep_std_qOverPt", t.lep_std_qOverPt, "lep_std_qOverPt[2]/F");
   tree->Branch("lep_tpfms_p", t.lep_tpfms_p, "lep_tpfms_p[2]/F");
   tree->Branch("lep_tpfms_pt", t.lep_tpfms_pt, "lep_tpfms_pt[2]/F");
   tree->Branch("lep_tpfms_pt_err", t.lep_tpfms_pt_err, "lep_tpfms_pt_err[2]/F");
@@ -372,6 +406,12 @@ SimpleNtupler_miniAOD::SimpleNtupler_miniAOD(const edm::ParameterSet& cfg)
   tree->Branch("lep_picky_chi2", t.lep_picky_chi2, "lep_picky_chi2[2]/F");
   tree->Branch("lep_picky_ndf", t.lep_picky_ndf, "lep_picky_ndf[2]/F");
   tree->Branch("lep_picky_qOverPt", t.lep_picky_qOverPt, "lep_picky_qOverPt[2]/F");
+  tree->Branch("lep_dyt_p", t.lep_dyt_p, "lep_dyt_p[2]/F");
+  tree->Branch("lep_dyt_pt", t.lep_dyt_pt, "lep_dyt_pt[2]/F");
+  tree->Branch("lep_dyt_pt_err", t.lep_dyt_pt_err, "lep_dyt_pt_err[2]/F");
+  tree->Branch("lep_dyt_chi2", t.lep_dyt_chi2, "lep_dyt_chi2[2]/F");
+  tree->Branch("lep_dyt_ndf", t.lep_dyt_ndf, "lep_dyt_ndf[2]/F");
+  tree->Branch("lep_dyt_qOverPt", t.lep_dyt_qOverPt, "lep_dyt_qOverPt[2]/F");
   tree->Branch("lep_cocktail_p", t.lep_cocktail_p, "lep_cocktail_p[2]/F");
   tree->Branch("lep_cocktail_pt", t.lep_cocktail_pt, "lep_cocktail_pt[2]/F");
   tree->Branch("lep_cocktail_pt_err", t.lep_cocktail_pt_err, "lep_cocktail_pt_err[2]/F");
@@ -418,6 +458,13 @@ SimpleNtupler_miniAOD::SimpleNtupler_miniAOD(const edm::ParameterSet& cfg)
   tree->Branch("lep_glb_numberOfValidTrackerLayers", t.lep_glb_numberOfValidTrackerLayers, "lep_glb_numberOfValidTrackerLayers[2]/S");
   tree->Branch("lep_glb_numberOfValidPixelHits", t.lep_glb_numberOfValidPixelHits, "lep_glb_numberOfValidPixelHits[2]/S");
   tree->Branch("lep_glb_numberOfValidMuonHits", t.lep_glb_numberOfValidMuonHits, "lep_glb_numberOfValidMuonHits[2]/S");
+  tree->Branch("lep_TuneP_numberOfValidMuonHits", t.lep_TuneP_numberOfValidMuonHits, "lep_TuneP_numberOfValidMuonHits[2]/S");
+  tree->Branch("lep_picky_numberOfValidMuonHits", t.lep_picky_numberOfValidMuonHits, "lep_picky_numberOfValidMuonHits[2]/S");
+  tree->Branch("lep_dyt_numberOfValidMuonHits", t.lep_dyt_numberOfValidMuonHits, "lep_dyt_numberOfValidMuonHits[2]/S");
+  tree->Branch("lep_tpfms_numberOfValidMuonHits", t.lep_tpfms_numberOfValidMuonHits, "lep_tpfms_numberOfValidMuonHits[2]/S");
+  tree->Branch("lep_stanAlone_numberOfValidMuonHits", t.lep_stanAlone_numberOfValidMuonHits, "lep_stanAlone_numberOfValidMuonHits[2]/S");
+  tree->Branch("lep_stanAlone_numberOfBadHits", t.lep_stanAlone_numberOfBadHits, "lep_stanAlone_numberOfBadHits[2]/S");;
+  tree->Branch("lep_stanAlone_numberOfMuonHits", t.lep_stanAlone_numberOfMuonHits, "lep_stanAlone_numberOfMuonHits[2]/S");
   tree->Branch("lep_glb_numberOfValidMuonDTHits", t.lep_glb_numberOfValidMuonDTHits, "lep_glb_numberOfValidMuonDTHits[2]/S");
   tree->Branch("lep_glb_numberOfValidMuonCSCHits", t.lep_glb_numberOfValidMuonCSCHits, "lep_glb_numberOfValidMuonCSCHits[2]/S");
   tree->Branch("lep_glb_numberOfValidMuonRPCHits", t.lep_glb_numberOfValidMuonRPCHits, "lep_glb_numberOfValidMuonRPCHits[2]/S");
@@ -437,6 +484,8 @@ SimpleNtupler_miniAOD::SimpleNtupler_miniAOD(const edm::ParameterSet& cfg)
   tree->Branch("lep_stationGapMaskPull", t.lep_stationGapMaskPull, "lep_stationGapMaskPull[2]/I");
   tree->Branch("lep_isGlobalMuon", t.lep_isGlobalMuon, "lep_isGlobalMuon[2]/O");
   tree->Branch("lep_isTrackerMuon", t.lep_isTrackerMuon, "lep_isTrackerMuon[2]/O");
+  tree->Branch("lep_isStandAloneMuon", t.lep_isStandAloneMuon, "lep_isStandAloneMuon[2]/O");
+  tree->Branch("lep_isPFMuon", t.lep_isPFMuon, "lep_isPFMuon[2]/O");
   tree->Branch("GoodDataRan", &t.GoodDataRan, "GoodDataRan/O");
   tree->Branch("GoodVtx", &t.GoodVtx, "GoodVtx/O");
   tree->Branch("METFilter", &t.METFilter, "METFilter/O");
@@ -726,8 +775,46 @@ void SimpleNtupler_miniAOD::analyze(const edm::Event& event, const edm::EventSet
       t.gen_res_rap  = hardInteraction->resonance->rapidity();
       t.gen_res_eta  = hardInteraction->resonance->eta();
       t.gen_res_phi  = hardInteraction->resonance->phi();
-      
+
+// ///// status 1      
+//       t.gen_dil_mass = hardInteraction->dilepton().mass();
+//       t.gen_dil_pt   = hardInteraction->dilepton().pt();
+//       t.gen_dil_rap  = hardInteraction->dilepton().Rapidity();
+//       t.gen_dil_eta  = hardInteraction->dilepton().eta();
+//       t.gen_dil_phi  = hardInteraction->dilepton().phi();
+//       t.gen_dil_dR   = deltaR(*hardInteraction->lepMinus, *hardInteraction->lepPlus);
+//       t.gen_dil_dPhi = deltaPhi(*hardInteraction->lepMinus, *hardInteraction->lepPlus);
+//       
+//       t.gen_lep_p[0]  = hardInteraction->lepMinus->p();
+//       t.gen_lep_pt[0]  = hardInteraction->lepMinus->pt();
+//       t.gen_lep_px[0]  = hardInteraction->lepMinus->px();
+//       t.gen_lep_py[0]  = hardInteraction->lepMinus->py();
+//       t.gen_lep_pz[0]  = hardInteraction->lepMinus->pz();
+//       t.gen_lep_E[0]  = hardInteraction->lepMinus->energy();
+//       t.gen_lep_eta[0] = hardInteraction->lepMinus->eta();
+//       t.gen_lep_phi[0] = hardInteraction->lepMinus->phi();
+//       t.gen_lep_qOverPt[0] = hardInteraction->lepMinus->charge() / hardInteraction->lepMinus->pt();
+//       
+//       t.gen_lep_p[1]  = hardInteraction->lepPlus->p();
+//       t.gen_lep_pt[1]  = hardInteraction->lepPlus->pt();
+//       t.gen_lep_px[1]  = hardInteraction->lepMinus->px();
+//       t.gen_lep_py[1]  = hardInteraction->lepMinus->py();
+//       t.gen_lep_pz[1]  = hardInteraction->lepMinus->pz();
+//       t.gen_lep_E[1]  = hardInteraction->lepMinus->energy();
+//       t.gen_lep_eta[1] = hardInteraction->lepPlus->eta();
+//       t.gen_lep_phi[1] = hardInteraction->lepPlus->phi();
+//       t.gen_lep_qOverPt[1] = hardInteraction->lepPlus->charge() / hardInteraction->lepPlus->pt();
+// ///// status 1     
+
+// ///// NO bremsstrahlung      
       t.gen_dil_mass = (hardInteraction->lepPlusNoIB->p4() + hardInteraction->lepMinusNoIB->p4()).mass();//hardInteraction->dilepton().mass();
+//       if(t.gen_dil_mass > 48 && t.gen_dil_mass < 500)
+//       	std::cout<<"....."<<t.gen_dil_mass<<"\tpt_minus = "<<hardInteraction->lepMinusNoIB->pt()<<"\tpt_plus = "<<hardInteraction->lepPlusNoIB->pt()<<"\tID_minus = "<<hardInteraction->lepMinusNoIB->pdgId()<<"\tID_plus = "<<hardInteraction->lepPlusNoIB->pdgId()<<
+//       	"\tMother_minus = "<<(hardInteraction->lepMinusNoIB->mother())->pdgId()<<
+//       	"\tGrandMother_minus = "<<((hardInteraction->lepMinusNoIB->mother())->mother())->pdgId()<<
+//       	"\tMother_plus = "<<(hardInteraction->lepPlusNoIB->mother())->pdgId()<<
+//       	"\tGrandMother_plus = "<<((hardInteraction->lepPlusNoIB->mother())->mother())->pdgId()<<std::endl;
+
       t.gen_dil_pt   = (hardInteraction->lepPlusNoIB->p4() + hardInteraction->lepMinusNoIB->p4()).pt();
       t.gen_dil_rap  = (hardInteraction->lepPlusNoIB->p4() + hardInteraction->lepMinusNoIB->p4()).Rapidity();
       t.gen_dil_eta  = (hardInteraction->lepPlusNoIB->p4() + hardInteraction->lepMinusNoIB->p4()).eta();
@@ -754,7 +841,7 @@ void SimpleNtupler_miniAOD::analyze(const edm::Event& event, const edm::EventSet
       t.gen_lep_eta[1] = hardInteraction->lepPlusNoIB->eta();
       t.gen_lep_phi[1] = hardInteraction->lepPlusNoIB->phi();
       t.gen_lep_qOverPt[1] = hardInteraction->lepPlusNoIB->charge() / hardInteraction->lepPlusNoIB->pt();
-      
+// ///// NO bremsstrahlung     
       /*
        t.gen_lep_noib_pt[0]  = hardInteraction->lepMinusNoIB->pt();
        t.gen_lep_noib_px[0]  = hardInteraction->lepMinusNoIB->px();
@@ -860,6 +947,12 @@ void SimpleNtupler_miniAOD::analyze(const edm::Event& event, const edm::EventSet
 	t.lep_glb_chi2[w] = -999;
 	t.lep_glb_ndf[w] = -999;
 	t.lep_glb_qOverPt[w] = -999;
+	t.lep_std_p[w] = -999;  
+	t.lep_std_pt[w] = -999;
+	t.lep_std_pt_err[w] = -999;
+	t.lep_std_eta[w] = -999;
+	t.lep_std_phi[w] = -999;
+	t.lep_std_qOverPt[w] = -999;
 	t.lep_tpfms_p[w] = -999;
 	t.lep_tpfms_pt[w] = -999;
 	t.lep_tpfms_pt_err[w] = -999;
@@ -927,6 +1020,12 @@ void SimpleNtupler_miniAOD::analyze(const edm::Event& event, const edm::EventSet
 	t.lep_glb_numberOfValidPixelHits[w] = -999;
 	t.lep_glb_muonStationsWithValidHits[w] = -999;
 	t.lep_glb_numberOfValidMuonHits[w] = -999;
+	t.lep_TuneP_numberOfValidMuonHits[w] = -999;
+	t.lep_picky_numberOfValidMuonHits[w] = -999;
+	t.lep_dyt_numberOfValidMuonHits[w] = -999;
+	t.lep_tpfms_numberOfValidMuonHits[w] = -999;
+	t.lep_stanAlone_numberOfValidMuonHits[w] = -999;
+	t.lep_stanAlone_numberOfMuonHits[w] = -999;
 	t.lep_glb_numberOfValidMuonDTHits[w] = -999;
 	t.lep_glb_numberOfValidMuonCSCHits[w] = -999;
 	t.lep_glb_numberOfValidMuonRPCHits[w] = -999;
@@ -934,8 +1033,8 @@ void SimpleNtupler_miniAOD::analyze(const edm::Event& event, const edm::EventSet
 	t.lep_glb_dtStationsWithValidHits[w] = -999;
 	t.lep_glb_cscStationsWithValidHits[w] = -999;
 	t.lep_glb_rpcStationsWithValidHits[w] = -999;
-        t.lep_glb_innermostMuonStationWithValidHits[w] = -999;
-        t.lep_glb_outermostMuonStationWithValidHits[w] = -999;
+    t.lep_glb_innermostMuonStationWithValidHits[w] = -999;
+    t.lep_glb_outermostMuonStationWithValidHits[w] = -999;
 	t.lep_numberOfMatches[w] = -999;
 	t.lep_numberOfMatchedStations[w] = -999;
 	t.lep_numberOfMatchedRPCLayers[w] = -999;
@@ -1015,6 +1114,7 @@ void SimpleNtupler_miniAOD::analyze(const edm::Event& event, const edm::EventSet
 	}
 	else{
 		t.lep_tk_p[w] = mu->innerTrack()->p();
+		t.lep_tk_charge[w] = mu->innerTrack()->charge();
 		t.lep_tk_pt[w] = mu->innerTrack()->pt();
 		t.lep_tk_pt_err[w] = mu->innerTrack()->ptError();
 		t.lep_tk_px[w] = mu->innerTrack()->px();
@@ -1116,7 +1216,26 @@ void SimpleNtupler_miniAOD::analyze(const edm::Event& event, const edm::EventSet
 	  t.lep_picky_ndf[w] = mu->pickyTrack()->ndof();
 	  t.lep_picky_qOverPt[w] = (mu->charge())/(mu->pickyTrack()->pt());
 	}
-        if (!mu->hasUserInt("hasTeVMuons") || mu->userInt("hasTeVMuons")){
+	
+//DYT muon information
+	if (!(mu->dytTrack().refCore().isAvailable())) {
+      t.lep_dyt_p[w] = -999;
+      t.lep_dyt_pt[w] = -999;
+      t.lep_dyt_pt_err[w] = -999;
+      t.lep_dyt_chi2[w] = -999;
+      t.lep_dyt_ndf[w] = -999;
+      t.lep_dyt_qOverPt[w] = -999;
+    }
+    else {
+      t.lep_dyt_p[w] = mu->dytTrack()->p();
+      t.lep_dyt_pt[w] = mu->dytTrack()->pt();
+      t.lep_dyt_pt_err[w] = mu->dytTrack()->ptError();
+      t.lep_dyt_chi2[w] = mu->dytTrack()->chi2();
+      t.lep_dyt_ndf[w] = mu->dytTrack()->ndof();
+      t.lep_dyt_qOverPt[w] = (mu->charge())/(mu->dytTrack()->pt());
+    }
+
+    if (!mu->hasUserInt("hasTeVMuons") || mu->userInt("hasTeVMuons")){
 	        reco::TrackRef cocktail = muon::tevOptimized(*mu, 200, 17, 40, 0.25).first;
        		 if (cocktail.isNull()) {
           	 t.lep_cocktail_p[w] = -999;
@@ -1214,6 +1333,36 @@ void SimpleNtupler_miniAOD::analyze(const edm::Event& event, const edm::EventSet
 		t.lep_tk_numberOfValidTrackerLayers[w] = mu->innerTrack()->hitPattern().trackerLayersWithMeasurement();
 		t.lep_tk_numberOfValidPixelHits[w] = mu->innerTrack()->hitPattern().numberOfValidPixelHits();
 	}
+	
+ // Standalone
+ 	t.lep_isStandAloneMuon[w] = mu->isStandAloneMuon();
+ 	t.lep_isPFMuon[w] = mu->isPFMuon();
+ 	
+ 	if (mu->outerTrack().isNull()){
+ 		t.lep_std_p[w] = -999;
+ 		t.lep_std_pt[w] = -999;
+ 		t.lep_std_pt_err[w] = -999;
+ 		t.lep_std_eta[w] = -999;
+ 		t.lep_std_phi[w] = -999;
+ 		t.lep_std_qOverPt[w] = -999;
+ 		t.lep_stanAlone_numberOfValidMuonHits[w] = 100;
+ 		t.lep_stanAlone_numberOfBadHits[w] = 100;
+ 		t.lep_stanAlone_numberOfMuonHits[w] = 100;
+ 
+	}
+	else{
+		t.lep_std_p[w] = mu->outerTrack()->p();
+		t.lep_std_charge[w] = mu->outerTrack()->charge();
+ 		t.lep_std_pt[w] = mu->outerTrack()->pt();
+ 		t.lep_std_pt_err[w] = mu->outerTrack()->ptError();
+ 		t.lep_std_eta[w] = mu->outerTrack()->eta();
+ 		t.lep_std_phi[w] = mu->outerTrack()->phi();
+ 		t.lep_std_qOverPt[w] = (mu->charge())/(mu->outerTrack()->pt());
+ 		t.lep_stanAlone_numberOfValidMuonHits[w] =  mu->outerTrack()->hitPattern().numberOfValidMuonHits();
+ 		t.lep_stanAlone_numberOfBadHits[w] =  mu->outerTrack()->hitPattern().numberOfBadHits();         
+ 		t.lep_stanAlone_numberOfMuonHits[w] =  mu->outerTrack()->hitPattern().numberOfMuonHits();
+	}
+
         // 
         // Global track
         //
@@ -1236,7 +1385,22 @@ void SimpleNtupler_miniAOD::analyze(const edm::Event& event, const edm::EventSet
 		t.lep_glb_rpcStationsWithValidHits[w] = mu->globalTrack()->hitPattern().rpcStationsWithValidHits();
         	t.lep_glb_innermostMuonStationWithValidHits[w] = mu->globalTrack()->hitPattern().innermostMuonStationWithValidHits();
         	t.lep_glb_outermostMuonStationWithValidHits[w] = mu->globalTrack()->hitPattern().outermostMuonStationWithValidHits();
+        	t.lep_glb_charge[w] = mu->globalTrack()->charge();
         }
+        if (mu->isGlobalMuon() && mu->tunePMuonBestTrack().refCore().isAvailable()){
+	        t.lep_TuneP_numberOfValidMuonHits[w] = mu->tunePMuonBestTrack()->hitPattern().numberOfValidMuonHits();
+	    }
+	    if (mu->isGlobalMuon() && mu->pickyTrack().refCore().isAvailable()){
+	    	t.lep_picky_numberOfValidMuonHits[w] = mu->pickyTrack()->hitPattern().numberOfValidMuonHits();
+	    	
+	    if (mu->isGlobalMuon() && mu->dytTrack().refCore().isAvailable()){
+	    	t.lep_dyt_numberOfValidMuonHits[w] = mu->dytTrack()->hitPattern().numberOfValidMuonHits();
+	    }
+	    
+	    if (mu->isGlobalMuon() && mu->tpfmsTrack().refCore().isAvailable()){
+	    	t.lep_tpfms_numberOfValidMuonHits[w] = mu->tpfmsTrack()->hitPattern().numberOfValidMuonHits();
+	    }
+     }
 	// number of chambers with matched segments
 	t.lep_numberOfMatches[w] = mu->numberOfMatches();
         // number of stations with matched segments

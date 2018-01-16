@@ -4,7 +4,7 @@
 import sys,os
 import argparse
 import math
-from setTDRStyle import setTDRStyle
+# from setTDRStyle import setTDRStyle
 
 oldargv = sys.argv[:]
 sys.argv = [ '-b-' ]
@@ -114,7 +114,7 @@ def doFitGeneric(hist,output,rap="BB",fit="cruijff",syst=False):
             if ("cruijff" in fit): 
                 print ">>>>>>>>  Using CRYSTAL BALL for systematics >>>>>>>>"
                 systfunc = ROOT.TF1("systfunc","crystalball",h.GetMean() - 2.5*h.GetRMS(),h.GetMean() + 1.2*h.GetRMS())
-                systfunc.SetParameters(funct.GetParameter(0), funct.GetParameter(1), funct.GetParameter(2), 1.4, 2.)
+                systfunc.SetParameters(funct.GetParameter(0), funct.GetParameter(1), funct.GetParameter(2), 1.4, 1.5)#2.)
             elif ("crystal" in fit): 
                 print ">>>>>>>>  Using CRUIJFF for systematics >>>>>>>>"
                 systfunc = ROOT.TF1("systfunc",ROOT.cruijff, h.GetMean() - 2.3*h.GetRMS(),  h.GetMean() + 1.5*h.GetRMS(),5)
@@ -129,9 +129,14 @@ def doFitGeneric(hist,output,rap="BB",fit="cruijff",syst=False):
                 sys =1-systfunc.GetParameter(par+1)/funct.GetParameter(par+1)
                 sys = sys*funct.GetParameter(par+1)
             else:
-                sys = 0.
+                sys = 0.    
+            print funct.GetNpar(), par, funct.GetParName(par+1), sys
             errs.append(math.sqrt(sys*sys+funct.GetParError(par+1)*funct.GetParError(par+1)))
-        chi2.append(funct.GetChisquare()/funct.GetNDF())
+            
+        sysUncert = systfunc.GetParameter(2)/funct.GetParameter(2)-1
+        chi2.append(sysUncert)
+#         chi2.append(funct.GetChisquare()/funct.GetNDF())
+        print systfunc.GetParameter(2), funct.GetParameter(2), sysUncert
 
         h.SetTitle("Mass resolution for %d < m_{ll} <%d" %(mrange[i],mrange[i+1]))
         h.GetXaxis().SetTitle("m_{ll}^{RECO} / m_{ll}^{GEN} - 1")
@@ -267,7 +272,7 @@ def drawMassResGeneric(hist,output,rapidity,funct="cruijff"):
         f.GetXaxis().SetTitle("m(#mu^{+}#mu^{-}) [GeV]")
         f.GetXaxis().SetRangeUser(mrange[0],mrange[len(mrange)-1])
         if ("chi2" in f.GetName()): 
-            f.GetYaxis().SetRangeUser(0,20)            
+            f.GetYaxis().SetRangeUser(0,0.4)            
 
         if "Sigma" in f.GetName():
             f.GetYaxis().SetRangeUser(0,0.15)
@@ -374,7 +379,7 @@ def drawMassResGeneric(hist,output,rapidity,funct="cruijff"):
     
     
 def makeMassRes(inputfile,output,funct):
-    style = setTDRStyle()
+#     style = setTDRStyle()
     ROOT.gStyle.SetTitleYOffset(1.45)
     ROOT.gStyle.SetTitleXOffset(1.45)
     ROOT.gStyle.SetOptFit(0)
@@ -480,9 +485,9 @@ if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(usage="makeMassRes.py [options]",description="Compute mass resolution",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-
-    parser.add_argument("-i","--ifile", dest="inputfile",default="files/res_ZToMuMu_M_120_6000.root", help='Input filename')
-    parser.add_argument("-o","--ofolder",dest="output", default="plots/", help='folder name to store results')
+#/afs/cern.ch/work/f/ferrico/private/ZPrime_code/CMSSW_8_0_21/src/SUSYBSMAnalysis/Zprime2muAnalysis/test/EfficiencyResolutionFromMC/mc/effres.root
+    parser.add_argument("-i","--ifile", dest="inputfile",default="./mc/res_ZToMuMu_M_120_6000.root", help='Input filename')
+    parser.add_argument("-o","--ofolder",dest="output", default="./plots/", help='folder name to store results')
     parser.add_argument("-f","--funct",dest="funct", default="cruijff", help='function used')
     parser.add_argument("-x","--xrange", type=str, help='lower and upper x limit', nargs=1)
                     
