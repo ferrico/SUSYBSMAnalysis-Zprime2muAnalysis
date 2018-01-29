@@ -31,7 +31,7 @@ use_non_dy = True
 
 
 masses  = ['dy50to120', 'dy120to200', 'dy200to400', 'dy400to800', 'dy800to1400', 'dy1400to2300', 'dy2300to3500', 'dy3500to4500', 'dy4500to6000']
-nevents = [2977600, 100000, 100000,  98400, 100000, 100000, 100000, 100000, 100000]
+nevents = [100000, 100000, 100000,  98000, 96613, 100000, 100000, 100000, 100000]
 #sigmas  = [  1915.,  12.2,  1.53, 0.0462, 0.00586, 0.00194, 1.70e-4, 2.21e-5] # in pb, PYTHIA*1.3
 sigmas  = [  1975, 19.32, 2.731, 0.241, 0.01678, 0.00139, 0.00008948, 0.0000041, 4.56E-7]
 weights = [int_lumi / nev * sig for nev,sig in zip(nevents, sigmas)]
@@ -55,25 +55,32 @@ for m,w in zip(masses, weights):
  
 if use_non_dy:
     from SUSYBSMAnalysis.Zprime2muAnalysis.MCSamples import *
-    non_dy_samples = [WWinclusive, WW200to600, WW600to1200, WW1200to2500, WW2500, 
-    						WZ_skim,
-							ZZ_skim,
-    						WZ_ext, 
-    						ZZ_ext_skim,
-    						Wantitop, tW, 
-    						Wjets, 
-    						ttbar_lep50to500, 
-							ttbar_lep_500to800, 
-							ttbar_lep_800to1200, 
-							ttbar_lep_1200to1800, 
-							ttbar_lep1800toInf,
-							#     						qcd50to80, 
-    						qcd80to120, qcd120to170, 
-    						qcd170to300, 
-    						qcd300to470, qcd470to600, qcd600to800, qcd800to1000, qcd1000to1400, 
-    						qcd1400to1800, qcd1800to2400, qcd2400to3200, qcd3200, 
-    						dyInclusive50
-    						]
+    non_dy_samples = [		
+    						WW,
+    						WZ,
+    						ZZ,
+    						ttbar,
+    						Wantitop, tW
+    				]    						
+#     						WWinclusive, WW200to600, WW600to1200, WW1200to2500, WW2500, 
+#     						WZ_skim,
+# 							ZZ_skim,
+#     						WZ_ext, 
+#     						ZZ_ext_skim,
+#     						Wantitop, tW, 
+#     						Wjets, 
+#     						ttbar_lep50to500, 
+# 							ttbar_lep_500to800, 
+# 							ttbar_lep_800to1200, 
+# 							ttbar_lep_1200to1800, 
+# 							ttbar_lep1800toInf,
+# 							#     						qcd50to80, 
+#     						qcd80to120, qcd120to170, 
+#     						qcd170to300, 
+#     						qcd300to470, qcd470to600, qcd600to800, qcd800to1000, qcd1000to1400, 
+#     						qcd1400to1800, qcd1800to2400, qcd2400to3200, qcd3200, 
+#     						dyInclusive50
+#     						]
     for sample in non_dy_samples:
         fn = 'ana_datamc_%s.root' % sample.name
         fn = hists_dir + fn

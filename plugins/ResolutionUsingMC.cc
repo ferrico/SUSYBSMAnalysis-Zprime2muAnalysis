@@ -78,6 +78,7 @@ class ResolutionUsingMC : public edm::EDAnalyzer {
   TH2F* DileptonMassResVMass_2d;
   TH2F* DileptonMassResVMass_2d_BB;
   TH2F* DileptonMassResVMass_2d_BE;
+  TH2F* DileptonMassResVMass_2d_EE;
   TH2F* DileptonMassResVMass_2d_vsPtsum;
   TH2F* DileptonMassResVMass_2d_vsLeadPt;
   TH2F* DileptonMassResVMass_2d_vsPt_B;
@@ -170,6 +171,7 @@ ResolutionUsingMC::ResolutionUsingMC(const edm::ParameterSet& cfg)
   DileptonMassResVMass_2d          = fs->make<TH2F>("DileptonMassResVMass_2d",          titlePrefix + "(dil. mass - gen dil. mass)/(gen dil. mass)", 120, 0., 6000., 1000, -1., 1.0);
   DileptonMassResVMass_2d_BB       = fs->make<TH2F>("DileptonMassResVMass_2d_BB",       titlePrefix + "(dil. mass - gen dil. mass)/(gen dil. mass)", 120, 0., 6000., 1000, -1., 1.0);
   DileptonMassResVMass_2d_BE       = fs->make<TH2F>("DileptonMassResVMass_2d_BE",       titlePrefix + "(dil. mass - gen dil. mass)/(gen dil. mass)", 120, 0., 6000., 1000, -1., 1.0);
+  DileptonMassResVMass_2d_EE       = fs->make<TH2F>("DileptonMassResVMass_2d_EE",       titlePrefix + "(dil. mass - gen dil. mass)/(gen dil. mass)", 120, 0., 6000., 1000, -1., 1.0);
   DileptonMassResVMass_2d_vsPtsum  = fs->make<TH2F>("DileptonMassResVMass_2d_vsPtsum",  titlePrefix + "(dil. mass - gen dil. mass)/(gen dil. mass)", 120, 0., 6000., 1000, -1., 1.0);
   DileptonMassResVMass_2d_vsLeadPt = fs->make<TH2F>("DileptonMassResVMass_2d_vsLeadPt", titlePrefix + "(dil. mass - gen dil. mass)/(gen dil. mass)", 120, 0., 6000., 1000, -1., 1.0);
   DileptonMassResVMass_2d_vsPt_B   = fs->make<TH2F>("DileptonMassResVMass_2d_vsPt_B",   titlePrefix + "(dil. mass - gen dil. mass)/(gen dil. mass)", 120, 0., 6000., 1000, -1., 1.0);
@@ -329,7 +331,9 @@ void ResolutionUsingMC::fillDileptonMassResolution(const reco::CompositeCandidat
     DileptonMassResVMass_2d_BB ->Fill(gen_mass,     rdil);
   else                                                                         
     DileptonMassResVMass_2d_BE ->Fill(gen_mass,     rdil);
-  
+  if((dil.daughter(0)->eta() > 1.2 || dil.daughter(0)->eta() < -1.2) && (dil.daughter(1)->eta() > 1.2 || dil.daughter(1)->eta() < -1.2))                                                                         
+    DileptonMassResVMass_2d_EE ->Fill(gen_mass,     rdil);
+    
   DileptonMassResVMass_2d_vsPtsum   ->Fill(hardInteraction.lepPlusNoIB->pt()+hardInteraction.lepMinusNoIB->pt(),     rdil);
   if (hardInteraction.lepPlusNoIB->pt() > hardInteraction.lepMinusNoIB->pt())  DileptonMassResVMass_2d_vsLeadPt   ->Fill(hardInteraction.lepPlusNoIB->pt(),     rdil);
   else                                                                 DileptonMassResVMass_2d_vsLeadPt   ->Fill(hardInteraction.lepMinusNoIB->pt(),     rdil);

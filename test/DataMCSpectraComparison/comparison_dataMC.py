@@ -8,18 +8,19 @@ ROOT.TH1.AddDirectory(False)
 histos = {}
 histos_7 = {}
 mumu_MC = '/afs/cern.ch/work/f/ferrico/private/cancella_zprime_port/CMSSW_9_2_6/src/SUSYBSMAnalysis/Zprime2muAnalysis/test/DataMCSpectraComparison/mc/ana_datamc_%s.root'
-mumu_Dati = './data_OK/Run2017MuonsOnly/ana_datamc_data.root'
+mumu_Dati = './data/Run2017MuonsOnly/ana_datamc_data.root'
 # mumu_Dati = '/afs/cern.ch/work/f/ferrico/private/ZPrime_code/CMSSW_8_0_21/src/SUSYBSMAnalysis/Zprime2muAnalysis/test/DataMCSpectraComparison/data_OK/NoScale_YesEtaCut_Run2016MuonsOnly/ana_datamc_data.root'
 
 mumu_scale = 1
-lumi = 35149.782
+lumi = 39484
 # histogram = ['DileptonMass', 'DimuonMassVertexConstrained']#'DileptonMass_bb', 'DileptonPt']
 # histogram = ['LeptonPt']
+# histogram = ['DimuonMassVtxConstrainedLog', 
 histogram = ['DimuonMassVertexConstrained']#, 'DimuonMassVertexConstrained_bb', 'DimuonMassVertexConstrained_be']#, 'DimuonMassVertexConstrained_be']
 #,  'DileptonMass_be',  'DimuonMassVertexConstrained_be', 'LeptonPt']
 # 
-Xmin = 60
-Xmax = 3000
+Xmin =70
+Xmax = 100
 
 # tt_binned = False;
 # 
@@ -29,7 +30,7 @@ Xmax = 3000
 # 	tt_sample = 'NoBinned'
 tt_sample = ''
 
-rebin = 20
+rebin = 1
 for mumu_histogram in histogram:
 	if 'Pt' in mumu_histogram:
 		rebin = 20
@@ -188,10 +189,11 @@ for mumu_histogram in histogram:
  	totale_80X_cum = MC_Stack_cum.GetStack().Last()
 	
 	canvas = ROOT.TCanvas(mumu_histogram, mumu_histogram, 210,45,1050,750)
-	
 	pad1 = ROOT.TPad("pad1", "pad1", 0, 0.25, 1, 1.0)
 	pad1.SetBottomMargin(0)
 	pad1.SetGridx()
+	pad1.SetGridy()
+	pad1.SetLogx()
 	pad1.Draw()
 	pad1.cd() 
 
@@ -204,7 +206,7 @@ for mumu_histogram in histogram:
 	label_histogram.SetFillColor(0)
 	label_histogram.SetFillStyle(0)
 	
-	label_lumi = '\int L\, dt = %.3f fb^{-1}' % (lumi/1000)
+	label_lumi = '\int L\, dt = %f fb^{-1}' % (lumi/1000)
 	label_luminosity = ROOT.TPaveLabel(0.4, 0.675, 0.50, 0.775, label_lumi, 'brNDC')
 	label_luminosity.SetTextFont(42)
 	label_luminosity.SetTextSize(0.5)
@@ -241,6 +243,8 @@ for mumu_histogram in histogram:
 	pad2.SetTopMargin(0)
 	pad2.SetBottomMargin(0.2)
 	pad2.SetGridx()
+	pad2.SetGridy()
+	pad2.SetLogx()
 	pad2.Draw()
 	pad2.cd()  
 	nome_ratio = '%s_ratio' % mumu_histogram
@@ -283,9 +287,11 @@ for mumu_histogram in histogram:
 
 	cumulative_res = dati.Clone()	
 	canvas_cum = ROOT.TCanvas(mumu_histogram + ' cumulative', mumu_histogram + ' cumulative', 210,45,1050,750)
+	canvas_cum.SetGrid()
 	pad11 = ROOT.TPad("pad1", "pad1", 0, 0.25, 1, 1.0)
 	pad11.SetBottomMargin(0)
 	pad11.SetGridx()
+	pad11.SetGridy()
 	pad11.Draw()
 	pad11.cd()
 	pad11.SetLogy()
@@ -299,8 +305,8 @@ for mumu_histogram in histogram:
 		contenuto_dati = dati.Integral(i, nbins)
 		dati_cum.SetBinContent(i, contenuto_dati)
 		
-		if i*dati.GetBinWidth(i)> 899 and i*dati.GetBinWidth(i) < 3001 and (i*totale_80X_cum.GetBinWidth(i))%100 == 0:
-			print i*totale_80X_cum.GetBinWidth(i), dati_cum.GetBinContent(i), totale_80X_cum.GetBinContent(i)
+# 		if i*dati.GetBinWidth(i)> 899 and i*dati.GetBinWidth(i) < 3001 and (i*totale_80X_cum.GetBinWidth(i))%100 == 0:
+# 			print i*totale_80X_cum.GetBinWidth(i), dati_cum.GetBinContent(i), totale_80X_cum.GetBinContent(i)
 
 
 
@@ -342,6 +348,7 @@ for mumu_histogram in histogram:
 	pad22.SetTopMargin(0)
 	pad22.SetBottomMargin(0.2)
 	pad22.SetGridx()
+	pad22.SetGridy()
 	pad22.Draw()
 	pad22.cd()
 	cumulative_res = dati_cum.Clone()

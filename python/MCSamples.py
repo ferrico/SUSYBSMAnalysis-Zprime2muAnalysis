@@ -67,17 +67,18 @@ samples = [
     
     sample('WZ', 'WZ', '/WZ_TuneCUETP8M1_13TeV-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM', 994554, 98, 1., 47.13, k_factor=1.),#NLO from MCFM
     sample('ZZ',   'ZZ', '/ZZ_TuneCUETP8M1_13TeV-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM', 992884, 94, 1.,16.523, k_factor=1.),#NLO from MCFM
-    sample('WW',  'WW', '/WW_TuneCUETP8M1_13TeV-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM',1000000,66 , 1., 35.6, k_factor=1.),#already NNLO xs
+    sample('WW',  'WW', '/WW_TuneCUETP8M1_13TeV-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM',1000000,66 , 1., 118.7, k_factor=1.),#12.178, k_factor=1.),#already NNLO xs
 
 #### Moriond 2017 MC ---> OLD ONE ######
 #### Moriond 2017 MC ---> OLD ONE ######
- 	sample('dyInclusive50', 'DYInclusive50', '/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv2-PUMoriond17_HCALDebug_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM', 19385554, 209 , 1., 5765.4,    k_factor=1., is_madgraph=True),  
- 	sample('Wjets', 'Wjets', '/WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM',29705748,52,1.,61526.7,k_factor=1),#already NNLO xs
+#  	sample('dyInclusive50', 'DYInclusive50', '/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv2-PUMoriond17_HCALDebug_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM', 19385554, 209 , 1., 5765.4,    k_factor=1., is_madgraph=True),  
+#  	sample('Wjets', 'Wjets', '/WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM',29705748,52,1.,61526.7,k_factor=1),#already NNLO xs
+# 	sample('ttbar_lep',     'ttbar_lep', '/TTTo2L2Nu_TuneCUETP8M2_ttHtranche3_13TeV-powheg-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM', 78892260, 4 , 1., 87.31, k_factor=1.),
 #### Moriond 2017 MC ---> OLD ONE ######
 #### Moriond 2017 MC ---> OLD ONE ######
     
-    sample('ttbar',     'ttbar', '/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10_ext1-v2/MINIAODSIM',34438536,66 , 1., 35.6, k_factor=1.),#already NNLO xs
-
+    sample('ttbar',     'ttbar', '/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10_ext1-v2/MINIAODSIM',33844772,66 , 1., 831.76, k_factor=1.),#87.31, k_factor=1.),#already NNLO xs
+  
     sample('Wantitop', 'WantiTop', '/ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM',6620324,63 , 1., 35.6, k_factor=1.),#already NNLO xs          
     sample('tW',     'tW', '/ST_tW_top_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM',6723341,66 , 1., 35.6, k_factor=1.),#already NNLO xs
 

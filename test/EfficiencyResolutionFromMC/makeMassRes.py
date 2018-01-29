@@ -41,6 +41,8 @@ def loadHistos(inputfile,region,rebin):
         res = _file.Get("%s/DileptonMassResVMass_2d_BB" %(histoname)).Clone()
     elif ("BE" in region):
         res = _file.Get("%s/DileptonMassResVMass_2d_BE" %(histoname)).Clone()
+    elif ("EE" in region):
+        res = _file.Get("%s/DileptonMassResVMass_2d_EE" %(histoname)).Clone()
 
     histos = [ROOT.TH1D() for x in range(len(mrange)-1)]
     for h in histos:
@@ -73,6 +75,9 @@ def doFitGeneric(hist,output,rap="BB",fit="cruijff",syst=False):
         if ("cruijff" in fit):
             fit_min = h.GetMean()-2.0*h.GetRMS()
             fit_max = h.GetMean()+1.7*h.GetRMS()
+        elif ("gauss" in fit):
+            fit_min = -0.05#h.GetMean() - 5*h.GetRMS() 
+            fit_max = 0.05#h.GetMean() + 5*h.GetRMS()
         elif ("crystal" in fit):
             fit_min = h.GetMean() - 2.3*h.GetRMS() 
             fit_max = h.GetMean() + 1.0*h.GetRMS()
@@ -95,7 +100,14 @@ def doFitGeneric(hist,output,rap="BB",fit="cruijff",syst=False):
             print ">>>>>> Using Cruijff >>>>>>>>"
             funct = ROOT.TF1(fit,ROOT.cruijff,fit_min,fit_max,5)
             funct.SetParameters(gaus.GetParameter(0), gaus.GetParameter(1), gaus.GetParameter(2), 0., 0.) #15, 0.001)             
-            funct.SetParNames("Constant","Mean","Sigma","AlphaL","AlphaR")        
+            funct.SetParNames("Constant","Mean","Sigma","AlphaL","AlphaR")  
+
+        elif "gauss" in fit: 
+            print ">>>>>> Using Gauss >>>>>>>>"
+            funct = ROOT.TF1("gaus","gaus",fit_min,fit_max)
+            funct.SetParameters(0,h.GetMean(),h.GetRMS())
+            funct.SetParNames("Constant","Mean","Sigma")
+            h.Fit("gaus","M0R+")      
 
         elif "crystal" in fit: 
             print ">>>>>>>>  Using CRYSTAL BALL >>>>>>>>"
@@ -115,11 +127,16 @@ def doFitGeneric(hist,output,rap="BB",fit="cruijff",syst=False):
                 print ">>>>>>>>  Using CRYSTAL BALL for systematics >>>>>>>>"
                 systfunc = ROOT.TF1("systfunc","crystalball",h.GetMean() - 2.5*h.GetRMS(),h.GetMean() + 1.2*h.GetRMS())
                 systfunc.SetParameters(funct.GetParameter(0), funct.GetParameter(1), funct.GetParameter(2), 1.4, 1.5)#2.)
+            elif ("gauss" in fit): 
+                print ">>>>>>>>  Using GAUSS for systematics >>>>>>>>"
+                systfunc = ROOT.TF1("systfunc", "gaus", h.GetMean() - 2.3*h.GetRMS(),  h.GetMean() + 1.5*h.GetRMS(), 3)
+                systfunc.SetParameters(funct.GetParameter(0), funct.GetParameter(1), funct.GetParameter(2))
             elif ("crystal" in fit): 
                 print ">>>>>>>>  Using CRUIJFF for systematics >>>>>>>>"
                 systfunc = ROOT.TF1("systfunc",ROOT.cruijff, h.GetMean() - 2.3*h.GetRMS(),  h.GetMean() + 1.5*h.GetRMS(),5)
                 systfunc.SetParameters(funct.GetParameter(0), funct.GetParameter(1), funct.GetParameter(2), 0., 0.) #15, 0.001)             
                 systfunc.SetParNames("Constant","Mean","Sigma","AlphaL","AlphaR")        
+
             systfunc.SetLineColor(ROOT.kRed)
             h.Fit("systfunc","M0R+")
 
@@ -136,7 +153,6 @@ def doFitGeneric(hist,output,rap="BB",fit="cruijff",syst=False):
         sysUncert = systfunc.GetParameter(2)/funct.GetParameter(2)-1
         chi2.append(sysUncert)
 #         chi2.append(funct.GetChisquare()/funct.GetNDF())
-        print systfunc.GetParameter(2), funct.GetParameter(2), sysUncert
 
         h.SetTitle("Mass resolution for %d < m_{ll} <%d" %(mrange[i],mrange[i+1]))
         h.GetXaxis().SetTitle("m_{ll}^{RECO} / m_{ll}^{GEN} - 1")
@@ -230,6 +246,8 @@ def drawMassResGeneric(hist,output,rapidity,funct="cruijff"):
     
 
     (pars,errs,chi2) = doFitGeneric(hist,output,rapidity,funct,True)
+    
+    print " ------------------------------------------------------------ ", len(pars), len(errs), len(chi2)
 #    if "crystal" in funct: 
 #        (pars2,_,_) = doFitGeneric(hist,output,rapidity,"cruijff")
 #    else:
@@ -243,23 +261,41 @@ def drawMassResGeneric(hist,output,rapidity,funct="cruijff"):
     for i in range(fun.GetNpar()): 
         fun.ReleaseParameter(i)
         fun.SetParameter(i,0.)
+        
 
     param = [ROOT.TGraphErrors(len(mass)) for x in range((len(pars)/len(mass))+1)] 
     res = ROOT.TGraphErrors(len(mass))
+    
     for k,f in enumerate(param): 
-        if k==4: 
-            f.SetName("chi2")
-        else : 
-            f.SetName(hist[0].GetFunction(funct).GetParName(k+1))            
+       	if("gauss" in funct):
+       		if k==2: 
+       			f.SetName("chi2")
+       		else: 
+       			f.SetName(hist[0].GetFunction("gaus").GetParName(k+1))
+       	else:
+   	        if k==4: 
+	        	f.SetName("chi2")
+    	   	else: 
+       			f.SetName(hist[0].GetFunction(funct).GetParName(k+1))
 
+        	
         for i in range(0,len(mass)):
-            if k==4: 
-                f.SetName("chi2")
-                f.SetPoint(i,mass[i],chi2[i])
-                f.SetPointError(i,merr[i],0)
-            else: 
-                f.SetPoint(i,mass[i],pars[i*4+k])
-                f.SetPointError(i,merr[i],errs[i*4+k])
+        	if("gauss" in funct): 
+        		if k==2: 
+        			f.SetName("chi2")
+        			f.SetPoint(i,mass[i],chi2[i])
+        			f.SetPointError(i,merr[i],0)
+        		else: 
+        			f.SetPoint(i,mass[i],pars[i*2+k])
+        			f.SetPointError(i,merr[i],errs[i*2+k])
+        	else:
+	            if k==4: 
+	            	f.SetName("chi2")
+	            	f.SetPoint(i,mass[i],chi2[i])
+	            	f.SetPointError(i,merr[i],0)
+	            else: 
+	            	f.SetPoint(i,mass[i],pars[i*4+k])
+	            	f.SetPointError(i,merr[i],errs[i*4+k])
         
         if ("Sigma" in f.GetName()):
             res = param[k]
@@ -296,9 +332,10 @@ def drawMassResGeneric(hist,output,rapidity,funct="cruijff"):
         if ("chi2" not in f.GetName()): 
             if ("Sigma" in f.GetName()):  
                 print "Fitting Sigma"
-                fun.SetParameters(0.,1E-5,-1.E-8,2E-12,-2E-16)
-                fun.SetParLimits(1, 1.0E-6, 1.0E-4)
-                fun.SetParLimits(2,-1.0E-7,-1.0E-9)
+                if "gauss" not in funct:
+                	fun.SetParameters(0.,1E-5,-1.E-8,2E-12,-2E-16)
+                	fun.SetParLimits(1, 1.0E-6, 1.0E-4)
+                	fun.SetParLimits(2,-1.0E-7,-1.0E-9)
 #                fun.SetParLimits(4,-3.0E-16,-1E-16)
                 #                fun.FixParameter(3,0.)
 #                fun.FixParameter(3,0.)
@@ -328,9 +365,8 @@ def drawMassResGeneric(hist,output,rapidity,funct="cruijff"):
                 fun.SetParLimits(3,-1E-12,-5E-14)
                 fun.FixParameter(4,0.)
                 
-            f.Fit(fun,"MBFE+")            
+            f.Fit(fun,"MBFE+") 
             fun.Draw("SAME")
-
         
             latexFit = ROOT.TLatex()
             latexFit.SetTextFont(42)
@@ -388,8 +424,10 @@ def makeMassRes(inputfile,output,funct):
     
     hist_barrel = loadHistos(inputfile,"BB",1)
     hist_other  = loadHistos(inputfile,"BE",1)
+    hist_endcap  = loadHistos(inputfile,"EE",1)
     resBB  = drawMassResGeneric(hist_barrel,output,"BB",funct)
     resBE  = drawMassResGeneric(hist_other,output,"BE",funct)
+    resEE  = drawMassResGeneric(hist_endcap,output,"EE",funct)
     
     res = ROOT.TCanvas("res","res",700,700)
     res.cd()
@@ -423,6 +461,20 @@ def makeMassRes(inputfile,output,funct):
     resBE.GetXaxis().SetRangeUser(mrange[0],mrange[len(mrange)-1])
     resBE.GetFunction("fun").SetLineColor(ROOT.kGreen+2)
     resBE.Draw("PE0 SAME")
+    
+    resEE.SetMarkerStyle(20)
+    resEE.SetMarkerSize(1.0)
+    resEE.SetMarkerColor(ROOT.kBlue+1)
+    resEE.SetLineColor(ROOT.kBlue+1)
+    resEE.SetFillColor(0)
+    resEE.SetTitle("Dimuon mass resolution vs mass")
+    resEE.GetYaxis().SetTitle("Dimuon Mass Resolution")
+    resEE.GetYaxis().SetTitleOffset(1.5)
+ #   resEE.GetXaxis().SetTitle("m(#mu^{+}#mu^{-}) [GeV]")
+    resEE.GetYaxis().SetRangeUser(0,.15)
+    resEE.GetXaxis().SetRangeUser(mrange[0],mrange[len(mrange)-1])
+    resEE.GetFunction("fun").SetLineColor(ROOT.kBlue+2)
+    resEE.Draw("PE0 SAME")
 
     latexFitBB = ROOT.TLatex()
     latexFitBB.SetTextFont(42)
@@ -435,8 +487,16 @@ def makeMassRes(inputfile,output,funct):
     latexFitBE.SetTextSize(0.030)
     latexFitBE.SetNDC(True)        
     latexFitBE.SetTextColor(ROOT.kGreen+2)
+    
+    latexFitEE = ROOT.TLatex()
+    latexFitEE.SetTextFont(42)
+    latexFitEE.SetTextSize(0.030)
+    latexFitEE.SetNDC(True)        
+    latexFitEE.SetTextColor(ROOT.kGreen+2)
+    
     latexFitBB.DrawLatex(0.19, 0.78,"BB Category")
     latexFitBE.DrawLatex(0.60, 0.78,"BE+EE Category")
+#     latexFitEE.DrawLatex(0.60, 0.78,"EE Category")
     for par in range(resBB.GetFunction("fun").GetNpar()):
         yPos = 0.74-0.04*(float(par))
         latexFitBB.DrawLatex(0.19, yPos,"%s = %5.3g #pm %5.3g"%(resBB.GetFunction("fun").GetParName(par),resBB.GetFunction("fun").GetParameter(par),resBB.GetFunction("fun").GetParError(par)))
@@ -485,7 +545,6 @@ if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(usage="makeMassRes.py [options]",description="Compute mass resolution",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-#/afs/cern.ch/work/f/ferrico/private/ZPrime_code/CMSSW_8_0_21/src/SUSYBSMAnalysis/Zprime2muAnalysis/test/EfficiencyResolutionFromMC/mc/effres.root
     parser.add_argument("-i","--ifile", dest="inputfile",default="./mc/res_ZToMuMu_M_120_6000.root", help='Input filename')
     parser.add_argument("-o","--ofolder",dest="output", default="./plots/", help='folder name to store results')
     parser.add_argument("-f","--funct",dest="funct", default="cruijff", help='function used')
