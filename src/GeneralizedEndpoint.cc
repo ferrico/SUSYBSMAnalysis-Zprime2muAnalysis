@@ -94,7 +94,7 @@ float GeneralizedEndpoint::GeneralizedEndpointPt(float MuonPt, int MuonCharge, f
   float KappaBiasError=_CorrectionError[kEtaBin][kPhiBin];
   
   float rnd = KappaBias+99*KappaBiasError;
-  while (abs(KappaBias-rnd) > KappaBiasError)
+  while (fabs(KappaBias-rnd) > KappaBiasError)
     rnd = gRandom->Gaus(KappaBias,KappaBiasError);
 
   KappaBias = rnd;
