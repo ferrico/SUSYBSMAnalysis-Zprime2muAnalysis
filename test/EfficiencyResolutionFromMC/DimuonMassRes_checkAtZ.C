@@ -125,6 +125,8 @@ gROOT->LoadMacro("cruijff.C+");
   float lep_eta[2];
   float dil_lep_eta[2];
   float lep_tk_pt[2];
+  float lep_tk_eta[2];
+  float lep_tk_phi[2];
   float lep_glb_pt[2];
   float lep_picky_pt[2];
   float lep_tpfms_pt[2];
@@ -203,6 +205,12 @@ gROOT->LoadMacro("cruijff.C+");
 	int pp;
 	bool next;
 	
+	
+	TLorentzVector lep_1, lep_2;
+	TLorentzVector ZPrime; 
+	
+  Int_t prev_event = -88;
+	
 			
 	for(int i = 0; i < 43; i++){
 // 		weight[i] = LUMINOSITY * sigma[i] / events[i];
@@ -262,7 +270,7 @@ gROOT->LoadMacro("cruijff.C+");
 	
 	
                        	
-  for(int j=30; j < 43; j++){   
+  for(int j=43; j < 43; j++){   
 
 	 printf("openning.. %s %i  --- %.5f\n",samples[j].Data(),j , weight[j]);    
 
@@ -292,6 +300,8 @@ gROOT->LoadMacro("cruijff.C+");
      treeMC->SetBranchAddress("lep_glb_numberOfValidTrackerLayers",lep_glb_numberOfValidTrackerLayers);
      treeMC->SetBranchAddress("lep_sumPt",lep_sumPt);
      treeMC->SetBranchAddress("lep_tk_pt",lep_tk_pt);
+     treeMC->SetBranchAddress("lep_tk_eta",lep_tk_eta);
+     treeMC->SetBranchAddress("lep_tk_phi",lep_tk_phi);
      treeMC->SetBranchAddress("lep_glb_pt",lep_glb_pt);
      treeMC->SetBranchAddress("lep_picky_pt",lep_picky_pt);
      treeMC->SetBranchAddress("lep_tpfms_pt",lep_tpfms_pt);
@@ -328,6 +338,10 @@ gROOT->LoadMacro("cruijff.C+");
 			(lep_triggerMatchPt[0]>50 || lep_triggerMatchPt[1]>50) && 
 			vertex_chi2 < 20
 			){
+
+			if(prev_event == event) continue; //to remove double event; take the first --> they are already sorted in pt
+			prev_event = event;
+
 		
 			mass         = dil_mass; //vertex_m			
 			DileptonMass_2d_vsPt_MC->Fill(mass, dil_lep_pt[0], weight[j]);
@@ -356,13 +370,15 @@ gROOT->LoadMacro("cruijff.C+");
 		} //if selection
 	} // for entries
  } // for samples
+ 
+ int counting_data[4] = {0};
 
 //////////////////////////
 ////////// DATA //////////
 //////////////////////////
 
      TChain *treeDATA = new TChain("SimpleNtupler/t");
-     treeDATA->Add("../DataMCSpectraComparison/data/Run2017MuonsOnly/ana_datamc_data.root");
+     treeDATA->Add("../DataMCSpectraComparison/data_OK/Run2017MuonsOnly/ana_datamc_data.root");
      treeDATA->SetBranchAddress("event",&event);
      treeDATA->SetBranchAddress("run",&run);
      treeDATA->SetBranchAddress("lumi",&lumi);
@@ -386,6 +402,8 @@ gROOT->LoadMacro("cruijff.C+");
      treeDATA->SetBranchAddress("lep_glb_numberOfValidTrackerLayers",lep_glb_numberOfValidTrackerLayers);
      treeDATA->SetBranchAddress("lep_sumPt",lep_sumPt);
      treeDATA->SetBranchAddress("lep_tk_pt",lep_tk_pt);
+     treeDATA->SetBranchAddress("lep_tk_eta",lep_tk_eta);
+     treeDATA->SetBranchAddress("lep_tk_phi",lep_tk_phi);
      treeDATA->SetBranchAddress("lep_glb_pt",lep_glb_pt);
      treeDATA->SetBranchAddress("lep_picky_pt",lep_picky_pt);
      treeDATA->SetBranchAddress("lep_tpfms_pt",lep_tpfms_pt);
@@ -398,8 +416,8 @@ gROOT->LoadMacro("cruijff.C+");
 
 	ne = treeDATA->GetEntries();
 	std::cout<<"START"<<std::endl;
-// 	for ( int p=0; p < ne ;p++){
-	for ( int p=0; p<100000 ;p++){
+	for ( int p=0; p < ne ;p++){
+// 	for ( int p=0; p<100000 ;p++){
 		if(p % 100000 == 0) std::cout<<p<<" su "<<ne<<std::endl;		
 		
 		treeDATA->GetEntry(p);
@@ -422,8 +440,43 @@ gROOT->LoadMacro("cruijff.C+");
 			(lep_triggerMatchPt[0]>50 || lep_triggerMatchPt[1]>50) && 
 			vertex_chi2 < 20
 			){
+
+			if(prev_event == event) continue; //to remove double event; take the first --> they are already sorted in pt
+			prev_event = event;
+
+			
+// 			if(mass > 900)
+// 				counting_data[3]++;
+// 			else{
+// 				if(mass > 600)
+// 					counting_data[2]++;
+// 				else{
+// 					if(mass > 400) 
+// 						counting_data[1]++;
+// 					else
+// 						counting_data[0]++;
+// 				}
+// 			}
 		
-			mass         = dil_mass; //vertex_m			
+// 			lep_1.SetPtEtaPhiM(lep_tk_pt[0], lep_tk_eta[0], lep_tk_phi[0], 0.105);
+// 			lep_2.SetPtEtaPhiM(lep_tk_pt[1], lep_tk_eta[1], lep_tk_phi[1], 0.105);
+// 			ZPrime = lep_1 + lep_2;
+// 
+// 			mass 		 = ZPrime.M(); // resolution using Tracker track		
+// 			DileptonMass_2d_vsPt_DATA->Fill(mass, lep_tk_pt[0]);
+// 		    DileptonMass_2d_vsPt_DATA->Fill(mass, lep_tk_pt[1]);
+//   
+// 		  if (abs(lep_eta[0]) < 1.2 && abs(lep_eta[1]) < 1.2) { 
+// 	    	DileptonMass_2d_vsPt_BB_DATA->Fill(mass, lep_tk_pt[0]);
+// 	    	DileptonMass_2d_vsPt_BB_DATA->Fill(mass, lep_tk_pt[1]);
+// 		  }
+// 		  else { 
+//     		DileptonMass_2d_vsPt_BE_DATA->Fill(mass, lep_tk_pt[0]);
+// 		    DileptonMass_2d_vsPt_BE_DATA->Fill(mass, lep_tk_pt[1]);
+// 		  }	
+    
+			mass         = dil_mass; //vertex_m	
+		
 			DileptonMass_2d_vsPt_DATA->Fill(mass, dil_lep_pt[0]);
 		    DileptonMass_2d_vsPt_DATA->Fill(mass, dil_lep_pt[1]);
   
@@ -438,7 +491,7 @@ gROOT->LoadMacro("cruijff.C+");
 // 		  if((dil_lep_eta[0] > 1.2 || dil_lep_eta[0] < -1.2) && (dil_lep_eta[1] > 1.2 || dil_lep_eta[1] < -1.2)) {
 // 		    DileptonMass_2d_vsPt_EE->Fill(mass, dil_lep_pt[0]);
 // 		    DileptonMass_2d_vsPt_EE->Fill(mass, dil_lep_pt[1]);
-// 		  }                                                                        
+// 		  }                                                                         
 
 			
 			
@@ -452,7 +505,7 @@ gROOT->LoadMacro("cruijff.C+");
 //////////////////////////
 
 
-
+bool save = true;
 	
 // TH2F* tmp;
 // TH2F* prova = new TH2F("prova", "prova", 80, 75, 105., binnum_BB, PT_BINS_BB);
@@ -470,10 +523,10 @@ gROOT->LoadMacro("cruijff.C+");
 //  	NOME = Form("%s - MC", samples[30+i].Data());
 //  	TCanvas *canvas = new TCanvas(NOME, NOME, 200,10,700,500);
 //  	if(i==0)
-//  		canvas->Print("./ciao.pdf[");
-// 	canvas->Print("./ciao.pdf");
+//  		canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/./ciao.pdf[");
+// 	canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/./ciao.pdf");
 //  	if(i==8)
-//  		canvas->Print("./ciao.pdf]");
+//  		canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/./ciao.pdf]");
 //     canvas->Write();	   	 	   	
 // }
 //    TCanvas* c44 = new TCanvas("prova", "prova", 200,10,700,500);
@@ -481,7 +534,7 @@ gROOT->LoadMacro("cruijff.C+");
 
 
 
-
+/*
  for(int i = 1; i <= DileptonMass_2d_vsPt_BB_MC->GetNbinsY(); i++){
 //  for(int i = 1; i <= DileptonMass_2d_vsPt_BB_MC->GetNbinsY(); i++){
  	
@@ -526,14 +579,14 @@ gROOT->LoadMacro("cruijff.C+");
     }
  	 
  	if(i==1)
- 		canvas->Print("./BB_resolutionAtZ_MC.pdf[");
-	canvas->Print("./BB_resolutionAtZ_MC.pdf");
+ 		canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/./BB_resolutionAtZ_MC.pdf[");
+	canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/./BB_resolutionAtZ_MC.pdf");
  	if(i==DileptonMass_2d_vsPt_BB_MC->GetNbinsY())
- 		canvas->Print("./BB_resolutionAtZ_MC.pdf]");
+ 		canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/./BB_resolutionAtZ_MC.pdf]");
     canvas->Write();
 
 }
-/*
+
  for(int i = 1; i <= DileptonMass_2d_vsPt_BE_MC->GetNbinsY(); i++){
  	
  	NOME = Form("DimuonMass Resolution at Z BE+EE: %.0f < m < %.0f - MC", PT_BINS_BE[i-1], PT_BINS_BE[i]);
@@ -575,10 +628,10 @@ gROOT->LoadMacro("cruijff.C+");
     }
 
  	if(i==1)
- 		canvas->Print("./BE_resolutionAtZ_MC.pdf[");
-	canvas->Print("./BE_resolutionAtZ_MC.pdf");
+ 		canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/./BE_resolutionAtZ_MC.pdf[");
+	canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/./BE_resolutionAtZ_MC.pdf");
  	if(i==DileptonMass_2d_vsPt_BE_MC->GetNbinsY())
- 		canvas->Print("./BE_resolutionAtZ_MC.pdf]");
+ 		canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/./BE_resolutionAtZ_MC.pdf]");
     canvas->Write();
 
 }
@@ -623,16 +676,18 @@ gROOT->LoadMacro("cruijff.C+");
     	longstring = Form("%s = %5.3g #pm %5.3g", funct->GetParName(i),funct->GetParameter(i),funct->GetParError(i));
         latexFit->DrawLatex(80, yPos, longstring);
     }
- 	 	
+
+ if(save){ 	 	
  	if(i==1)
- 		canvas->Print("./BB_resolutionAtZ_DATA.pdf[");
-	canvas->Print("./BB_resolutionAtZ_DATA.pdf");
+ 		canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/./BB_resolutionAtZ_DATA.pdf[");
+	canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/./BB_resolutionAtZ_DATA.pdf");
  	if(i==DileptonMass_2d_vsPt_BB_DATA->GetNbinsY())
- 		canvas->Print("./BB_resolutionAtZ_DATA.pdf]");
+ 		canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/./BB_resolutionAtZ_DATA.pdf]");
     canvas->Write();
+}
 
 }
-/*
+
  for(int i = 1; i <= DileptonMass_2d_vsPt_BE_DATA->GetNbinsY(); i++){
  	
  	NOME = Form("DimuonMass Resolution at Z BE+EE: %.0f < m < %.0f - DATA", PT_BINS_BE[i-1], PT_BINS_BE[i]);
@@ -672,16 +727,18 @@ gROOT->LoadMacro("cruijff.C+");
     	longstring = Form("%s = %5.3g #pm %5.3g", funct->GetParName(i),funct->GetParameter(i),funct->GetParError(i));
         latexFit->DrawLatex(80, yPos, longstring);
     }
- 	 	
+
+ if(save){ 	 	
  	if(i==1)
- 		canvas->Print("./BE_resolutionAtZ_DATA.pdf[");
-	canvas->Print("./BE_resolutionAtZ_DATA.pdf");
+ 		canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/./BE_resolutionAtZ_DATA.pdf[");
+	canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/./BE_resolutionAtZ_DATA.pdf");
  	if(i==DileptonMass_2d_vsPt_BE_DATA->GetNbinsY())
- 		canvas->Print("./BE_resolutionAtZ_DATA.pdf]");
+ 		canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/./BE_resolutionAtZ_DATA.pdf]");
     canvas->Write();
+}
 
 }
-*/
+
 
 //////////////////////////
 ///// BE INUTILE /////////
@@ -724,10 +781,10 @@ gROOT->LoadMacro("cruijff.C+");
     
  	 	
  	if(i==1)
- 		canvas->Print("./EE_resolutionAtZ.pdf[");
-	canvas->Print("./EE_resolutionAtZ.pdf");
+ 		canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/./EE_resolutionAtZ.pdf[");
+	canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/./EE_resolutionAtZ.pdf");
  	if(i==DileptonMass_2d_vsPt_EE->GetNbinsY())
- 		canvas->Print("./EE_resolutionAtZ.pdf]");
+ 		canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/./EE_resolutionAtZ.pdf]");
     canvas->Write();
 
 }
@@ -737,9 +794,9 @@ gROOT->LoadMacro("cruijff.C+");
 //////////////////////////
 
 
-TLegend *legend_MC = new TLegend(0.6,0.75,0.85,0.85);
-legend_MC->AddEntry(DATA_res_bb, "DATA", "lep");
-legend_MC->AddEntry(MC_res_bb,"DY", "lep");
+// TLegend *legend_MC = new TLegend(0.6,0.75,0.85,0.85);
+// legend_MC->AddEntry(DATA_res_bb, "DATA", "lep");
+// legend_MC->AddEntry(MC_res_bb,"DY", "lep");
  
  TCanvas* c_BB = new TCanvas("res_BB", "res_BB", 500, 500);
 //  c_BB->SetGrid();
@@ -755,18 +812,18 @@ legend_MC->AddEntry(MC_res_bb,"DY", "lep");
  DATA_res_bb->SetMarkerColor(kBlack);
  DATA_res_bb->GetYaxis()->SetRangeUser(0, 8);
  DATA_res_bb->Draw();
- MC_res_bb->SetTitle("");
- MC_res_bb->SetLineColor(kRed+1);
- MC_res_bb->SetMarkerStyle(20);
- MC_res_bb->SetMarkerSize(0.5);
- MC_res_bb->SetMarkerColor(kRed+1);
- MC_res_bb->GetYaxis()->SetRangeUser(0, 8);
- MC_res_bb->Draw("same");
- legend_MC->Draw();
+//  MC_res_bb->SetTitle("");
+//  MC_res_bb->SetLineColor(kRed+1);
+//  MC_res_bb->SetMarkerStyle(20);
+//  MC_res_bb->SetMarkerSize(0.5);
+//  MC_res_bb->SetMarkerColor(kRed+1);
+//  MC_res_bb->GetYaxis()->SetRangeUser(0, 8);
+//  MC_res_bb->Draw("same");
+//  legend_MC->Draw();
 
  c_BB->Update();
  c_BB->cd();
-
+/*
  TPad* pad_2_bb = new TPad("pad2_bb", "pad2_bb", 0.05, 0.05, 1, 0.25);
  pad_2_bb->SetTopMargin(0);
  pad_2_bb->SetBottomMargin(0.2);
@@ -791,10 +848,11 @@ legend_MC->AddEntry(MC_res_bb,"DY", "lep");
  l_bb->SetLineWidth(2);
  ratio_bb->Draw();
  l_bb->Draw();
- c_BB->Update();
- c_BB->Print("ResolutionAtZ_BB.png");
- c_BB->Print("ResolutionAtZ_BB.pdf");
-/*
+ c_BB->Update();*/
+ if(save){
+ c_BB->Print("./Check_Resolution_Code_2017_94X_AtZ/ResolutionAtZ_BB.png");
+ c_BB->Print("./Check_Resolution_Code_2017_94X_AtZ/ResolutionAtZ_BB.pdf");
+	}
  TCanvas* c_BE = new TCanvas("res_BE", "res_BE", 500, 500);
 //  c_BE->SetGrid();
  TPad* pad_1_be = new TPad("pad1_be", "pad1_be", 0.05, 0.25, 1, 1);
@@ -809,15 +867,15 @@ legend_MC->AddEntry(MC_res_bb,"DY", "lep");
  DATA_res_be->SetMarkerColor(kBlack);
  DATA_res_be->GetYaxis()->SetRangeUser(0, 8);
  DATA_res_be->Draw();
- MC_res_be->SetTitle("");
- MC_res_be->SetLineColor(kRed+1);
- MC_res_be->SetMarkerStyle(20);
- MC_res_be->SetMarkerSize(0.5);
- MC_res_be->SetMarkerColor(kRed+1);
- MC_res_be->GetYaxis()->SetRangeUser(0, 8);
- MC_res_be->Draw("same");
- legend_MC->Draw();
- 
+//  MC_res_be->SetTitle("");
+//  MC_res_be->SetLineColor(kRed+1);
+//  MC_res_be->SetMarkerStyle(20);
+//  MC_res_be->SetMarkerSize(0.5);
+//  MC_res_be->SetMarkerColor(kRed+1);
+//  MC_res_be->GetYaxis()->SetRangeUser(0, 8);
+//  MC_res_be->Draw("same");
+//  legend_MC->Draw();
+/* 
  c_BE->Update();
  c_BE->cd();
  
@@ -844,14 +902,15 @@ legend_MC->AddEntry(MC_res_bb,"DY", "lep");
  l_be->SetLineColor(kRed);
  l_be->SetLineWidth(2);
  ratio_be->Draw();
- l_be->Draw();
- c_BE->Print("ResolutionAtZ_BE.png");
- c_BE->Print("ResolutionAtZ_BE.pdf");
+ l_be->Draw();*/
+ if(save){
+ c_BE->Print("./Check_Resolution_Code_2017_94X_AtZ/ResolutionAtZ_BE.png");
+ c_BE->Print("./Check_Resolution_Code_2017_94X_AtZ/ResolutionAtZ_BE.pdf");
+}
 
 
 
-
-
+/*
  TCanvas* c11 = new TCanvas("res", "res", 200,10,700,500);
  DileptonMass_2d_vsPt_MC->Draw("COLZ");
  TCanvas* c2 = new TCanvas("res_BB", "res_BB", 200,10,700,500);
@@ -871,18 +930,18 @@ legend_MC->AddEntry(MC_res_bb,"DY", "lep");
  
 
 
-//  for(int i = 0; i < 6; i++)
-// 	std::cout<<BB_sigma[i]<<", ";
-//  std::cout<<""<<std::endl;
-//  for(int i = 0; i < 6; i++)
-// 	std::cout<<BB_sigma_err[i]<<", ";	
-//  std::cout<<""<<std::endl;
-//  for(int i = 0; i < 6; i++)
-// 	std::cout<<BE_sigma[i]<<", ";
-//  std::cout<<""<<std::endl;
-//  for(int i = 0; i < 6; i++)
-// 	std::cout<<BE_sigma_err[i]<<", ";	    
-//  std::cout<<""<<std::endl;
+ for(int i = 0; i < 6; i++)
+	std::cout<<BB_sigma[i]<<", ";
+ std::cout<<""<<std::endl;
+ for(int i = 0; i < 6; i++)
+	std::cout<<BB_sigma_err[i]<<", ";	
+ std::cout<<""<<std::endl;
+ for(int i = 0; i < 6; i++)
+	std::cout<<BE_sigma[i]<<", ";
+ std::cout<<""<<std::endl;
+ for(int i = 0; i < 6; i++)
+	std::cout<<BE_sigma_err[i]<<", ";	    
+ std::cout<<""<<std::endl;
 
 } // main function
 

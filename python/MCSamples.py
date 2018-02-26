@@ -55,19 +55,19 @@ class tupleonlysample(sample):
 # K factor for Drell-Yan samples is the ratio of the NNLO to POWHEG cross sections for M > 20 GeV bin, 1915/1871=1.024
 samples = [
 
-    sample('dy50to120',   'DY50to120', '/ZToMuMu_NNPDF30_13TeV-powheg_M_50_120/RunIISummer17MiniAOD-NZSFlatPU28to62_92X_upgrade2017_realistic_v10-v1/MINIAODSIM', 100000, 209 , 1., 1975,   k_factor=1.),#NLO xs and k-factor applied to reach NLO
-    sample('dy120to200',  'DY120to200', '/ZToMuMu_NNPDF30_13TeV-powheg_M_120_200/RunIISummer17MiniAOD-NZSFlatPU28to62_92X_upgrade2017_realistic_v10-v1/MINIAODSIM', 100000, 210, 1., 19.32, k_factor=1.),#mcm 19.32
-    sample('dy200to400',  'DY200to400', '/ZToMuMu_NNPDF30_13TeV-powheg_M_200_400/RunIISummer17MiniAOD-NZSFlatPU28to62_92X_upgrade2017_realistic_v10-v1/MINIAODSIM', 100000, 211, 1., 2.731, k_factor=1.),#mcm 2.731
-    sample('dy400to800',  'DY400to800', '/ZToMuMu_NNPDF30_13TeV-powheg_M_400_800/RunIISummer17MiniAOD-NZSFlatPU28to62_92X_upgrade2017_realistic_v10-v1/MINIAODSIM', 98000, 212, 1., 0.241, k_factor=1.),
-    sample('dy800to1400', 'DY800to1400', '/ZToMuMu_NNPDF30_13TeV-powheg_M_800_1400/RunIISummer17MiniAOD-NZSFlatPU28to62_92X_upgrade2017_realistic_v10-v1/MINIAODSIM', 96613, 72, 1., 0.01678, k_factor=1.),
-    sample('dy1400to2300','DY1400to2300', '/ZToMuMu_NNPDF30_13TeV-powheg_M_1400_2300/RunIISummer17MiniAOD-NZSFlatPU28to62_92X_upgrade2017_realistic_v10-v1/MINIAODSIM', 100000, 70 , 1., 0.00139,    k_factor=1.),
-    sample('dy2300to3500','DY2300to3500', '/ZToMuMu_NNPDF30_13TeV-powheg_M_2300_3500/RunIISummer17MiniAOD-NZSFlatPU28to62_92X_upgrade2017_realistic_v10-v1/MINIAODSIM', 100000, 70 , 1., 0.00008948,    k_factor=1.),
-    sample('dy3500to4500','DY3500to4500', '/ZToMuMu_NNPDF30_13TeV-powheg_M_3500_4500/RunIISummer17MiniAOD-NZSFlatPU28to62_92X_upgrade2017_realistic_v10-v1/MINIAODSIM', 100000, 70 , 1., 0.0000041,    k_factor=1.),
-    sample('dy4500to6000','DY4500to6000', '/ZToMuMu_NNPDF30_13TeV-powheg_M_4500_6000/RunIISummer17MiniAOD-NZSFlatPU28to62_92X_upgrade2017_realistic_v10-v1/MINIAODSIM', 100000, 70 , 1., 4.56E-7,    k_factor=1.),    
+					#     sample('dy50to120',   'DY50to120', '/ZToMuMu_NNPDF30_13TeV-powheg_M_50_120/RunIISummer17MiniAOD-NZSFlatPU28to62_92X_upgrade2017_realistic_v10-v1/MINIAODSIM', 100000, 209 , 1., 1975,   k_factor=1.),#NLO xs and k-factor applied to reach NLO
+#     sample('dy120to200',  'DY120to200', '/ZToMuMu_NNPDF31_13TeV-powheg_M_120_200/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v2/MINIAODSIM', 100000, 210, 1., 19.32, k_factor=1.),#mcm 19.32
+#     sample('dy200to400',  'DY200to400', '/ZToMuMu_NNPDF31_13TeV-powheg_M_200_400/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM', 100000, 211, 1., 2.731, k_factor=1.),#mcm 2.731
+#     sample('dy400to800',  'DY400to800', '/ZToMuMu_NNPDF31_13TeV-powheg_M_400_800/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v2/MINIAODSIM', 100000, 212, 1., 0.241, k_factor=1.),
+#     sample('dy800to1400', 'DY800to1400', '/ZToMuMu_NNPDF31_13TeV-powheg_M_800_1400/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM', 100000, 72, 1., 0.01678, k_factor=1.),
+#     sample('dy1400to2300','DY1400to2300', '/ZToMuMu_NNPDF31_13TeV-powheg_M_1400_2300/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM', 100000, 70 , 1., 0.00139,    k_factor=1.),
+	sample('dy2300to3500','DY2300to3500', '/ZToMuMu_NNPDF31_13TeV-powheg_M_2300_3500/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v2/MINIAODSIM', 100000, 70 , 1., 0.00008948,    k_factor=1.),
+#     sample('dy3500to4500','DY3500to4500', '/ZToMuMu_NNPDF31_13TeV-powheg_M_3500_4500/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM', 100000, 70 , 1., 0.0000041,    k_factor=1.),
+#     sample('dy4500to6000','DY4500to6000', '/ZToMuMu_NNPDF31_13TeV-powheg_M_4500_6000/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM', 100000, 70 , 1., 4.56E-7,    k_factor=1.),    
     
-    sample('WZ', 'WZ', '/WZ_TuneCUETP8M1_13TeV-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM', 994554, 98, 1., 47.13, k_factor=1.),#NLO from MCFM
-    sample('ZZ',   'ZZ', '/ZZ_TuneCUETP8M1_13TeV-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM', 992884, 94, 1.,16.523, k_factor=1.),#NLO from MCFM
-    sample('WW',  'WW', '/WW_TuneCUETP8M1_13TeV-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM',1000000,66 , 1., 118.7, k_factor=1.),#12.178, k_factor=1.),#already NNLO xs
+#     sample('WZ', 'WZ', '/WZ_TuneCUETP8M1_13TeV-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM', 994554, 98, 1., 47.13, k_factor=1.),#NLO from MCFM
+#     sample('ZZ',   'ZZ', '/ZZ_TuneCUETP8M1_13TeV-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM', 992884, 94, 1.,16.523, k_factor=1.),#NLO from MCFM
+#     sample('WW',  'WW', '/WW_TuneCUETP8M1_13TeV-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM',1000000,66 , 1., 118.7, k_factor=1.),#12.178, k_factor=1.),#already NNLO xs
 
 #### Moriond 2017 MC ---> OLD ONE ######
 #### Moriond 2017 MC ---> OLD ONE ######
@@ -77,10 +77,10 @@ samples = [
 #### Moriond 2017 MC ---> OLD ONE ######
 #### Moriond 2017 MC ---> OLD ONE ######
     
-    sample('ttbar',     'ttbar', '/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10_ext1-v2/MINIAODSIM',33844772,66 , 1., 831.76, k_factor=1.),#87.31, k_factor=1.),#already NNLO xs
-  
-    sample('Wantitop', 'WantiTop', '/ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM',6620324,63 , 1., 35.6, k_factor=1.),#already NNLO xs          
-    sample('tW',     'tW', '/ST_tW_top_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM',6723341,66 , 1., 35.6, k_factor=1.),#already NNLO xs
+#     sample('ttbar',     'ttbar', '/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10_ext1-v2/MINIAODSIM',33844772,66 , 1., 831.76, k_factor=1.),#87.31, k_factor=1.),#already NNLO xs
+#   
+#     sample('Wantitop', 'WantiTop', '/ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM',6620324,63 , 1., 35.6, k_factor=1.),#already NNLO xs          
+#     sample('tW',     'tW', '/ST_tW_top_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM',6723341,66 , 1., 35.6, k_factor=1.),#already NNLO xs
 
 
 

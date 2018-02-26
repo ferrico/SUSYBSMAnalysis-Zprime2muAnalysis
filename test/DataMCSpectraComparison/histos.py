@@ -10,20 +10,18 @@ from SUSYBSMAnalysis.Zprime2muAnalysis.Zprime2muAnalysis_cfg import process
 from SUSYBSMAnalysis.Zprime2muAnalysis.Zprime2muAnalysis_cff import goodDataFiltersMiniAOD
 
 process.source.fileNames =[#'file:./pat.root'
-# '/store/mc/RunIISummer17MiniAOD/ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/MINIAODSIM/92X_upgrade2017_realistic_v10-v2/10000/9CD48814-699F-E711-8811-848F69FD080F.root'
-
-# '/store/data/Run2017D/SingleMuon/MINIAOD/PromptReco-v1/000/302/031/00000/2411F4EE-2D8F-E711-B514-02163E0134D6.root'
-#'/store/data/Run2017B/SingleMuon/MINIAOD/PromptReco-v1/000/297/057/00000/D21018A6-7956-E711-828D-02163E0123EE.root',
-#'/store/data/Run2017D/SingleMuon/MINIAOD/PromptReco-v1/000/302/031/00000/2411F4EE-2D8F-E711-B514-02163E0134D6.root'
-'/store/mc/RunIISummer17MiniAOD/ZToMuMu_NNPDF30_13TeV-powheg_M_120_200/MINIAODSIM/NZSFlatPU28to62_92X_upgrade2017_realistic_v10-v1/150000/C08A23CE-A5AC-E711-9142-002590D9D98E.root'
-
+# '/store/data/Run2017F/SingleMuon/MINIAOD/17Nov2017-v1/00000/3E7C07F9-E6F1-E711-841A-0CC47A4C8E46.root'
+'/store/mc/RunIIFall17MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_400_800/MINIAODSIM/94X_mc2017_realistic_v10-v2/00000/18DC77AC-AC0F-E811-9798-02163E01A327.root'
+# '/store/mc/RunIIFall17MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_200_400/MINIAODSIM/94X_mc2017_realistic_v10-v1/40000/08EC7DA2-3F03-E811-81A7-FA163EE9233C.root',
+# '/store/mc/RunIIFall17MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_200_400/MINIAODSIM/94X_mc2017_realistic_v10-v1/40000/A8CFD527-9902-E811-A1A6-EC0D9A8225FE.root',
+# '/store/mc/RunIIFall17MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_200_400/MINIAODSIM/94X_mc2017_realistic_v10-v1/40000/B8266912-3702-E811-A677-3417EBE70069.root',
+# '/store/mc/RunIIFall17MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_200_400/MINIAODSIM/94X_mc2017_realistic_v10-v1/40000/D4BD70F6-3901-E811-8E22-FA163EB7EA75.root' 
 			   ]
 process.maxEvents.input = -1
-process.GlobalTag.globaltag ='92X_upgrade2017_realistic_v10' # MC --- change line 440
-# process.GlobalTag.globaltag ='92X_dataRun2_Prompt_v4' # Run 2017B #change line 440
-# process.GlobalTag.globaltag ='92X_dataRun2_Prompt_v8' # Run 2017CD #change line 440
-# process.GlobalTag.globaltag ='92X_dataRun2_Prompt_v9' # Run 2017E #change line 440
-# process.GlobalTag.globaltag ='92X_dataRun2_Prompt_v11' # Run 2017F #change line 440
+
+process.GlobalTag.globaltag ='94X_mc2017_realistic_v10' # MC --- change line 440
+# process.GlobalTag.globaltag ='94X_dataRun2_ReReco17_forValidation' # Run 2017BCDE #change line 440
+# process.GlobalTag.globaltag ='94X_dataRun2_ReReco_EOY17_v2' # Run 2017F #change line 440
 #process.options.wantSummary = cms.untracked.bool(True)# false di default
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000 # default 1000
 
@@ -102,7 +100,7 @@ dils = [('MuonsPlusMuonsMinus',          '%(leptons_name)s:muons@+ %(leptons_nam
 # that doesn't have a trigger match, need to re-add a hltHighLevel
 # filter somewhere below.
 cuts = {
-	'Our2012'  : OurSelectionDec2012,
+# 	'Our2012'  : OurSelectionDec2012,
 	'Our2016'  : OurSelection2016,
 	#'OurNoIso' : OurSelectionDec2012,
 	'Simple'   : OurSelectionDec2012, # The selection cuts in the module listed here are ignored below.
@@ -231,15 +229,15 @@ for cut_name, Selection in cuts.iteritems():
        #define the list of MC samples to be read here. be careful that if WWinclusive or tautau sample are not commented it will apply the filters when running locally.
 
     samples = [
-	    ('dy50to120', '/ZToMuMu_NNPDF30_13TeV-powheg_M_50_120/RunIISummer17MiniAOD-NZSFlatPU28to62_92X_upgrade2017_realistic_v10-v1/MINIAODSIM'),
-    	('dy120to200', '/ZToMuMu_NNPDF30_13TeV-powheg_M_120_200/RunIISummer17MiniAOD-NZSFlatPU28to62_92X_upgrade2017_realistic_v10-v1/MINIAODSIM'),
-	    ('dy200to400', '/ZToMuMu_NNPDF30_13TeV-powheg_M_200_400/RunIISummer17MiniAOD-NZSFlatPU28to62_92X_upgrade2017_realistic_v10-v1/MINIAODSIM'),
-    	('dy400to800', '/ZToMuMu_NNPDF30_13TeV-powheg_M_400_800/RunIISummer17MiniAOD-NZSFlatPU28to62_92X_upgrade2017_realistic_v10-v1/MINIAODSIM'),
-	    ('dy800to1400', '/ZToMuMu_NNPDF30_13TeV-powheg_M_800_1400/RunIISummer17MiniAOD-NZSFlatPU28to62_92X_upgrade2017_realistic_v10-v1/MINIAODSIM'),
-    	('dy1400to2300', '/ZToMuMu_NNPDF30_13TeV-powheg_M_1400_2300/RunIISummer17MiniAOD-NZSFlatPU28to62_92X_upgrade2017_realistic_v10-v1/MINIAODSIM'),
-    	('dy2300to3500', '/ZToMuMu_NNPDF30_13TeV-powheg_M_2300_3500/RunIISummer17MiniAOD-NZSFlatPU28to62_92X_upgrade2017_realistic_v10-v1/MINIAODSIM'),
-    	('dy3500to4500', '/ZToMuMu_NNPDF30_13TeV-powheg_M_3500_4500/RunIISummer17MiniAOD-NZSFlatPU28to62_92X_upgrade2017_realistic_v10-v1/MINIAODSIM'),
-    	('dy4500to6000', '/ZToMuMu_NNPDF30_13TeV-powheg_M_4500_6000/RunIISummer17MiniAOD-NZSFlatPU28to62_92X_upgrade2017_realistic_v10-v1/MINIAODSIM'),
+# 	    ('dy50to120', ''),
+    	('dy120to200', '/ZToMuMu_NNPDF31_13TeV-powheg_M_120_200/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v2/MINIAODSIM'),
+	    ('dy200to400', '/ZToMuMu_NNPDF31_13TeV-powheg_M_200_400/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'),
+    	('dy400to800', '/ZToMuMu_NNPDF31_13TeV-powheg_M_400_800/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v2/MINIAODSIM'),
+	    ('dy800to1400', '/ZToMuMu_NNPDF31_13TeV-powheg_M_800_1400/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'),
+    	('dy1400to2300', '/ZToMuMu_NNPDF31_13TeV-powheg_M_1400_2300/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'),
+#     	('dy2300to3500', '/ZToMuMu_NNPDF31_13TeV-powheg_M_2300_3500/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v2/MINIAODSIM'),
+    	('dy3500to4500', '/ZToMuMu_NNPDF31_13TeV-powheg_M_3500_4500/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'),
+    	('dy4500to6000', '/ZToMuMu_NNPDF31_13TeV-powheg_M_4500_6000/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'),
 # 
 #     	('WZ', '/WZ_TuneCUETP8M1_13TeV-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM'),
 # 	    ('ZZ', '/ZZ_TuneCUETP8M1_13TeV-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM'),
@@ -474,11 +472,9 @@ def check_prescale(process, trigger_paths, hlt_process_name='HLT'):
     process.pCheckPrescale = cms.Path(process.CheckPrescale)
 
 def for_data(process):
-	process.GlobalTag.globaltag ='92X_upgrade2017_realistic_v10' # MC  --- #change line 52 
-# 	process.GlobalTag.globaltag ='92X_dataRun2_Prompt_v4' # Run 2017B #change line 52
-# 	process.GlobalTag.globaltag ='92X_dataRun2_Prompt_v8' # Run 2017CD #change line 52
-# 	process.GlobalTag.globaltag ='92X_dataRun2_Prompt_v9' # Run 2017E #change line 52
-# 	process.GlobalTag.globaltag ='92X_dataRun2_Prompt_v11' # Run 2017F #change line 440
+	process.GlobalTag.globaltag ='94X_mc2017_realistic_v10' # MC  --- #change line 52 
+# 	process.GlobalTag.globaltag ='94X_dataRun2_ReReco17_forValidation' # Run 2017BCDE #change line 52
+# 	process.GlobalTag.globaltag ='94X_dataRun2_ReReco_EOY17_v2' # Run 2017F #change line 52
 	ntuplify(process)
     #check_prescale(process, trigger_paths) ####### Now it seams that there are no prescaled path ########
 
@@ -547,7 +543,7 @@ config.Data.publication = False
 config.Data.outputDatasetTag = 'ana_datamc_%(name)s'
 config.Data.outLFNDirBase = '/store/user/ferrico'
 config.Data.ignoreLocality = True 
-#config.Site.whitelist = ["T2_IT_Bari"]
+config.Site.whitelist = ["T2_IT_Bari"]
 config.Site.storageSite = 'T2_IT_Bari'
 '''
     
@@ -558,14 +554,11 @@ config.Site.storageSite = 'T2_IT_Bari'
         from SUSYBSMAnalysis.Zprime2muAnalysis.goodlumis import *
 
         dataset_details = [
-						('SingleMuonRun2017B-PromptReco-v1', '/SingleMuon/Run2017B-PromptReco-v1/MINIAOD'),
-						('SingleMuonRun2017B-PromptReco-v2', '/SingleMuon/Run2017B-PromptReco-v2/MINIAOD'),
-# 						('SingleMuonRun2017C-PromptReco-v1', '/SingleMuon/Run2017C-PromptReco-v1/MINIAOD'),
-# 						('SingleMuonRun2017C-PromptReco-v2', '/SingleMuon/Run2017C-PromptReco-v2/MINIAOD'),
-# 						('SingleMuonRun2017C-PromptReco-v3', '/SingleMuon/Run2017C-PromptReco-v3/MINIAOD'),
-# 						('SingleMuonRun2017D-PromptReco-v1', '/SingleMuon/Run2017D-PromptReco-v1/MINIAOD'),
-# 						('SingleMuonRun2017E-PromptReco-v1', '/SingleMuon/Run2017E-PromptReco-v1/MINIAOD'),
-# 						('SingleMuonRun2017F-PromptReco-v1', '/SingleMuon/Run2017F-PromptReco-v1/MINIAOD'),
+# 						('SingleMuonRun2017B-17Nov2017', '/SingleMuon/Run2017B-17Nov2017-v1/MINIAOD'),
+# 						('SingleMuonRun2017C-17Nov2017', '/SingleMuon/Run2017C-17Nov2017-v1/MINIAOD'),
+# 						('SingleMuonRun2017D-17Nov2017', '/SingleMuon/Run2017D-17Nov2017-v1/MINIAOD'),
+# 						('SingleMuonRun2017E-17Nov2017', '/SingleMuon/Run2017E-17Nov2017-v1/MINIAOD'),
+						('SingleMuonRun2017F-17Nov2017', '/SingleMuon/Run2017F-17Nov2017-v1/MINIAOD'),
             ]
 
         lumi_lists = [
@@ -600,7 +593,7 @@ config.Site.storageSite = 'T2_IT_Bari'
 config.Data.splitting = 'LumiBased'
 #config.Data.runRange = '256843-257490'
 config.Data.totalUnits = -1
-config.Data.unitsPerJob = 200
+config.Data.unitsPerJob = 150
 config.Data.lumiMask = '%(lumi_mask)s' #######
 ''' % locals()
 
@@ -627,7 +620,7 @@ config.Data.lumiMask = '%(lumi_mask)s' #######
 config.Data.splitting = 'EventAwareLumiBased'
 #config.Data.splitting = 'FileBased'
 config.Data.totalUnits = -1
-config.Data.unitsPerJob  = 100000
+config.Data.unitsPerJob  = 10000
     ''')
 
        
