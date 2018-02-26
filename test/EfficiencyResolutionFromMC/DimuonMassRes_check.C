@@ -177,6 +177,11 @@ gROOT->SetBatch();
 	TLorentzVector ZPrime; 
 	
   Int_t prev_event = -88;
+  
+	float count_event[9] = {0};
+	float count_event_BB[9] = {0};
+	float count_event_BE[9] = {0};
+
 			
 	for(int i = 0; i < 39; i++){
 // 		weight[i] = LUMINOSITY * sigma[i] / events[i];
@@ -212,9 +217,7 @@ gROOT->SetBatch();
 	 printf("openning.. %s %i  --- %.5f\n",samples[j].Data(),j , weight[j]);    
 
      TChain *treeMC = new TChain("SimpleNtupler/t");
-//      treeMC->Add("../DataMCSpectraComparison/mc/ana_datamc_"+samples[j]+".root");
 
-//      treeMC->Add("/afs/cern.ch/work/f/ferrico/private/cancella_zprime_port/CMSSW_9_2_6/src/SUSYBSMAnalysis/Zprime2muAnalysis/test/DataMCSpectraComparison/mc/ana_datamc_"+samples[j]+".root");
      treeMC->Add("/eos/user/f/ferrico/LXPLUS/ROOT_FILE_2016/MC_Pt_Assignment/ana_datamc_"+samples[j]+".root");
 
      treeMC->SetBranchAddress("event",&event);
@@ -263,7 +266,7 @@ gROOT->SetBatch();
 		if(p % 100000 == 0) std::cout<<p<<" su "<<ne<<std::endl;		
 			
 		treeMC->GetEntry(p);
-		
+				
 		if(
 			GoodVtx && 
 			fabs(lep_eta[0])<2.4 && fabs(lep_eta[1])<2.4 && 
@@ -282,9 +285,11 @@ gROOT->SetBatch();
 			(lep_triggerMatchPt[0]>50 || lep_triggerMatchPt[1]>50) && 
 			vertex_chi2 < 20
 			){
+			
+				if(prev_event == event) continue; //to remove double event; take the first --> they are already sorted in pt
+				prev_event = event;
 
-			if(prev_event == event) continue; //to remove double event; take the first --> they are already sorted in pt
-			prev_event = event;
+			count_event[j-30]++;
 
 			
 			lep_1.SetPtEtaPhiM(lep_tk_pt[0], lep_tk_eta[0], lep_tk_phi[0], 0.105);
@@ -296,10 +301,15 @@ gROOT->SetBatch();
 
 			rdil    = mass    /gen_dil_mass     - 1;
 			DileptonMassResVMass_2d   ->Fill(gen_dil_mass,     rdil, weight[j]);
-			if (lep_eta[0]<=1.2 && lep_eta[1]<=1.2 && lep_eta[0]>=-1.2 && lep_eta[1]>=-1.2) 
+			if (lep_eta[0]<=1.2 && lep_eta[1]<=1.2 && lep_eta[0]>=-1.2 && lep_eta[1]>=-1.2){ 
 				DileptonMassResVMass_2d_BB ->Fill(gen_dil_mass,     rdil, weight[j]);
-			else                                                                         
+				count_event_BB[j-30]++;
+			}
+
+			else{                                                                    
 				DileptonMassResVMass_2d_BE ->Fill(gen_dil_mass,     rdil, weight[j]);
+				count_event_BE[j-30]++;
+			}
 			if((lep_eta[0] > 1.2 || lep_eta[0] < -1.2) && (lep_eta[1] > 1.2 || lep_eta[1] < -1.2))                                                                         
 				DileptonMassResVMass_2d_EE ->Fill(gen_dil_mass,     rdil, weight[j]);	
 
@@ -319,8 +329,8 @@ gROOT->SetBatch();
 //  DileptonMassResVMass_2d_EE->Draw();
 
 
+ bool save = false;
 
-bool save = fale;
  
  for(int i = 1; i <= DileptonMassResVMass_2d_BB->GetNbinsX(); i++){
  	
@@ -359,7 +369,7 @@ bool save = fale;
     	longstring = Form("%s = %5.3g #pm %5.3g", funct->GetParName(i),funct->GetParameter(i),funct->GetParError(i));
         latexFit->DrawLatex(-0.85, yPos, longstring);
     }
-if(save){ 	 	
+ 	 if(save){	
  	if(i==1)
  		canvas->Print("./Check_Resolution_Code_2016/BB_resolution.pdf[");
 	canvas->Print("./Check_Resolution_Code_2016/BB_resolution.pdf");
@@ -406,7 +416,7 @@ if(save){
     	longstring = Form("%s = %5.3g #pm %5.3g", funct->GetParName(i),funct->GetParameter(i),funct->GetParError(i));
         latexFit->DrawLatex(-0.85, yPos, longstring);
     }
-if(save){ 	 	
+ if(save){
  	if(i==1)
  		canvas->Print("./Check_Resolution_Code_2016/BE_resolution.pdf[");
 	canvas->Print("./Check_Resolution_Code_2016/BE_resolution.pdf");
@@ -450,7 +460,7 @@ if(save){
         latexFit->DrawLatex(-0.85, yPos, longstring);
     }
     
-if(save){ 	 	
+ if(save){	 	
  	if(i==1)
  		canvas->Print("./Check_Resolution_Code_2016/EE_resolution.pdf[");
 	canvas->Print("./Check_Resolution_Code_2016/EE_resolution.pdf");
@@ -490,8 +500,8 @@ if(save){
  legend_3->AddEntry(res_ee,"EE category", "lep");
  legend_3->Draw(); 
  if(save){
-	 c1->Print("Check_Resolution_Code_2016/Resolution.png");
-	 c1->Print("Check_Resolution_Code_2016/Resolution.pdf");
+ c1->Print("./Check_Resolution_Code_2016/Resolution.png");
+ c1->Print("./Check_Resolution_Code_2016/Resolution.pdf");
 	}
  std::cout<<"{"<<std::endl;
  for(int i = 0; i < binnum; i++)
@@ -500,22 +510,25 @@ if(save){
  for(int i = 0; i < binnum; i++)
 	std::cout<<BB_sigma_err[i]<<", ";	
  std::cout<<"};\n{"<<std::endl;
- std::cout<<""<<std::endl;
  for(int i = 0; i < binnum; i++)
 	std::cout<<BE_sigma[i]<<", ";
  std::cout<<"};\n{"<<std::endl;
- std::cout<<""<<std::endl;
  for(int i = 0; i < binnum; i++)
 	std::cout<<BE_sigma_err[i]<<", ";	    
  std::cout<<"};"<<std::endl;
 
+
+ for(int i = 0; i < 9; i++) 
+	std::cout<<count_event[i]<<", ";
+std::cout<<""<<std::endl;	     
+ for(int i = 0; i < 9; i++) 
+	std::cout<<count_event_BB[i]<<", ";
+std::cout<<""<<std::endl;
+ for(int i = 0; i < 9; i++) 
+	std::cout<<count_event_BE[i]<<", ";
+std::cout<<""<<std::endl;
  
 } // main function
-
-
-
-
-
 
 
 
