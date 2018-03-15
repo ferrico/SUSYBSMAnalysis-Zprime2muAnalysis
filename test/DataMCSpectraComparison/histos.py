@@ -10,8 +10,9 @@ from SUSYBSMAnalysis.Zprime2muAnalysis.Zprime2muAnalysis_cfg import process
 from SUSYBSMAnalysis.Zprime2muAnalysis.Zprime2muAnalysis_cff import goodDataFiltersMiniAOD
 
 process.source.fileNames =[#'file:./pat.root'
+'/store/mc/RunIIFall17MiniAOD/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/94X_mc2017_realistic_v10-v1/00000/005DC030-D3F4-E711-889A-02163E01A62D.root'
 # '/store/data/Run2017F/SingleMuon/MINIAOD/17Nov2017-v1/00000/3E7C07F9-E6F1-E711-841A-0CC47A4C8E46.root'
-'/store/mc/RunIIFall17MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_400_800/MINIAODSIM/94X_mc2017_realistic_v10-v2/00000/18DC77AC-AC0F-E811-9798-02163E01A327.root'
+# '/store/mc/RunIIFall17MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_400_800/MINIAODSIM/94X_mc2017_realistic_v10-v2/00000/18DC77AC-AC0F-E811-9798-02163E01A327.root'
 # '/store/mc/RunIIFall17MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_200_400/MINIAODSIM/94X_mc2017_realistic_v10-v1/40000/08EC7DA2-3F03-E811-81A7-FA163EE9233C.root',
 # '/store/mc/RunIIFall17MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_200_400/MINIAODSIM/94X_mc2017_realistic_v10-v1/40000/A8CFD527-9902-E811-A1A6-EC0D9A8225FE.root',
 # '/store/mc/RunIIFall17MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_200_400/MINIAODSIM/94X_mc2017_realistic_v10-v1/40000/B8266912-3702-E811-A677-3417EBE70069.root',
@@ -229,15 +230,17 @@ for cut_name, Selection in cuts.iteritems():
        #define the list of MC samples to be read here. be careful that if WWinclusive or tautau sample are not commented it will apply the filters when running locally.
 
     samples = [
+    	('DYJetsToLL_M50', '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'),
+#  												   	('DYJetsToLL_M-50_ext', '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAOD-94X_mc2017_realistic_v10_ext1-v1/MINIAODSIM')
 # 	    ('dy50to120', ''),
-    	('dy120to200', '/ZToMuMu_NNPDF31_13TeV-powheg_M_120_200/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v2/MINIAODSIM'),
-	    ('dy200to400', '/ZToMuMu_NNPDF31_13TeV-powheg_M_200_400/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'),
-    	('dy400to800', '/ZToMuMu_NNPDF31_13TeV-powheg_M_400_800/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v2/MINIAODSIM'),
-	    ('dy800to1400', '/ZToMuMu_NNPDF31_13TeV-powheg_M_800_1400/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'),
-    	('dy1400to2300', '/ZToMuMu_NNPDF31_13TeV-powheg_M_1400_2300/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'),
+#     	('dy120to200', '/ZToMuMu_NNPDF31_13TeV-powheg_M_120_200/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v2/MINIAODSIM'),
+# 	    ('dy200to400', '/ZToMuMu_NNPDF31_13TeV-powheg_M_200_400/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'),
+#     	('dy400to800', '/ZToMuMu_NNPDF31_13TeV-powheg_M_400_800/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v2/MINIAODSIM'),
+# 	    ('dy800to1400', '/ZToMuMu_NNPDF31_13TeV-powheg_M_800_1400/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'),
+#     	('dy1400to2300', '/ZToMuMu_NNPDF31_13TeV-powheg_M_1400_2300/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'),
 #     	('dy2300to3500', '/ZToMuMu_NNPDF31_13TeV-powheg_M_2300_3500/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v2/MINIAODSIM'),
-    	('dy3500to4500', '/ZToMuMu_NNPDF31_13TeV-powheg_M_3500_4500/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'),
-    	('dy4500to6000', '/ZToMuMu_NNPDF31_13TeV-powheg_M_4500_6000/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'),
+#     	('dy3500to4500', '/ZToMuMu_NNPDF31_13TeV-powheg_M_3500_4500/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'),
+#     	('dy4500to6000', '/ZToMuMu_NNPDF31_13TeV-powheg_M_4500_6000/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'),
 # 
 #     	('WZ', '/WZ_TuneCUETP8M1_13TeV-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM'),
 # 	    ('ZZ', '/ZZ_TuneCUETP8M1_13TeV-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM'),
@@ -620,7 +623,7 @@ config.Data.lumiMask = '%(lumi_mask)s' #######
 config.Data.splitting = 'EventAwareLumiBased'
 #config.Data.splitting = 'FileBased'
 config.Data.totalUnits = -1
-config.Data.unitsPerJob  = 10000
+config.Data.unitsPerJob  = 100000
     ''')
 
        
@@ -644,4 +647,3 @@ config.Data.unitsPerJob  = 10000
 
 #         if not just_testing:
 # 		os.system('rm crabConfig.py histos_crab.py histos_crab.pyc')
-
