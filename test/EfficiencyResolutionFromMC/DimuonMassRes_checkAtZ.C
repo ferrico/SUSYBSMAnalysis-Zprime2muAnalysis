@@ -50,7 +50,7 @@ gROOT->LoadMacro("cruijff.C+");
           std::vector<float> SIGMA;
           std::vector<float> SIGMA_ERR;
 		
-     TString samples[43] =  {"dyInclusive50", 
+     TString samples[40] =  {"dyInclusive50", 
 	 						"qcd80to120", "qcd120to170", "qcd170to300", "qcd300to470", "qcd470to600", "qcd600to800", "qcd800to1000", "qcd1000to1400", "qcd1400to1800", "qcd1800to2400", "qcd2400to3200", "qcd3200", 
 	 						"Wantitop", "tW", 
 	 						"ttbar_lep50to500", "ttbar_lep_500to800", "ttbar_lep_800to1200", "ttbar_lep_1200to1800", "ttbar_lep1800toInf", 
@@ -58,30 +58,31 @@ gROOT->LoadMacro("cruijff.C+");
 	 						"WWinclusive", "WW200to600", "WW600to1200", "WW1200to2500", "WW2500", 
 	 						"ZZ", "WZ", "ZZ_ext", "WZ_ext", 
 	 						"dy50to120", "dy120to200", "dy200to400", "dy400to800", "dy800to1400", "dy1400to2300", "dy2300to3500", "dy3500to4500", "dy4500to6000", //};
-	 						"dyPt100to250", "dyPt250to400", "dyPt400to650", "dyPt650"};
+	 						'DYJetsToLL_M50'
+	 						};
 
 
-	float events[43] = {19385554,  6986740, 6708572, 6958708, 4150588, 3959986, 3896412, 3992112, 2999069, 396409, 397660, 399226, 391735, 
+	float events[40] = {19385554,  6986740, 6708572, 6958708, 4150588, 3959986, 3896412, 3992112, 2999069, 396409, 397660, 399226, 391735, 
 						6933094, 6952830,
 						79092400, 200000, 199800, 200000, 40829, 
 						29705748,
 						1999000, 200000, 200000, 200000, 38969, 
 						990064, 1000000, 998034, 2995828,
-						2990000, 100000, 100000, 98000, 96613, 100000, 100000, 100000, 100000,
-						2699820, 4854240, 167272, 177101
+						-1, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000,
+						18243658
 						};
 						
-	float sigma[43] = {6025.2, 2762530, 471100, 117276, 7823, 648.2, 186.9, 32.3992112, 9.4183, 0.84265, 0.114943, 0.00682981, 0.000165445,
+	float sigma[40] = {6025.2, 2762530, 471100, 117276, 7823, 648.2, 186.9, 32.3992112, 9.4183, 0.84265, 0.114943, 0.00682981, 0.000165445,
 						35.6, 35.6,
 						87.31, 0.32611, 0.03265, 0.00305, 0.00017, 
 						61526.7,
 						12.178, 1.385, 0.0566, 0.0035, 0.00005,
 						16.523, 47.13, 16.523, 47.13,
 						1975, 19.32,  2.731, 0.241, 0.01678, 0.00139, 0.00008948, 0.0000041, 4.56E-7,
-						83.12, 3.047, 0.3921, 0.03636
+						1921.8
 						};
 
-	float LUMINOSITY = 39484;
+	float LUMINOSITY = 41903;
 
 	float weight[43] = {0};
 	
@@ -270,7 +271,7 @@ gROOT->LoadMacro("cruijff.C+");
 	
 	
                        	
-  for(int j=43; j < 43; j++){   
+  for(int j=31; j < 39; j++){   
 
 	 printf("openning.. %s %i  --- %.5f\n",samples[j].Data(),j , weight[j]);    
 
@@ -339,8 +340,8 @@ gROOT->LoadMacro("cruijff.C+");
 			vertex_chi2 < 20
 			){
 
-			if(prev_event == event) continue; //to remove double event; take the first --> they are already sorted in pt
-			prev_event = event;
+				if(prev_event == event) continue; //to remove double event; take the first --> they are already sorted in pt
+				prev_event = event;
 
 		
 			mass         = dil_mass; //vertex_m			
@@ -416,7 +417,8 @@ gROOT->LoadMacro("cruijff.C+");
 
 	ne = treeDATA->GetEntries();
 	std::cout<<"START"<<std::endl;
-	for ( int p=0; p < ne ;p++){
+// 	for ( int p=0; p < ne ;p++){
+	for ( int p=0; p < 0 ;p++){
 // 	for ( int p=0; p<100000 ;p++){
 		if(p % 100000 == 0) std::cout<<p<<" su "<<ne<<std::endl;		
 		
@@ -441,8 +443,8 @@ gROOT->LoadMacro("cruijff.C+");
 			vertex_chi2 < 20
 			){
 
-			if(prev_event == event) continue; //to remove double event; take the first --> they are already sorted in pt
-			prev_event = event;
+				if(prev_event == event) continue; //to remove double event; take the first --> they are already sorted in pt
+				prev_event = event;
 
 			
 // 			if(mass > 900)
@@ -505,7 +507,7 @@ gROOT->LoadMacro("cruijff.C+");
 //////////////////////////
 
 
-bool save = true;
+bool save = false;
 	
 // TH2F* tmp;
 // TH2F* prova = new TH2F("prova", "prova", 80, 75, 105., binnum_BB, PT_BINS_BB);
@@ -534,7 +536,7 @@ bool save = true;
 
 
 
-/*
+
  for(int i = 1; i <= DileptonMass_2d_vsPt_BB_MC->GetNbinsY(); i++){
 //  for(int i = 1; i <= DileptonMass_2d_vsPt_BB_MC->GetNbinsY(); i++){
  	
@@ -579,10 +581,10 @@ bool save = true;
     }
  	 
  	if(i==1)
- 		canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/./BB_resolutionAtZ_MC.pdf[");
-	canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/./BB_resolutionAtZ_MC.pdf");
+ 		canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/BB_resolutionAtZ_MC.pdf[");
+	canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/BB_resolutionAtZ_MC.pdf");
  	if(i==DileptonMass_2d_vsPt_BB_MC->GetNbinsY())
- 		canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/./BB_resolutionAtZ_MC.pdf]");
+ 		canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/BB_resolutionAtZ_MC.pdf]");
     canvas->Write();
 
 }
@@ -628,15 +630,15 @@ bool save = true;
     }
 
  	if(i==1)
- 		canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/./BE_resolutionAtZ_MC.pdf[");
-	canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/./BE_resolutionAtZ_MC.pdf");
+ 		canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/BE_resolutionAtZ_MC.pdf[");
+	canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/BE_resolutionAtZ_MC.pdf");
  	if(i==DileptonMass_2d_vsPt_BE_MC->GetNbinsY())
- 		canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/./BE_resolutionAtZ_MC.pdf]");
+ 		canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/BE_resolutionAtZ_MC.pdf]");
     canvas->Write();
 
 }
-*/
 
+/*
  for(int i = 1; i <= DileptonMass_2d_vsPt_BB_DATA->GetNbinsY(); i++){
  	
  	NOME = Form("DimuonMass Resolution at Z BB: %.0f < m < %.0f - DATA", PT_BINS_BB[i-1], PT_BINS_BB[i]);
@@ -679,10 +681,10 @@ bool save = true;
 
  if(save){ 	 	
  	if(i==1)
- 		canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/./BB_resolutionAtZ_DATA.pdf[");
-	canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/./BB_resolutionAtZ_DATA.pdf");
+ 		canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/BB_resolutionAtZ_DATA.pdf[");
+	canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/BB_resolutionAtZ_DATA.pdf");
  	if(i==DileptonMass_2d_vsPt_BB_DATA->GetNbinsY())
- 		canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/./BB_resolutionAtZ_DATA.pdf]");
+ 		canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/BB_resolutionAtZ_DATA.pdf]");
     canvas->Write();
 }
 
@@ -730,15 +732,15 @@ bool save = true;
 
  if(save){ 	 	
  	if(i==1)
- 		canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/./BE_resolutionAtZ_DATA.pdf[");
-	canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/./BE_resolutionAtZ_DATA.pdf");
+ 		canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/BE_resolutionAtZ_DATA.pdf[");
+	canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/BE_resolutionAtZ_DATA.pdf");
  	if(i==DileptonMass_2d_vsPt_BE_DATA->GetNbinsY())
- 		canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/./BE_resolutionAtZ_DATA.pdf]");
+ 		canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/BE_resolutionAtZ_DATA.pdf]");
     canvas->Write();
-}
+	}
 
 }
-
+*/
 
 //////////////////////////
 ///// BE INUTILE /////////
@@ -781,10 +783,10 @@ bool save = true;
     
  	 	
  	if(i==1)
- 		canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/./EE_resolutionAtZ.pdf[");
-	canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/./EE_resolutionAtZ.pdf");
+ 		canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/EE_resolutionAtZ.pdf[");
+	canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/EE_resolutionAtZ.pdf");
  	if(i==DileptonMass_2d_vsPt_EE->GetNbinsY())
- 		canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/./EE_resolutionAtZ.pdf]");
+ 		canvas->Print("./Check_Resolution_Code_2017_94X_AtZ/EE_resolutionAtZ.pdf]");
     canvas->Write();
 
 }
@@ -794,9 +796,9 @@ bool save = true;
 //////////////////////////
 
 
-// TLegend *legend_MC = new TLegend(0.6,0.75,0.85,0.85);
-// legend_MC->AddEntry(DATA_res_bb, "DATA", "lep");
-// legend_MC->AddEntry(MC_res_bb,"DY", "lep");
+TLegend *legend_MC = new TLegend(0.6,0.75,0.85,0.85);
+legend_MC->AddEntry(DATA_res_bb, "DATA", "lep");
+legend_MC->AddEntry(MC_res_bb,"DY", "lep");
  
  TCanvas* c_BB = new TCanvas("res_BB", "res_BB", 500, 500);
 //  c_BB->SetGrid();
@@ -812,18 +814,18 @@ bool save = true;
  DATA_res_bb->SetMarkerColor(kBlack);
  DATA_res_bb->GetYaxis()->SetRangeUser(0, 8);
  DATA_res_bb->Draw();
-//  MC_res_bb->SetTitle("");
-//  MC_res_bb->SetLineColor(kRed+1);
-//  MC_res_bb->SetMarkerStyle(20);
-//  MC_res_bb->SetMarkerSize(0.5);
-//  MC_res_bb->SetMarkerColor(kRed+1);
-//  MC_res_bb->GetYaxis()->SetRangeUser(0, 8);
-//  MC_res_bb->Draw("same");
-//  legend_MC->Draw();
+ MC_res_bb->SetTitle("");
+ MC_res_bb->SetLineColor(kRed+1);
+ MC_res_bb->SetMarkerStyle(20);
+ MC_res_bb->SetMarkerSize(0.5);
+ MC_res_bb->SetMarkerColor(kRed+1);
+ MC_res_bb->GetYaxis()->SetRangeUser(0, 8);
+ MC_res_bb->Draw("same");
+ legend_MC->Draw();
 
  c_BB->Update();
  c_BB->cd();
-/*
+
  TPad* pad_2_bb = new TPad("pad2_bb", "pad2_bb", 0.05, 0.05, 1, 0.25);
  pad_2_bb->SetTopMargin(0);
  pad_2_bb->SetBottomMargin(0.2);
@@ -848,11 +850,12 @@ bool save = true;
  l_bb->SetLineWidth(2);
  ratio_bb->Draw();
  l_bb->Draw();
- c_BB->Update();*/
+ c_BB->Update();
  if(save){
  c_BB->Print("./Check_Resolution_Code_2017_94X_AtZ/ResolutionAtZ_BB.png");
  c_BB->Print("./Check_Resolution_Code_2017_94X_AtZ/ResolutionAtZ_BB.pdf");
 	}
+	
  TCanvas* c_BE = new TCanvas("res_BE", "res_BE", 500, 500);
 //  c_BE->SetGrid();
  TPad* pad_1_be = new TPad("pad1_be", "pad1_be", 0.05, 0.25, 1, 1);
@@ -867,15 +870,15 @@ bool save = true;
  DATA_res_be->SetMarkerColor(kBlack);
  DATA_res_be->GetYaxis()->SetRangeUser(0, 8);
  DATA_res_be->Draw();
-//  MC_res_be->SetTitle("");
-//  MC_res_be->SetLineColor(kRed+1);
-//  MC_res_be->SetMarkerStyle(20);
-//  MC_res_be->SetMarkerSize(0.5);
-//  MC_res_be->SetMarkerColor(kRed+1);
-//  MC_res_be->GetYaxis()->SetRangeUser(0, 8);
-//  MC_res_be->Draw("same");
-//  legend_MC->Draw();
-/* 
+ MC_res_be->SetTitle("");
+ MC_res_be->SetLineColor(kRed+1);
+ MC_res_be->SetMarkerStyle(20);
+ MC_res_be->SetMarkerSize(0.5);
+ MC_res_be->SetMarkerColor(kRed+1);
+ MC_res_be->GetYaxis()->SetRangeUser(0, 8);
+ MC_res_be->Draw("same");
+ legend_MC->Draw();
+
  c_BE->Update();
  c_BE->cd();
  
@@ -902,11 +905,11 @@ bool save = true;
  l_be->SetLineColor(kRed);
  l_be->SetLineWidth(2);
  ratio_be->Draw();
- l_be->Draw();*/
+ l_be->Draw();
  if(save){
- c_BE->Print("./Check_Resolution_Code_2017_94X_AtZ/ResolutionAtZ_BE.png");
- c_BE->Print("./Check_Resolution_Code_2017_94X_AtZ/ResolutionAtZ_BE.pdf");
-}
+	 c_BE->Print("./Check_Resolution_Code_2017_94X_AtZ/ResolutionAtZ_BE.png");
+	 c_BE->Print("./Check_Resolution_Code_2017_94X_AtZ/ResolutionAtZ_BE.pdf");
+ }
 
 
 
@@ -944,6 +947,3 @@ bool save = true;
  std::cout<<""<<std::endl;
 
 } // main function
-
-
-
