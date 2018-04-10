@@ -216,7 +216,7 @@ void SaveMultipleCounting(TString name, TH1F* h[15], TH1F* h_DATA[15], TString s
     Int_t  binnum_eta = sizeof(ETA_BINS)/sizeof(Double_t)-1;
     
     Double_t PHI_BINS[] = {-3.14, -2.356, -1.57, -0.785, 0, 0.785, 1.57, 2.356, 3.14};
-    Int_t  binnum_phi = sizeof(ETA_BINS)/sizeof(Double_t)-1;
+    Int_t  binnum_phi = sizeof(PHI_BINS)/sizeof(Double_t)-1;
     
     Double_t MET_BINS[] = {0, 25, 50, 75, 100, 200, 350, 500};//, 750, 1000};
     Int_t  binnum_met = sizeof(MET_BINS)/sizeof(Double_t)-1;
