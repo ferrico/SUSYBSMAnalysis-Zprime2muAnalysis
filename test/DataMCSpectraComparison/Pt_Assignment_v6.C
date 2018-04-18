@@ -36,6 +36,10 @@ void SaveMultipleCounting(TString name, TH1F* h[15], TH1F* h_DATA[15], TString s
 //   Int_t lumi;
 
   float dil_mass;
+  
+  float gen_lep_pt[2];
+  float gen_lep_eta[2];
+  float gen_lep_phi[2];
 //   float dil_pt;
   float cos_angle;
 //   float vertex_chi2;
@@ -114,7 +118,8 @@ void SaveMultipleCounting(TString name, TH1F* h[15], TH1F* h_DATA[15], TString s
                             "ttbar_12001800", 
                             "ttbar_1800tInf",                            
 							"WWinclusive", "WW200to600", "WW600to1200", "WW1200to2500", "WW2500",
-                            "ZZ", "WZ", "ZZ_ext", "WZ_ext",
+                            "ZZ", "ZZ_ext", 
+                            "WZ", "WZ_ext",
                             "dy50to120", "dy120to200", "dy200to400", "dy400to800", "dy800to1400", "dy1400to2300", "dy2300to3500", "dy3500to4500", "dy4500to6000"
                             };
 
@@ -126,7 +131,8 @@ void SaveMultipleCounting(TString name, TH1F* h[15], TH1F* h_DATA[15], TString s
 						6933094, 6952830,
 						79092400, 200000, 199800, 200000, 40829, 
 						1999000, 200000, 200000, 200000, 38969, 
-						990064, 1000000, 998034, 2995828,
+						990064, 998034, 
+						1000000, 2995828,
 						2977600, 100000, 100000, 98400, 100000, 95106, 100000, 100000, 100000
 						};
 	float sigma[39] = {6025.2, 
@@ -135,7 +141,8 @@ void SaveMultipleCounting(TString name, TH1F* h[15], TH1F* h_DATA[15], TString s
 						35.6, 35.6,
 						87.31, 0.32611, 0.03265, 0.00305, 0.00017, 
 						12.178, 1.385, 0.0566, 0.0035, 0.00005,
-					    8.2615, 23.565, 8.2615, 23.565, //16.523, 47.13, 16.523, 47.13,
+					    8.2615, 8.2615, 
+					    23.565, 23.565, //16.523, 47.13, 16.523, 47.13,
 						1975, 19.32,  2.731, 0.241, 0.01678, 0.00139, 0.00008948, 0.0000041, 4.56E-7
 						};
          
@@ -154,7 +161,7 @@ void SaveMultipleCounting(TString name, TH1F* h[15], TH1F* h_DATA[15], TString s
 	int numberOfValidMuonHits[2][8];
 	int NotGoodQualityMuon_MC = 0;
 	int NotGoodQualityMuon_DATA = 0;
-	int count_assignment_MC[8][9];
+	int count_assignment_MC[8][25];
 	int count_assignment_DATA[8];
 
 	int tot[8] = {0};
@@ -190,14 +197,22 @@ void SaveMultipleCounting(TString name, TH1F* h[15], TH1F* h_DATA[15], TString s
 	TH2F* pt_vs_met_DATA[8];
 	TH1F* Double_Count_MC[6][6];
 	TH1F* Double_Count_DATA[6][6];
-	TH1F* eta_MC_till400[8];
-	TH1F* eta_DATA_till400[8];
-	TH1F* eta_MC_above400[8];
-	TH1F* eta_DATA_above400[8];
-	TH1F* phi_MC_till400[8];
-	TH1F* phi_DATA_till400[8];
-	TH1F* phi_MC_above400[8];
-	TH1F* phi_DATA_above400[8];
+	TH1F* eta_MC_till600[8];
+	TH1F* eta_MC_till600_clear[8];
+	THStack* eta_MC_till600_Stack[8];
+	TH1F* eta_DATA_till600[8];
+	TH1F* eta_MC_above600[8];
+	TH1F* eta_MC_above600_clear[8];
+	THStack* eta_MC_above600_Stack[8];
+	TH1F* eta_DATA_above600[8];
+	TH1F* phi_MC_till600[8];
+	TH1F* phi_MC_till600_clear[8];
+	THStack* phi_MC_till600_Stack[8];
+	TH1F* phi_DATA_till600[8];
+	TH1F* phi_MC_above600[8];
+	TH1F* phi_MC_above600_clear[8];
+	THStack* phi_MC_above600_Stack[8];
+	TH1F* phi_DATA_above600[8];
 
 	TH1D* h_count_assignment_MC[8];
 	TH1D* h_count_assignment_DATA[8];
@@ -209,10 +224,14 @@ void SaveMultipleCounting(TString name, TH1F* h[15], TH1F* h_DATA[15], TString s
 	const double MMIN = 60., MMAX = 2100.;
 	double logMbins[NMBINS+1];
 
-    Double_t PT_BINS[] = {200, 225, 250, 275, 300, 325, 350, 375, 400, 450, 500, 600, 750, 1000, 1500};
-    Int_t  binnum_pt = sizeof(PT_BINS)/sizeof(Double_t)-1;
+//     Double_t PT_BINS[] = {200, 225, 250, 275, 300, 325, 350, 375, 400, 450, 500, 600, 750, 1000, 1500};
+//     Int_t  binnum_pt = sizeof(PT_BINS)/sizeof(Double_t)-1;
+    Double_t PT_BINS[] = {200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 
+    					1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750, 1800};
+    Int_t  binnum_pt = sizeof(PT_BINS)/sizeof(Double_t)-1;    
     
-    Double_t ETA_BINS[] = {-2.4, -1.5, -1.2, -0.9, 0, 0.9, 1.2, 1.5, 2.4};
+//     Double_t ETA_BINS[] = {-2.4, -1.5, -1.2, -0.9, 0, 0.9, 1.2, 1.5, 2.4};
+    Double_t ETA_BINS[] = {0, 0.9, 1.2, 1.5, 2.4};
     Int_t  binnum_eta = sizeof(ETA_BINS)/sizeof(Double_t)-1;
     
     Double_t PHI_BINS[] = {-3.14, -2.356, -1.57, -0.785, 0, 0.785, 1.57, 2.356, 3.14};
@@ -222,17 +241,16 @@ void SaveMultipleCounting(TString name, TH1F* h[15], TH1F* h_DATA[15], TString s
     Int_t  binnum_met = sizeof(MET_BINS)/sizeof(Double_t)-1;
    
     int count_double_MC[8][8] = {0};
-    int count_double_DATA[8][8] = {0};
+    int count_double_DATA[8][8] = {0};    
     
 void Pt_Assignment_v6(){
-
 
 // 	gROOT->LoadMacro("/afs/cern.ch/work/f/ferrico/private/Ratioplot.C+");
 
     gROOT->Reset();
     gROOT->SetBatch();
 
-	gStyle->SetOptFit(1111);        
+	gStyle->SetOptFit(1);        
 	gStyle->SetPadTickX(1);
 	gStyle->SetPadTickY(1);
 	gStyle->SetLabelColor(1, "XYZ");
@@ -261,11 +279,15 @@ void Pt_Assignment_v6(){
 	THStack *Dimuon_MC_Stack = new THStack("Dimuon mass: MC - stack plot", "Dimuon mass: MC - stack plot");
 	TH1F *Dimuon_DATA = new TH1F("Dimuon mass: DATA", "Dimuon mass: DATA", NMBINS, logMbins);
 	
+	THStack* pt_GEN_Stack = new THStack("p_{T} gen", "p_{T} gen");
+	THStack* eta_GEN_Stack = new THStack("#eta gen", "#eta gen");
+	THStack* phi_GEN_Stack = new THStack("#phi gen", "#phi gen");		
      
 	for(int i = 0; i < 39; i++){
 		weight[i] = LUMINOSITY * sigma[i] / events[i];
 		weight[i] *= Z_peak;
 // 		weight[i] = 1;
+		if(i>29) std::cout<<weight[i]<<std::endl;
 	}
 	
 	for(int a = 0; a < 5; a++){
@@ -321,14 +343,18 @@ void Pt_Assignment_v6(){
 		pt_vs_phi_DATA[i] = new TH2F(pt_vs_phi_name[1] + reconstruction[i], pt_vs_phi_name[1] + reconstruction[i], binnum_phi, PHI_BINS, binnum_pt, PT_BINS);
 		eta_vs_phi_MC[i] = new TH2F(eta_vs_phi_name[0] + reconstruction[i], eta_vs_phi_name[0] + reconstruction[i], binnum_phi, PHI_BINS, binnum_eta, ETA_BINS);
 		eta_vs_phi_DATA[i] = new TH2F(eta_vs_phi_name[1] + reconstruction[i], eta_vs_phi_name[1] + reconstruction[i], binnum_phi, PHI_BINS, binnum_eta, ETA_BINS);
-		eta_MC_till400[i] = new TH1F(eta_name[0] + reconstruction[i] + "_till400", eta_name[0] + reconstruction[i] + "_till400", binnum_eta, ETA_BINS);
-		eta_DATA_till400[i] = new TH1F(eta_name[1] + reconstruction[i] + "_till400", eta_name[1] + reconstruction[i] + "_till400",binnum_eta, ETA_BINS);
-		eta_MC_above400[i] = new TH1F(eta_name[0] + reconstruction[i] + "_above400", eta_name[0] + reconstruction[i] + "_above400", binnum_eta, ETA_BINS);
-		eta_DATA_above400[i] = new TH1F(eta_name[1] + reconstruction[i] + "_above400", eta_name[1] + reconstruction[i] + "_above400", binnum_eta, ETA_BINS);
-		phi_MC_till400[i] = new TH1F(phi_name[0] + reconstruction[i] + "_till400", phi_name[0] + reconstruction[i] + "_till400", binnum_phi, PHI_BINS);
-		phi_DATA_till400[i] = new TH1F(phi_name[1] + reconstruction[i] + "_till400", phi_name[1] + reconstruction[i] + "_till400",binnum_phi, PHI_BINS);
-		phi_MC_above400[i] = new TH1F(phi_name[0] + reconstruction[i] + "_above400", phi_name[0] + reconstruction[i] + "_above400", binnum_phi, PHI_BINS);
-		phi_DATA_above400[i] = new TH1F(phi_name[1] + reconstruction[i] + "_above400", phi_name[1] + reconstruction[i] + "_above400", binnum_phi, PHI_BINS);
+		eta_MC_till600[i] = new TH1F(eta_name[0] + reconstruction[i] + "_till600", eta_name[0] + reconstruction[i] + "_till600", binnum_eta, ETA_BINS);
+		eta_MC_till600_Stack[i] = new THStack(eta_name[0] + reconstruction[i] + "_till600", eta_name[0] + reconstruction[i] + "_till600");
+		eta_DATA_till600[i] = new TH1F(eta_name[1] + reconstruction[i] + "_till600", eta_name[1] + reconstruction[i] + "_till600",binnum_eta, ETA_BINS);
+		eta_MC_above600[i] = new TH1F(eta_name[0] + reconstruction[i] + "_above600", eta_name[0] + reconstruction[i] + "_above600", binnum_eta, ETA_BINS);
+		eta_MC_above600_Stack[i] = new THStack(eta_name[0] + reconstruction[i] + "_above600", eta_name[0] + reconstruction[i] + "_above600");
+		eta_DATA_above600[i] = new TH1F(eta_name[1] + reconstruction[i] + "_above600", eta_name[1] + reconstruction[i] + "_above600", binnum_eta, ETA_BINS);
+		phi_MC_till600[i] = new TH1F(phi_name[0] + reconstruction[i] + "_till600", phi_name[0] + reconstruction[i] + "_till600", binnum_phi, PHI_BINS);
+		phi_MC_till600_Stack[i] = new THStack(phi_name[0] + reconstruction[i] + "_till600", phi_name[0] + reconstruction[i] + "_till600");
+		phi_DATA_till600[i] = new TH1F(phi_name[1] + reconstruction[i] + "_till600", phi_name[1] + reconstruction[i] + "_till600",binnum_phi, PHI_BINS);
+		phi_MC_above600[i] = new TH1F(phi_name[0] + reconstruction[i] + "_above600", phi_name[0] + reconstruction[i] + "_above600", binnum_phi, PHI_BINS);
+		phi_MC_above600_Stack[i] = new THStack(phi_name[0] + reconstruction[i] + "_above600", phi_name[0] + reconstruction[i] + "_above600");
+		phi_DATA_above600[i] = new TH1F(phi_name[1] + reconstruction[i] + "_above600", phi_name[1] + reconstruction[i] + "_above600", binnum_phi, PHI_BINS);
 
 		pt_vs_met_MC[i] = new TH2F(pt_vs_met_name[0] + reconstruction[i], pt_vs_met_name[0] + reconstruction[i], binnum_met, MET_BINS, binnum_pt, PT_BINS);
 		pt_vs_met_DATA[i] = new TH2F(pt_vs_met_name[1] + reconstruction[i], pt_vs_met_name[1] + reconstruction[i], binnum_met, MET_BINS, binnum_pt, PT_BINS);
@@ -350,14 +376,14 @@ void Pt_Assignment_v6(){
 		phi_DATA[i]->GetXaxis()->SetTitle("#phi");
 
 
-		eta_MC_till400[i]->GetXaxis()->SetTitle("#eta");
-		eta_DATA_till400[i]->GetXaxis()->SetTitle("#eta");
-		eta_MC_above400[i]->GetXaxis()->SetTitle("#eta");
-		eta_DATA_above400[i]->GetXaxis()->SetTitle("#eta");
-		phi_MC_till400[i]->GetXaxis()->SetTitle("#phi");
-		phi_DATA_till400[i]->GetXaxis()->SetTitle("#phi");
-		phi_MC_above400[i]->GetXaxis()->SetTitle("#phi");
-		phi_DATA_above400[i]->GetXaxis()->SetTitle("#phi");
+		eta_MC_till600[i]->GetXaxis()->SetTitle("#eta");
+		eta_DATA_till600[i]->GetXaxis()->SetTitle("#eta");
+		eta_MC_above600[i]->GetXaxis()->SetTitle("#eta");
+		eta_DATA_above600[i]->GetXaxis()->SetTitle("#eta");
+		phi_MC_till600[i]->GetXaxis()->SetTitle("#phi");
+		phi_DATA_till600[i]->GetXaxis()->SetTitle("#phi");
+		phi_MC_above600[i]->GetXaxis()->SetTitle("#phi");
+		phi_DATA_above600[i]->GetXaxis()->SetTitle("#phi");
 		
 		pt_vs_met_MC[i]->GetXaxis()->SetTitle("p_{T} [GeV]");
 		pt_vs_met_MC[i]->GetXaxis()->SetTitle("met [GeV]");
@@ -365,8 +391,6 @@ void Pt_Assignment_v6(){
 		pt_vs_met_DATA[i]->GetXaxis()->SetTitle("met [GeV]");
 
 	}
-
-	
 
 	for(int i = 0; i < 6; i++){
 		for(int j = 0; j < 6; j++){
@@ -387,8 +411,12 @@ void Pt_Assignment_v6(){
 
 
      for(int j = 14; j <39; j++){
-     
+     		
 		TH1F *Dimuon_MC_clear = new TH1F("Dimuon mass: MC", "Dimuon mass: MC", NMBINS, logMbins);
+		TH1F* pt_GEN_clear = new TH1F("p_{T} gen", "p_{T} gen", binnum_pt, PT_BINS);
+		TH1F* eta_GEN_clear = new TH1F("#eta gen", "#eta gen", binnum_eta, ETA_BINS);
+		TH1F* phi_GEN_clear = new TH1F("#phi gen", "#phi gen", binnum_phi, PHI_BINS);
+
 		for(int i = 0; i < 8; i++){
 			pt_MC_clear[i] = new TH1F(pt_name[0] + reconstruction[i], pt_name[0] + reconstruction[i], binnum_pt, PT_BINS);
 			eta_MC_clear[i] = new TH1F(eta_name[0] + reconstruction[i], eta_name[0] + reconstruction[i], binnum_eta, ETA_BINS);
@@ -396,6 +424,11 @@ void Pt_Assignment_v6(){
 			pt_MC_clear[i]->GetXaxis()->SetTitle("p_{T} [GeV]");
 			eta_MC_clear[i]->GetXaxis()->SetTitle("#eta");
 			phi_MC_clear[i]->GetXaxis()->SetTitle("#phi");
+			eta_MC_till600_clear[i] = new TH1F(eta_name[0] + reconstruction[i] + "_till600", eta_name[0] + reconstruction[i] + "_till600", binnum_eta, ETA_BINS);
+			eta_MC_above600_clear[i] = new TH1F(eta_name[0] + reconstruction[i] + "_above600", eta_name[0] + reconstruction[i] + "_above600", binnum_eta, ETA_BINS);
+			phi_MC_till600_clear[i] = new TH1F(phi_name[0] + reconstruction[i] + "_till600", phi_name[0] + reconstruction[i] + "_till600", binnum_phi, PHI_BINS);
+			phi_MC_above600_clear[i] = new TH1F(phi_name[0] + reconstruction[i] + "_above600", phi_name[0] + reconstruction[i] + "_above600", binnum_phi, PHI_BINS);
+
 		}
 
      	TChain *treeMC = new TChain("SimpleNtupler/t");
@@ -407,6 +440,10 @@ void Pt_Assignment_v6(){
       	treeMC->SetBranchAddress("run", &run);
 //       	treeMC->SetBranchAddress("lumi", &lumi);    	
     	treeMC->SetBranchAddress("dil_mass",&dil_mass);
+    	
+    	treeMC->SetBranchAddress("gen_lep_pt", gen_lep_pt);
+    	treeMC->SetBranchAddress("gen_lep_eta", gen_lep_eta);
+    	treeMC->SetBranchAddress("gen_lep_phi", gen_lep_phi);
 //      treeMC->SetBranchAddress("gen_dil_mass",&gen_dil_mass);
 //      treeMC->SetBranchAddress("dil_pt",&dil_pt);
 	     treeMC->SetBranchAddress("cos_angle",&cos_angle);
@@ -478,9 +515,12 @@ void Pt_Assignment_v6(){
 
 		int bhu_mc = 0;
 
-//     	 for(int p=0; p<nentries; p++){
-    	 for(int p=0; p<10000; p++){
-  
+    	 for(int p=0; p<nentries; p++){
+//      	 for(int p=0; p<1000000; p++){
+//      	 for(int p=0; p<100000; p++){
+
+    	 	if(p % 100000 == 0) std::cout<<p<<" su "<<nentries<<std::endl;		
+    	 	
     	 	treeMC->GetEntry(p);
 			
 //     	 	std::cout<<lep_std_pt[0]<<"\t"<<lep_std_pt[1]<<std::endl;
@@ -494,10 +534,12 @@ void Pt_Assignment_v6(){
 	     		lep_glb_numberOfValidPixelHits[0]>=1 && lep_glb_numberOfValidPixelHits[1]>=1 && 
     	 		lep_glb_numberOfValidTrackerLayers[0]>5 && lep_glb_numberOfValidTrackerLayers[1]>5 && 
     	 		(lep_triggerMatchPt[0]>50 || lep_triggerMatchPt[1]>50) && 
+    	 		
+//     	 		dil_mass > 120 &&
 
-// 	     		lep_sumPt[0]/lep_tk_pt[0]<0.10 && 
-//     	 		lep_sumPt[1]/lep_tk_pt[1]<0.10 &&
-	     		lep_sumPt[0]/lep_tk_pt[0]<0.05 &&  // Rel. trk iso < 0.05
+	     		lep_sumPt[0]/lep_tk_pt[0]<0.10 && 
+    	 		lep_sumPt[1]/lep_tk_pt[1]<0.10 &&
+/*	     		lep_sumPt[0]/lep_tk_pt[0]<0.05 &&  // Rel. trk iso < 0.05
     	 		lep_sumPt[1]/lep_tk_pt[1]<0.05 &&  // Rel. trk iso < 0.05
 	     		lep_sumPt[0] < 50 &&  // Abs.trk iso < 5
     	 		lep_sumPt[1] < 50 &&  // Abs.trk iso < 5
@@ -505,9 +547,10 @@ void Pt_Assignment_v6(){
     	 		lep_pfIso[1]/lep_tk_pt[1]<0.05 &&  // Rel. trk iso < 0.05
 	     		lep_pfIso[0] < 150 &&  // Abs. PF iso < 150
     	 		lep_pfIso[1] < 150 &&  // Abs. PF iso < 150
-
+*/
      			cos_angle>-0.9998 && 
-     			lep_id[0]*lep_id[1]<0   
+     			lep_id[0]*lep_id[1]<0
+
 				 /////// CON E SENZA VTX CUT ///////				
 // 				&& vertex_chi2 < 20
 				 /////// CON E SENZA VTX CUT ///////
@@ -544,9 +587,9 @@ void Pt_Assignment_v6(){
      						 && lep_pt[h] > 200.
      					) {
      					
-   	
-// 				     		if(lep_pt[0] < 200. || lep_pt[1] < 200.) continue;
-
+ 	     					pt_GEN_clear->Fill(gen_lep_pt[h],  weight[j]);
+	     					eta_GEN_clear->Fill(gen_lep_eta[h],  weight[j]);
+	     					phi_GEN_clear->Fill(gen_lep_phi[h],  weight[j]);
    					
      						lepton_pt[h][0] = lep_pt[h];//lep_cocktail_pt[h];
      						lepton_pt[h][1] = lep_glb_pt[h];
@@ -636,41 +679,61 @@ void Pt_Assignment_v6(){
 							///////////// MULTIPLE COUNTING ////////////
 							////////////////////////////////////////////
 							////////////////////////////////////////////
-
 	     					
-	     					for(int i = 1; i <7; i++){ // for on different reconstruction
-
+	     					for(int i = 1; i < 7; i++){ // for on different reconstruction
+   	 						    	 						
     	 						if(lep_pt[h] == lepton_pt[h][i]){
-									// To correct select Picky only if Picky = TuneP    	 						
-    	 							if(i == 2 && (lepton_pt[h][i] == lepton_pt[h][3] || lepton_pt[h][i] == lepton_pt[h][4] || lepton_pt[h][i] == lepton_pt[h][5])) break;
-									// To correct select DYT only if DYT = TuneP    	 						
-									if(i == 4 && lepton_pt[h][i] == lepton_pt[h][5]) break;
-     								count_assignment_MC[i][j-30]++;
+    	 						
+    	 							bool multiple_reconstruction = false;	
+    	 							for(int z = 1; z < 7; z++){
+    	 								if(z == i) continue;
+    	 								if(lepton_pt[h][z] == lepton_pt[h][i]){
+    	 									multiple_reconstruction = true;
+    	 									continue;
+    	 								}
+    	 							}
+    	 							if(multiple_reconstruction) continue; //to remove multiple reconstructions
+    	 							
+//     	 							if(j == 30 && i == 1)
+// 			     						std::cout<<"+++++++++++"<<lepton_pt[h][0]<<"\t"<<lepton_pt[h][1]<<"\t"<<lepton_pt[h][2]<<"\t"<<lepton_pt[h][3]
+// 			     						<<"\t"<<lepton_pt[h][4]<<"\t"<<lepton_pt[h][5]<<"\t"<<lepton_pt[h][6]<<"\t"<<lepton_pt[h][7]<<std::endl;
+
+									// Select Picky only if Picky = TuneP    	 						
+//     	 							if(i == 2 && (lepton_pt[h][i] == lepton_pt[h][3] || lepton_pt[h][i] == lepton_pt[h][5])) continue;
+									// Select DYT only if DYT = TuneP    	 						
+// 									if(i == 4 && lepton_pt[h][i] == lepton_pt[h][5]) continue;
+//      								if(i != 7) count_assignment_MC[i][j-14]++;
 	     							pt_MC[i]->Fill(lepton_pt[h][i], weight[j]);
-	     							eta_MC[i]->Fill(lepton_eta[h][i], weight[j]);
+	     							eta_MC[i]->Fill(fabs(lepton_eta[h][i]), weight[j]);
 	     							phi_MC[i]->Fill(lepton_phi[h][i], weight[j]);
 	     							pt_MC_clear[i]->Fill(lepton_pt[h][i], weight[j]); //for stack plot
-	     							eta_MC_clear[i]->Fill(lepton_eta[h][i], weight[j]); //for stack plot
+	     							eta_MC_clear[i]->Fill(fabs(lepton_eta[h][i]), weight[j]); //for stack plot
 	     							phi_MC_clear[i]->Fill(lepton_phi[h][i], weight[j]); //for stack plot
     	 							pt_vs_eta_MC[i]->Fill(lep_eta[h], lep_pt[h], weight[j]);
     	 							pt_vs_phi_MC[i]->Fill(lep_phi[h], lep_pt[h], weight[j]);
     	 							eta_vs_phi_MC[i]->Fill(lep_phi[h], lep_eta[h], weight[j]);
     	 							pt_vs_met_MC[i]->Fill(met_pt, lep_pt[h], weight[j]);
 
-		     						if(lepton_pt[h][i] < 400){
-		     							eta_MC_till400[i]->Fill(lepton_eta[h][i], weight[j]);
-		     							phi_MC_till400[i]->Fill(lepton_phi[h][i], weight[j]);
+		     						if(lepton_pt[h][i] < 600){
+		     							eta_MC_till600[i]->Fill(fabs(lepton_eta[h][i]), weight[j]);
+		     							phi_MC_till600[i]->Fill(lepton_phi[h][i], weight[j]);
+		     							eta_MC_till600_clear[i]->Fill(fabs(lepton_eta[h][i]), weight[j]);
+		     							phi_MC_till600_clear[i]->Fill(lepton_phi[h][i], weight[j]);
+
 		     						}
 	    	 						else{
-	     								eta_MC_above400[i]->Fill(lepton_eta[h][i], weight[j]);
-	     								phi_MC_above400[i]->Fill(lepton_phi[h][i], weight[j]);
+	     								if(i != 7) count_assignment_MC[i][j-14]++;
+	     								eta_MC_above600[i]->Fill(fabs(lepton_eta[h][i]), weight[j]);
+	     								phi_MC_above600[i]->Fill(lepton_phi[h][i], weight[j]);
+	     								eta_MC_above600_clear[i]->Fill(fabs(lepton_eta[h][i]), weight[j]);
+	     								phi_MC_above600_clear[i]->Fill(lepton_phi[h][i], weight[j]);
 	     							}
 
     	 							break; // to take only one reconstruction in case of double counting --- DYT chosen because it is the first
     	 						}
      						}
     	 					if(lep_pt[h] == lepton_pt[h][7]){
-    	 						count_assignment_MC[7][j-30]++;
+//     	 						count_assignment_MC[7][j-14]++;
      							pt_MC[7]->Fill(lepton_pt[h][7], weight[j]);
      							eta_MC[7]->Fill(lepton_eta[h][7], weight[j]);
      							phi_MC[7]->Fill(lepton_phi[h][7], weight[j]);
@@ -683,15 +746,27 @@ void Pt_Assignment_v6(){
    	 							pt_vs_met_MC[7]->Fill(met_pt, lep_pt[h], weight[j]);
 
 
-		     					if(lepton_pt[h][7] < 400){
-		     						eta_MC_till400[7]->Fill(lepton_eta[h][7], weight[j]);
-	     							phi_MC_till400[7]->Fill(lepton_phi[h][7], weight[j]);
+		     					if(lepton_pt[h][7] < 600){
+		     						eta_MC_till600[7]->Fill(lepton_eta[h][7], weight[j]);
+	     							phi_MC_till600[7]->Fill(lepton_phi[h][7], weight[j]);
+	     							eta_MC_till600_clear[7]->Fill(lepton_eta[h][7], weight[j]);
+	     							phi_MC_till600_clear[7]->Fill(lepton_phi[h][7], weight[j]);
+
 		     					}
 	    	 					else{
-	     							eta_MC_above400[7]->Fill(lepton_eta[h][7], weight[j]);
-	     							phi_MC_above400[7]->Fill(lepton_phi[h][7], weight[j]);
+	    	 						count_assignment_MC[7][j-14]++;
+	     							eta_MC_above600[7]->Fill(lepton_eta[h][7], weight[j]);
+	     							phi_MC_above600[7]->Fill(lepton_phi[h][7], weight[j]);
+     								eta_MC_above600_clear[7]->Fill(lepton_eta[h][7], weight[j]);
+     								phi_MC_above600_clear[7]->Fill(lepton_phi[h][7], weight[j]);
+
 	     						}
      						}
+//      						std::cout<<count_assignment_MC[0][0]<<"\t"<<count_assignment_MC[1][0]<<"\t"<<count_assignment_MC[2][0]
+//      						<<"\t"<<count_assignment_MC[3][0]<<"\t"<<count_assignment_MC[4][0]<<"\t"<<count_assignment_MC[5][0]
+//      						<<"\t"<<count_assignment_MC[6][0]<<"\t"<<count_assignment_MC[7][0]
+//      						<<"\t\t\t"<<lepton_pt[h][0]<<"\t"<<lepton_pt[h][1]<<"\t"<<lepton_pt[h][2]<<"\t"<<lepton_pt[h][3]
+//      						<<"\t"<<lepton_pt[h][4]<<"\t"<<lepton_pt[h][5]<<"\t"<<lepton_pt[h][6]<<"\t"<<lepton_pt[h][7]<<std::endl;
 
 //      						for(int i =0; i < 8; i++)
 //      							std::cout<<reconstruction[i].Data()<<"\t"<<count_assignment_MC[i][j-30]<<std::endl;
@@ -702,100 +777,216 @@ void Pt_Assignment_v6(){
 	       }//end of condition on event
 
 		 }// end loop p
-		 
-		 
+
 		 for(int i = 0; i < 8; i++){
-			 if(j > 29){
+			 if(j > 30){
 				pt_MC_clear[i]->SetFillColor(3);
 				pt_MC_clear[i]->SetLineColor(3);
-				pt_MC_clear[i]->SetMarkerSize(3);
-				pt_MC_clear[i]->SetMarkerColor(3);
+// 				pt_MC_clear[i]->SetMarkerSize(3);
+// 				pt_MC_clear[i]->SetMarkerColor(3);
 				eta_MC_clear[i]->SetFillColor(3);
 				eta_MC_clear[i]->SetLineColor(3);
-				eta_MC_clear[i]->SetMarkerSize(3);
-				eta_MC_clear[i]->SetMarkerColor(3);
+// 				eta_MC_clear[i]->SetMarkerSize(3);
+// 				eta_MC_clear[i]->SetMarkerColor(3);
 				phi_MC_clear[i]->SetFillColor(3);
 				phi_MC_clear[i]->SetLineColor(3);
-				phi_MC_clear[i]->SetMarkerSize(3);
-				phi_MC_clear[i]->SetMarkerColor(3);
+// 				phi_MC_clear[i]->SetMarkerSize(3);
+// 				phi_MC_clear[i]->SetMarkerColor(3);
+				eta_MC_till600_clear[i]->SetFillColor(3);
+				eta_MC_till600_clear[i]->SetLineColor(3);
+				eta_MC_above600_clear[i]->SetFillColor(3);
+				eta_MC_above600_clear[i]->SetLineColor(3);
+				phi_MC_till600_clear[i]->SetFillColor(3);
+				phi_MC_till600_clear[i]->SetLineColor(3);
+				phi_MC_above600_clear[i]->SetFillColor(3);
+				phi_MC_above600_clear[i]->SetLineColor(3);
 			 }
-			 if(j > 20 && j < 30){
+			 if(j == 30){
+				pt_MC_clear[i]->SetFillColor(kGreen+3);
+				pt_MC_clear[i]->SetLineColor(kGreen+3);
+// 				pt_MC_clear[i]->SetMarkerSize(kGreen+3);
+// 				pt_MC_clear[i]->SetMarkerColor(kGreen+3);
+				eta_MC_clear[i]->SetFillColor(kGreen+3);
+				eta_MC_clear[i]->SetLineColor(kGreen+3);
+// 				eta_MC_clear[i]->SetMarkerSize(kGreen+3);
+// 				eta_MC_clear[i]->SetMarkerColor(kGreen+3);
+				phi_MC_clear[i]->SetFillColor(kGreen+3);
+				phi_MC_clear[i]->SetLineColor(kGreen+3);
+// 				phi_MC_clear[i]->SetMarkerSize(kGreen+3);
+// 				phi_MC_clear[i]->SetMarkerColor(kGreen+3);
+				eta_MC_till600_clear[i]->SetFillColor(kGreen+3);
+				eta_MC_till600_clear[i]->SetLineColor(kGreen+3);
+				eta_MC_above600_clear[i]->SetFillColor(kGreen+3);
+				eta_MC_above600_clear[i]->SetLineColor(kGreen+3);
+				phi_MC_till600_clear[i]->SetFillColor(kGreen+3);
+				phi_MC_till600_clear[i]->SetLineColor(kGreen+3);
+				phi_MC_above600_clear[i]->SetFillColor(kGreen+3);
+				phi_MC_above600_clear[i]->SetLineColor(kGreen+3);
+			 }
+			 if(j > 27 && j < 30){
+				pt_MC_clear[i]->SetFillColor(kRed+3);
+				pt_MC_clear[i]->SetLineColor(kRed+3);
+				eta_MC_clear[i]->SetFillColor(kRed+3);
+				eta_MC_clear[i]->SetLineColor(kRed+3);
+				phi_MC_clear[i]->SetFillColor(kRed+3);
+				phi_MC_clear[i]->SetLineColor(kRed+3);
+				eta_MC_till600_clear[i]->SetFillColor(kRed+3);
+				eta_MC_till600_clear[i]->SetLineColor(kRed+3);
+				eta_MC_above600_clear[i]->SetFillColor(kRed+3);
+				eta_MC_above600_clear[i]->SetLineColor(kRed+3);
+				phi_MC_till600_clear[i]->SetFillColor(kRed+3);
+				phi_MC_till600_clear[i]->SetLineColor(kRed+3);
+				phi_MC_above600_clear[i]->SetFillColor(kRed+3);
+				phi_MC_above600_clear[i]->SetLineColor(kRed+3);
+			}
+			 if(j > 25 && j < 28){
 				pt_MC_clear[i]->SetFillColor(2);
 				pt_MC_clear[i]->SetLineColor(2);
-				pt_MC_clear[i]->SetMarkerSize(2);
-				pt_MC_clear[i]->SetMarkerColor(2);
 				eta_MC_clear[i]->SetFillColor(2);
 				eta_MC_clear[i]->SetLineColor(2);
-				eta_MC_clear[i]->SetMarkerSize(2);
-				eta_MC_clear[i]->SetMarkerColor(2);
 				phi_MC_clear[i]->SetFillColor(2);
 				phi_MC_clear[i]->SetLineColor(2);
-				phi_MC_clear[i]->SetMarkerSize(2);
-				phi_MC_clear[i]->SetMarkerColor(2);
+				eta_MC_till600_clear[i]->SetFillColor(2);
+				eta_MC_till600_clear[i]->SetLineColor(2);
+				eta_MC_above600_clear[i]->SetFillColor(2);
+				eta_MC_above600_clear[i]->SetLineColor(2);
+				phi_MC_till600_clear[i]->SetFillColor(2);
+				phi_MC_till600_clear[i]->SetLineColor(2);
+				phi_MC_above600_clear[i]->SetFillColor(2);
+				phi_MC_above600_clear[i]->SetLineColor(2);
+			}
+			 if(j > 20 && j < 26){
+				pt_MC_clear[i]->SetFillColor(kRed-10);
+				pt_MC_clear[i]->SetLineColor(kRed-10);
+				eta_MC_clear[i]->SetFillColor(kRed-10);
+				eta_MC_clear[i]->SetLineColor(kRed-10);
+				phi_MC_clear[i]->SetFillColor(kRed-10);
+				phi_MC_clear[i]->SetLineColor(kRed-10);
+				eta_MC_till600_clear[i]->SetFillColor(kRed-10);
+				eta_MC_till600_clear[i]->SetLineColor(kRed-10);
+				eta_MC_above600_clear[i]->SetFillColor(kRed-10);
+				eta_MC_above600_clear[i]->SetLineColor(kRed-10);
+				phi_MC_till600_clear[i]->SetFillColor(kRed-10);
+				phi_MC_till600_clear[i]->SetLineColor(kRed-10);
+				phi_MC_above600_clear[i]->SetFillColor(kRed-10);
+				phi_MC_above600_clear[i]->SetLineColor(kRed-10);	
 			}
 			 if(j > 15 && j < 21){
 				pt_MC_clear[i]->SetFillColor(4);
 				pt_MC_clear[i]->SetLineColor(4);
-				pt_MC_clear[i]->SetMarkerSize(4);
-				pt_MC_clear[i]->SetMarkerColor(4);
 				eta_MC_clear[i]->SetFillColor(4);
 				eta_MC_clear[i]->SetLineColor(4);
-				eta_MC_clear[i]->SetMarkerSize(4);
-				eta_MC_clear[i]->SetMarkerColor(4);
 				phi_MC_clear[i]->SetFillColor(4);
 				phi_MC_clear[i]->SetLineColor(4);
-				phi_MC_clear[i]->SetMarkerSize(4);
-				phi_MC_clear[i]->SetMarkerColor(4);
+				eta_MC_till600_clear[i]->SetFillColor(4);
+				eta_MC_till600_clear[i]->SetLineColor(4);
+				eta_MC_above600_clear[i]->SetFillColor(4);
+				eta_MC_above600_clear[i]->SetLineColor(4);
+				phi_MC_till600_clear[i]->SetFillColor(4);
+				phi_MC_till600_clear[i]->SetLineColor(4);
+				phi_MC_above600_clear[i]->SetFillColor(4);
+				phi_MC_above600_clear[i]->SetLineColor(4);
 			 }
 			 if(j == 14 || j == 15){
 				pt_MC_clear[i]->SetFillColor(kBlue+2);
 				pt_MC_clear[i]->SetLineColor(kBlue+2);
-				pt_MC_clear[i]->SetMarkerSize(kBlue+2);
-				pt_MC_clear[i]->SetMarkerColor(kBlue+2);
 				eta_MC_clear[i]->SetFillColor(kBlue+2);
 				eta_MC_clear[i]->SetLineColor(kBlue+2);
-				eta_MC_clear[i]->SetMarkerSize(kBlue+2);
-				eta_MC_clear[i]->SetMarkerColor(kBlue+2);
 				phi_MC_clear[i]->SetFillColor(kBlue+2);
 				phi_MC_clear[i]->SetLineColor(kBlue+2);
-				phi_MC_clear[i]->SetMarkerSize(kBlue+2);
-				phi_MC_clear[i]->SetMarkerColor(kBlue+2);
+				eta_MC_till600_clear[i]->SetFillColor(kBlue+2);
+				eta_MC_till600_clear[i]->SetLineColor(kBlue+2);
+				eta_MC_above600_clear[i]->SetFillColor(kBlue+2);
+				eta_MC_above600_clear[i]->SetLineColor(kBlue+2);
+				phi_MC_till600_clear[i]->SetFillColor(kBlue+2);
+				phi_MC_till600_clear[i]->SetLineColor(kBlue+2);
+				phi_MC_above600_clear[i]->SetFillColor(kBlue+2);
+				phi_MC_above600_clear[i]->SetLineColor(kBlue+2);
 			 }
 			 pt_MC_Stack[i]->Add(pt_MC_clear[i], "HIST");
 			 eta_MC_Stack[i]->Add(eta_MC_clear[i], "HIST");
 			 phi_MC_Stack[i]->Add(phi_MC_clear[i], "HIST");
-			 
-			 pt_MC_clear[i]->ClearUnderflowAndOverflow();
-			 eta_MC_clear[i]->ClearUnderflowAndOverflow();
-			 phi_MC_clear[i]->ClearUnderflowAndOverflow();
+			 eta_MC_till600_Stack[i]->Add(eta_MC_till600_clear[i], "HIST");
+			 phi_MC_till600_Stack[i]->Add(phi_MC_till600_clear[i], "HIST");
+			 eta_MC_above600_Stack[i]->Add(eta_MC_above600_clear[i], "HIST");
+			 phi_MC_above600_Stack[i]->Add(phi_MC_above600_clear[i], "HIST");
 		 }
-		 
-		 if(j > 29){
+
+		 if(j > 30){
 			Dimuon_MC_clear->SetFillColor(3);
 			Dimuon_MC_clear->SetLineColor(3);
-			Dimuon_MC_clear->SetMarkerSize(3);
-			Dimuon_MC_clear->SetMarkerColor(3);
+			pt_GEN_clear->SetFillColor(3);
+			pt_GEN_clear->SetLineColor(3);
+			eta_GEN_clear->SetFillColor(3);
+			eta_GEN_clear->SetLineColor(3);
+			phi_GEN_clear->SetFillColor(3);
+			phi_GEN_clear->SetLineColor(3);
+		 }		 
+		 if(j == 30){
+			Dimuon_MC_clear->SetFillColor(kGreen+3);
+			Dimuon_MC_clear->SetLineColor(kGreen+3);
+			pt_GEN_clear->SetFillColor(kGreen+3);
+			pt_GEN_clear->SetLineColor(kGreen+3);
+			eta_GEN_clear->SetFillColor(kGreen+3);
+			eta_GEN_clear->SetLineColor(kGreen+3);
+			phi_GEN_clear->SetFillColor(kGreen+3);
+			phi_GEN_clear->SetLineColor(kGreen+3);
 		 }
-		 if(j > 20 && j < 30){
+		 if(j > 27 && j < 30){
+			Dimuon_MC_clear->SetFillColor(kRed+3);
+			Dimuon_MC_clear->SetLineColor(kRed+3);
+			pt_GEN_clear->SetFillColor(kRed+3);
+			pt_GEN_clear->SetLineColor(kRed+3);
+			eta_GEN_clear->SetFillColor(kRed+3);
+			eta_GEN_clear->SetLineColor(kRed+3);
+			phi_GEN_clear->SetFillColor(kRed+3);
+			phi_GEN_clear->SetLineColor(kRed+3);
+		 }
+		 if(j > 25 && j < 28){
 			Dimuon_MC_clear->SetFillColor(2);
 			Dimuon_MC_clear->SetLineColor(2);
-			Dimuon_MC_clear->SetMarkerSize(2);
-			Dimuon_MC_clear->SetMarkerColor(2);
+			pt_GEN_clear->SetFillColor(2);
+			pt_GEN_clear->SetLineColor(2);
+			eta_GEN_clear->SetFillColor(2);
+			eta_GEN_clear->SetLineColor(2);
+			phi_GEN_clear->SetFillColor(2);
+			phi_GEN_clear->SetLineColor(2);	
+		 }
+		 if(j > 20 && j < 26){
+			Dimuon_MC_clear->SetFillColor(kRed-10);
+			Dimuon_MC_clear->SetLineColor(kRed-10);
+			pt_GEN_clear->SetFillColor(kRed-10);
+			pt_GEN_clear->SetLineColor(kRed-10);
+			eta_GEN_clear->SetFillColor(kRed-10);
+			eta_GEN_clear->SetLineColor(kRed-10);
+			phi_GEN_clear->SetFillColor(kRed-10);
+			phi_GEN_clear->SetLineColor(kRed-10);
 		 }
 		 if(j > 15 && j < 21){
 			Dimuon_MC_clear->SetFillColor(4);
 			Dimuon_MC_clear->SetLineColor(4);
-			Dimuon_MC_clear->SetMarkerSize(4);
-			Dimuon_MC_clear->SetMarkerColor(4);
+			pt_GEN_clear->SetFillColor(4);
+			pt_GEN_clear->SetLineColor(4);
+			eta_GEN_clear->SetFillColor(4);
+			eta_GEN_clear->SetLineColor(4);
+			phi_GEN_clear->SetFillColor(4);
+			phi_GEN_clear->SetLineColor(4);
 		 }
 		 if(j == 14 || j == 15){
 			Dimuon_MC_clear->SetFillColor(kBlue+2);
 			Dimuon_MC_clear->SetLineColor(kBlue+2);
-			Dimuon_MC_clear->SetMarkerSize(kBlue+2);
-			Dimuon_MC_clear->SetMarkerColor(kBlue+2);
+			pt_GEN_clear->SetFillColor(kBlue+2);
+			pt_GEN_clear->SetLineColor(kBlue+2);
+			eta_GEN_clear->SetFillColor(kBlue+2);
+			eta_GEN_clear->SetLineColor(kBlue+2);
+			phi_GEN_clear->SetFillColor(kBlue+2);
+			phi_GEN_clear->SetLineColor(kBlue+2);
 		 }
 		 Dimuon_MC_Stack->Add(Dimuon_MC_clear, "HIST");
-		 
+		 pt_GEN_Stack->Add(pt_GEN_clear, "HIST");
+		 eta_GEN_Stack->Add(eta_GEN_clear, "HIST");
+		 phi_GEN_Stack->Add(phi_GEN_clear, "HIST");
+	 
      }// end loop on MC
     
     
@@ -884,8 +1075,9 @@ void Pt_Assignment_v6(){
 	printf("opening... DATA --- %lld\n", nentries);    
 		int bhu_data = 0;
 	
-// 	for(int p=0; p<nentries; p++){
-	for(int p=0; p<10000; p++){
+	for(int p=0; p<nentries; p++){
+// 	for(int p=0; p<100000; p++){
+// 	for(int p=0; p<1; p++){
 
 		if(p % 100000 == 0) std::cout<<p<<" su "<<nentries<<std::endl;		
 	
@@ -900,10 +1092,12 @@ void Pt_Assignment_v6(){
 	     		lep_glb_numberOfValidPixelHits[0]>=1 && lep_glb_numberOfValidPixelHits[1]>=1 && 
     	 		lep_glb_numberOfValidTrackerLayers[0]>5 && lep_glb_numberOfValidTrackerLayers[1]>5 && 
     	 		(lep_triggerMatchPt[0]>50 || lep_triggerMatchPt[1]>50) && 
+    	 		
+//     	 		dil_mass > 120 &&
 
-// 	     		lep_sumPt[0]/lep_tk_pt[0]<0.10 && 
-//     	 		lep_sumPt[1]/lep_tk_pt[1]<0.10 &&
-	     		lep_sumPt[0]/lep_tk_pt[0]<0.05 &&  // Rel. trk iso < 0.05
+	     		lep_sumPt[0]/lep_tk_pt[0]<0.10 && 
+    	 		lep_sumPt[1]/lep_tk_pt[1]<0.10 &&
+/*	     		lep_sumPt[0]/lep_tk_pt[0]<0.05 &&  // Rel. trk iso < 0.05
     	 		lep_sumPt[1]/lep_tk_pt[1]<0.05 &&  // Rel. trk iso < 0.05
 	     		lep_sumPt[0] < 50 &&  // Abs.trk iso < 5
     	 		lep_sumPt[1] < 50 &&  // Abs.trk iso < 5
@@ -911,9 +1105,10 @@ void Pt_Assignment_v6(){
     	 		lep_pfIso[1]/lep_tk_pt[1]<0.05 &&  // Rel. trk iso < 0.05
 	     		lep_pfIso[0] < 150 &&  // Abs. PF iso < 150
     	 		lep_pfIso[1] < 150 &&  // Abs. PF iso < 150
-
+*/
      			cos_angle>-0.9998 && 
      			lep_id[0]*lep_id[1]<0
+
 				 /////// CON E SENZA VTX CUT ///////				
 // 				&& vertex_chi2 < 20
 				 /////// CON E SENZA VTX CUT ///////
@@ -1039,36 +1234,48 @@ void Pt_Assignment_v6(){
 							////////////////////////////////////////////
 							////////////////////////////////////////////
 
-	     					for(int i = 1; i <7; i++){ // for on different reconstruction
+	     					for(int i = 1; i < 7; i++){ // for on different reconstruction
 
     	 						if(lep_pt[h] == lepton_pt[h][i]){
-									// To correct select Picky only if Picky = TuneP    	 						
-    	 							if(i == 2 && (lepton_pt[h][i] == lepton_pt[h][3] || lepton_pt[h][i] == lepton_pt[h][4] || lepton_pt[h][i] == lepton_pt[h][5])) break;
-									// To correct select DYT only if DYT = TuneP    	 						
-									if(i == 4 && lepton_pt[h][i] == lepton_pt[h][5]) break;
-     								count_assignment_DATA[i]++;
+    	 						
+    	 							bool multiple_reconstruction = false;	
+    	 							for(int z = 1; z < 7; z++){
+    	 								if(z == i) continue;
+    	 								if(lepton_pt[h][z] == lepton_pt[h][i]){
+    	 									multiple_reconstruction = true;
+    	 									continue;
+    	 								}
+    	 							}
+    	 							if(multiple_reconstruction) continue; //to remove multiple reconstructions
+    	 							
+									// Select Picky only if Picky = TuneP    	 						
+//     	 							if(i == 2 && (lepton_pt[h][i] == lepton_pt[h][3] || lepton_pt[h][i] == lepton_pt[h][5])) continue;
+									// Select DYT only if DYT = TuneP    	 						
+// 									if(i == 4 && lepton_pt[h][i] == lepton_pt[h][5]) continue;
+//      								if(i != 7) count_assignment_DATA[i]++;
 	     							pt_DATA[i]->Fill(lepton_pt[h][i]);
-	     							eta_DATA[i]->Fill(lepton_eta[h][i]);
+	     							eta_DATA[i]->Fill(fabs(lepton_eta[h][i]));
 	     							phi_DATA[i]->Fill(lepton_phi[h][i]);
     	 							pt_vs_eta_DATA[i]->Fill(lep_eta[h], lep_pt[h]);
     	 							pt_vs_phi_DATA[i]->Fill(lep_phi[h], lep_pt[h]);
     	 							eta_vs_phi_DATA[i]->Fill(lep_phi[h], lep_eta[h]);
     	 							pt_vs_met_DATA[i]->Fill(met_pt, lep_pt[h]);
 
-		    	 					if(lepton_pt[h][i] < 400){
-		     							eta_DATA_till400[i]->Fill(lepton_eta[h][i]);
-		     							phi_DATA_till400[i]->Fill(lepton_phi[h][i]);
+		    	 					if(lepton_pt[h][i] < 600){
+		     							eta_DATA_till600[i]->Fill(fabs(lepton_eta[h][i]));
+		     							phi_DATA_till600[i]->Fill(lepton_phi[h][i]);
 		     						}
 	    	 						else{
-	     								eta_DATA_above400[i]->Fill(lepton_eta[h][i]);
-	     								phi_DATA_above400[i]->Fill(lepton_phi[h][i]);
+	     								if(i != 7) count_assignment_DATA[i]++;
+	     								eta_DATA_above600[i]->Fill(fabs(lepton_eta[h][i]));
+	     								phi_DATA_above600[i]->Fill(lepton_phi[h][i]);
 	     							}
 
     	 							break; // to take only one reconstruction in case of double counting --- DYT chosen because it is the first
     	 						}
      						}
     	 					if(lep_pt[h] == lepton_pt[h][7]){ 
-    	 						count_assignment_DATA[7]++;
+//     	 						count_assignment_DATA[7]++;
     	 						pt_DATA[7]->Fill(lepton_pt[h][7]);
     	 						eta_DATA[7]->Fill(lepton_eta[h][7]);
     	 						phi_DATA[7]->Fill(lepton_phi[h][7]);
@@ -1077,13 +1284,14 @@ void Pt_Assignment_v6(){
    	 							eta_vs_phi_DATA[7]->Fill(lep_phi[h], lep_eta[h]);
    	 							pt_vs_met_DATA[7]->Fill(met_pt, lep_pt[h]);
 
-		     					if(lepton_pt[h][7] < 400){
-		     						eta_DATA_till400[7]->Fill(lepton_eta[h][7]);
-		     						phi_DATA_till400[7]->Fill(lepton_phi[h][7]);
+		     					if(lepton_pt[h][7] < 600){
+		     						eta_DATA_till600[7]->Fill(lepton_eta[h][7]);
+		     						phi_DATA_till600[7]->Fill(lepton_phi[h][7]);
 		     					}
 	    	 					else{
-	     							eta_DATA_above400[7]->Fill(lepton_eta[h][7]);
-	     							phi_DATA_above400[7]->Fill(lepton_phi[h][7]);
+	    	 						count_assignment_DATA[7]++;
+	     							eta_DATA_above600[7]->Fill(lepton_eta[h][7]);
+	     							phi_DATA_above600[7]->Fill(lepton_phi[h][7]);
 	     						}
 
     	 					}
@@ -1104,8 +1312,8 @@ void Pt_Assignment_v6(){
 
      printf("                --> %15s\t%15s\t%15s\t%15s\t%15s\t%15s\t%15s\t\t|%15s\n", reconstruction[0].Data(), reconstruction[1].Data(), reconstruction[2].Data(), reconstruction[3].Data(), reconstruction[4].Data(), reconstruction[5].Data(), reconstruction[6].Data(), reconstruction[7].Data()); 
 
-    for(int i = 0; i < 9; i++){ // samples
- 		printf("%15s -->  %15d\t%15d\t%15d\t%15d\t%15d\t%15d\t%15d\t\t|%15d\n", samples[30+i].Data(), count_assignment_MC[0][i], count_assignment_MC[1][i], count_assignment_MC[2][i], count_assignment_MC[3][i], count_assignment_MC[4][i], count_assignment_MC[5][i], count_assignment_MC[6][i], count_assignment_MC[7][i]);
+    for(int i = 0; i < 25; i++){ // samples
+ 		printf("%15s -->  %15d\t%15d\t%15d\t%15d\t%15d\t%15d\t%15d\t\t|%15d\n", samples[14+i].Data(), count_assignment_MC[0][i], count_assignment_MC[1][i], count_assignment_MC[2][i], count_assignment_MC[3][i], count_assignment_MC[4][i], count_assignment_MC[5][i], count_assignment_MC[6][i], count_assignment_MC[7][i]);
 	   	for(int j = 1; j < 8; j++) // reconstruction
 	    	tot[j] += count_assignment_MC[j][i];
      }
@@ -1142,7 +1350,7 @@ void Pt_Assignment_v6(){
  		printf("%15s -->  %15d\t%15d\t%15d\t%15d\t%15d\t%15d\t%15d\t\t|%15d\n", reconstruction[i].Data(), count_double_DATA[0][i], count_double_DATA[1][i], count_double_DATA[2][i], count_double_DATA[3][i], count_double_DATA[4][i], count_double_DATA[5][i], count_double_DATA[6][i], count_double_DATA[7][i]);
 
  	}
- 	
+ 	 	
  	bool save = false;
 //  	bool save = true;
 
@@ -1161,36 +1369,51 @@ void Pt_Assignment_v6(){
 		swap(b,c);	
 		swap(c,d);	
 		swap(d,e);	
-	}
-	
+	}	
 	save_document = dir_save + "Variuos_distribution.pdf";
 	SalvaHisto("h_blank", h_blank, h_blank, dir_save + "Variuos_distribution.pdf[", 0,  0, "p_{T}");
-	SalvaHisto("Dimuon Mass", Dimuon_MC, Dimuon_DATA, dir_save + "Variuos_distribution.pdf[", 0,  1, "m_{#mu#mu} [GeV]");
-	SalvaHisto("Dimuon Mass: stack plot", Dimuon_MC_Stack, Dimuon_DATA, dir_save + "Variuos_distribution.pdf[", 0,  1, "m_{#mu#mu} [GeV]");
+	SalvaHisto("Dimuon Mass", Dimuon_MC, Dimuon_DATA, dir_save + "Variuos_distribution.pdf[", 1,  1, "m_{#mu#mu} [GeV]");
+	SalvaHisto("Dimuon Mass: stack plot", Dimuon_MC_Stack, Dimuon_DATA, dir_save + "Variuos_distribution.pdf[", 1,  1, "m_{#mu#mu} [GeV]");
+
+	SalvaHisto("p_{T} gen distribution: stack plot", pt_GEN_Stack, pt_DATA[7], dir_save + "Variuos_distribution.pdf[", 0,  1, "p_{T}");
+	SalvaHisto("#eta gen distribution: stack plot", eta_GEN_Stack, eta_DATA[7], dir_save + "Variuos_distribution.pdf[", 0,  0, "#eta");
+	SalvaHisto("#phi gen distribution: stack plot", phi_GEN_Stack, phi_DATA[7], dir_save + "Variuos_distribution.pdf[", 0,  0, "#phi");
+
 	for(int i = 1; i < 8; i++){
 	
-		name_histo = Form("Eta_%s_till400GeV", reconstruction[i].Data());
-// 		SalvaHisto(name_histo, eta_MC_till400[i], eta_DATA_till400[i], save_document, 0,  0, "#eta");
-		name_histo = Form("Eta_%s_above400GeV", reconstruction[i].Data());
-// 		SalvaHisto(name_histo, eta_MC_above400[i], eta_DATA_above400[i], save_document, 0,  0, "#eta");
-		name_histo = Form("Phi_%s_till400GeV", reconstruction[i].Data());
-// 		SalvaHisto(name_histo, phi_MC_till400[i], phi_DATA_till400[i], save_document, 0, 0,  "#phi");
-		name_histo = Form("Phi_%s_above400GeV", reconstruction[i].Data());
-// 		SalvaHisto(name_histo, phi_MC_above400[i], phi_DATA_above400[i], save_document, 0,  0, "#phi");
+// 		name_histo = Form("Eta_%s_till600GeV", reconstruction[i].Data());
+// 		SalvaHisto(name_histo, eta_MC_till600[i], eta_DATA_till600[i], save_document, 0,  0, "#eta");
+		name_histo = Form("#eta %s: p_{T} < 600GeV", reconstruction[i].Data());
+		SalvaHisto(name_histo, eta_MC_till600_Stack[i], eta_DATA_till600[i], save_document, 0,  0, "#eta");
 
+// 		name_histo = Form("Eta_%s_above600GeV", reconstruction[i].Data());
+// 		SalvaHisto(name_histo, eta_MC_above600[i], eta_DATA_above600[i], save_document, 0,  0, "#eta");
+		name_histo = Form("#eta %s: p_{T} > 600GeV", reconstruction[i].Data());
+		SalvaHisto(name_histo, eta_MC_above600_Stack[i], eta_DATA_above600[i], save_document, 0,  0, "#eta");
+
+// 		name_histo = Form("Phi_%s_till600GeV", reconstruction[i].Data());
+// 		SalvaHisto(name_histo, phi_MC_till600[i], phi_DATA_till600[i], save_document, 0, 0,  "#phi");
+		name_histo = Form("#phi %s: p_{T} < 600GeV", reconstruction[i].Data());
+		SalvaHisto(name_histo, phi_MC_till600_Stack[i], phi_DATA_till600[i], save_document, 0,  0,  "#phi");
+
+// 		name_histo = Form("Phi_%s_above600GeV", reconstruction[i].Data());
+// 		SalvaHisto(name_histo, phi_MC_above600[i], phi_DATA_above600[i], save_document, 0,  0, "#phi");
+		name_histo = Form("#phi %s: p_{T} > 600GeV", reconstruction[i].Data());
+		SalvaHisto(name_histo, phi_MC_above600_Stack[i], phi_DATA_above600[i], save_document, 0,  0,  "#phi");
+
+// 		name_histo = Form("%s p_{T}", reconstruction[i].Data());
+// 		SalvaHisto(name_histo, pt_MC[i], pt_DATA[i], save_document, 0,  1, "p_{T}");
 		name_histo = Form("%s p_{T}", reconstruction[i].Data());
-		SalvaHisto(name_histo, pt_MC[i], pt_DATA[i], save_document, 0,  1, "p_{T}");
-		name_histo = Form("%s p_{T}: stack plot", reconstruction[i].Data());
 		SalvaHisto(name_histo, pt_MC_Stack[i], pt_DATA[i], save_document, 0,  1, "p_{T}");
 
+// 		name_histo = Form("%s #eta", reconstruction[i].Data());
+// 		SalvaHisto(name_histo, eta_MC[i], eta_DATA[i], save_document, 0,  0, "#eta");
 		name_histo = Form("%s #eta", reconstruction[i].Data());
-		SalvaHisto(name_histo, eta_MC[i], eta_DATA[i], save_document, 0,  0, "#eta");
-		name_histo = Form("%s #eta: stack plot", reconstruction[i].Data());
 		SalvaHisto(name_histo, eta_MC_Stack[i], eta_DATA[i], save_document, 0,  0, "#eta");
 
+// 		name_histo = Form("%s #phi", reconstruction[i].Data());
+// 		SalvaHisto(name_histo, phi_MC[i], phi_DATA[i], save_document, 0,  0, "#phi");
 		name_histo = Form("%s #phi", reconstruction[i].Data());
-		SalvaHisto(name_histo, phi_MC[i], phi_DATA[i], save_document, 0,  0, "#phi");
-		name_histo = Form("%s #phi: stack plot", reconstruction[i].Data());
 		SalvaHisto(name_histo, phi_MC_Stack[i], phi_DATA[i], save_document, 0,  0, "#phi");
 
 
@@ -1199,17 +1422,17 @@ void Pt_Assignment_v6(){
 			pt_vs_eta_MC[i]->Divide(pt_vs_eta_MC[7]);
 			pt_vs_eta_MC[i]->GetZaxis()->SetRangeUser(0.0, 1.0);			
 		}
-// 		SalvaHisto(name_histo, pt_vs_eta_MC[i], save_document, "#eta", "p_{T}");		
+		SalvaHisto(name_histo, pt_vs_eta_MC[i], save_document, "#eta", "p_{T}");		
 		name_histo = Form("%s p_{T} vs #eta: DATA", reconstruction[i].Data());
 		if(i != 7){
 			pt_vs_eta_DATA[i]->Divide(pt_vs_eta_DATA[7]);
 			pt_vs_eta_DATA[i]->GetZaxis()->SetRangeUser(0.0, 1.0);			
 		}
-// 		SalvaHisto(name_histo, pt_vs_eta_DATA[i], save_document, "#eta", "p_{T}");
+		SalvaHisto(name_histo, pt_vs_eta_DATA[i], save_document, "#eta", "p_{T}");
 		name_histo = Form("%s p_{T} vs #eta: DATA/MC", reconstruction[i].Data());
 		pt_vs_eta_DATA[i]->Divide(pt_vs_eta_MC[i]);
 		pt_vs_eta_DATA[i]->GetZaxis()->SetRangeUser(0.0, 1.0);			
-// 		SalvaHisto(name_histo, pt_vs_eta_DATA[i], save_document, "#eta", "p_{T}", 0);
+		SalvaHisto(name_histo, pt_vs_eta_DATA[i], save_document, "#eta", "p_{T}", 0);
 
 
 		name_histo = Form("%s p_{T} vs #phi: MC", reconstruction[i].Data());
@@ -1217,7 +1440,7 @@ void Pt_Assignment_v6(){
 			pt_vs_phi_MC[i]->Divide(pt_vs_phi_MC[7]);
 			pt_vs_phi_MC[i]->GetZaxis()->SetRangeUser(0.0, 1.0);			
 		}
-// 		SalvaHisto(name_histo, pt_vs_phi_MC[i], save_document, "#phi", "p_{T}");		
+		SalvaHisto(name_histo, pt_vs_phi_MC[i], save_document, "#phi", "p_{T}");		
 		name_histo = Form("%s p_{T} vs #phi: DATA", reconstruction[i].Data());
 		if(i != 7){
 			pt_vs_phi_DATA[i]->Divide(pt_vs_phi_DATA[7]);
@@ -1227,7 +1450,7 @@ void Pt_Assignment_v6(){
 		name_histo = Form("%s p_{T} vs #phi: DATA/MC", reconstruction[i].Data());
 		pt_vs_phi_DATA[i]->Divide(pt_vs_phi_MC[i]);
 		pt_vs_phi_DATA[i]->GetZaxis()->SetRangeUser(0.0, 1.0);
-// 		SalvaHisto(name_histo, pt_vs_phi_DATA[i], save_document, "#phi", "p_{T}", 0);
+		SalvaHisto(name_histo, pt_vs_phi_DATA[i], save_document, "#phi", "p_{T}", 0);
 
 
 		name_histo = Form("%s #eta vs #phi: MC", reconstruction[i].Data());
@@ -1235,17 +1458,17 @@ void Pt_Assignment_v6(){
 			eta_vs_phi_MC[i]->Divide(eta_vs_phi_MC[7]);
 			eta_vs_phi_MC[i]->GetZaxis()->SetRangeUser(0.0, 1.0);			
 		}
-// 		SalvaHisto(name_histo, eta_vs_phi_MC[i], save_document, "#phi", "#eta");		
+		SalvaHisto(name_histo, eta_vs_phi_MC[i], save_document, "#phi", "#eta");		
 		name_histo = Form("%s #eta vs #phi: DATA", reconstruction[i].Data());
 		if(i != 7){
 			eta_vs_phi_DATA[i]->Divide(eta_vs_phi_DATA[7]);
 			eta_vs_phi_DATA[i]->GetZaxis()->SetRangeUser(0.0, 1.0);			
 		}
-// 		SalvaHisto(name_histo, eta_vs_phi_DATA[i], save_document, "#phi", "#eta");
+		SalvaHisto(name_histo, eta_vs_phi_DATA[i], save_document, "#phi", "#eta");
 		name_histo = Form("%s #eta vs #phi: DATA/MC", reconstruction[i].Data());
 		eta_vs_phi_DATA[i]->Divide(eta_vs_phi_MC[i]);
 		eta_vs_phi_DATA[i]->GetZaxis()->SetRangeUser(0.0, 1.0);			
-// 		SalvaHisto(name_histo, eta_vs_phi_DATA[i], save_document, "#phi", "#eta", 0);
+		SalvaHisto(name_histo, eta_vs_phi_DATA[i], save_document, "#phi", "#eta", 0);
 
 
 		name_histo = Form("%s p_{T} vs met: MC", reconstruction[i].Data());
@@ -1253,17 +1476,17 @@ void Pt_Assignment_v6(){
 			pt_vs_met_MC[i]->Divide(pt_vs_met_MC[7]);
 			pt_vs_met_MC[i]->GetZaxis()->SetRangeUser(0.0, 1.0);			
 		}
-// 		SalvaHisto(name_histo, pt_vs_met_MC[i], save_document, "met", "p_{T}");
+		SalvaHisto(name_histo, pt_vs_met_MC[i], save_document, "met", "p_{T}");
 		name_histo = Form("%s p_{T} vs met: DATA", reconstruction[i].Data());
 		if(i != 7){
 			pt_vs_met_DATA[i]->Divide(pt_vs_met_DATA[7]);
 			pt_vs_met_DATA[i]->GetZaxis()->SetRangeUser(0.0, 1.0);			
 		}
-// 		SalvaHisto(name_histo, pt_vs_met_DATA[i], save_document, "met", "p_{T}");
+		SalvaHisto(name_histo, pt_vs_met_DATA[i], save_document, "met", "p_{T}");
 		name_histo = Form("%s p_{T} vs met: DATA/MC", reconstruction[i].Data());
 		pt_vs_met_DATA[i]->Divide(pt_vs_met_MC[i]);
 		pt_vs_met_DATA[i]->GetZaxis()->SetRangeUser(0.0, 1.0);			
-// 		SalvaHisto(name_histo, pt_vs_met_DATA[i], save_document, "met", "p_{T}", 0);
+		SalvaHisto(name_histo, pt_vs_met_DATA[i], save_document, "met", "p_{T}", 0);
 
 	}	
 	SalvaHisto("h_blank", h_blank, h_blank, dir_save + "Variuos_distribution.pdf]", 0,  0, "p_{T}");
@@ -1401,6 +1624,8 @@ void SalvaHisto(TString name, TH2F* h_MC, TString save, TString name_Xaxis, TStr
 }
 
 void SalvaHisto(TString name, THStack* h_MC, TH1F* h_DATA, TString save, bool logx, bool logy, TString name_axis, int X_pos_latex, TString strig_1, TString strig_2, TString strig_3, TString strig_4, TString strig_5){
+			
+
 
 	TLatex lat;
 	TCanvas *c1 = new TCanvas(name, name,  500, 500);//210,45,1050,750);
@@ -1424,14 +1649,11 @@ void SalvaHisto(TString name, THStack* h_MC, TH1F* h_DATA, TString save, bool lo
 	Double_t max;
 	Double_t min;
 
-	if(logy) min = 0.1;
+	if(logy) min = 10e-6;
 	else min = 0;
-	
+
 	TH1F* last_hist = (TH1F *)h_MC->GetStack()->Last();	
-	h_DATA->SetStats(0);
-	TH1F *ratio = (TH1F*) h_DATA->Clone();
-// 	ratio->SetStats(0);
-	
+		
 	if(h_DATA->GetMaximum() > last_hist->GetMaximum())
 		max = h_DATA->GetMaximum();
 	else
@@ -1440,7 +1662,9 @@ void SalvaHisto(TString name, THStack* h_MC, TH1F* h_DATA, TString save, bool lo
 	max = 1.1 * max;
 	
 	if(max == 0) max = 1;
-	
+
+	h_MC->SetTitle(name);
+	last_hist->SetTitle(name);
 	last_hist->Draw();
 	last_hist->SetStats(1);
 	c1->Update();
@@ -1455,12 +1679,11 @@ void SalvaHisto(TString name, THStack* h_MC, TH1F* h_DATA, TString save, bool lo
     }
     else std::cout << "Null pointer to TPaveStats MC: " << st_MC << std::endl;
   
-	h_DATA->SetMarkerStyle(3);
-	h_DATA->SetMarkerColor(kBlack);
-	h_DATA->SetMarkerSize(0.5);	
-// 	h_DATA->SetStats(0);
-	c1->Update();
+	h_DATA->SetLineColor(kRed);
+	h_DATA->SetTitle(name);
 	h_DATA->Draw();
+// 	h_DATA->SetStats(0);
+	TH1F *ratio = (TH1F*) h_DATA->Clone();
 	h_DATA->SetStats(1);
 	c1->Update();
 // 	gPad->Update();
@@ -1479,18 +1702,20 @@ void SalvaHisto(TString name, THStack* h_MC, TH1F* h_DATA, TString save, bool lo
 	last_hist->GetYaxis()->SetTitleOffset(1.2);
 	h_DATA->GetYaxis()->SetTitleOffset(1.2);
 
-	last_hist->SetMaximum(max);
-	last_hist->SetMinimum(min);	
-// 	h_MC->GetYaxis()->SetRangeUser(min, max);//SetMaximum(max);
+	last_hist->GetYaxis()->SetRangeUser(min, max);//SetMaximum(max);
 	h_DATA->GetYaxis()->SetRangeUser(min, max);//SetMaximum(max);
-	
+		
     c1->Update();
 
 	h_MC->Draw();
 	h_DATA->Draw("sameP");
+	h_DATA->SetMarkerStyle(3);
+	h_DATA->SetMarkerColor(kBlack);
+	h_DATA->SetMarkerSize(0.5);
 	st_MC->Draw("same");
 // 	st_DATA->Draw("same");
-     	
+	
+//     	
 	TLegend *l1 = new TLegend(0.25,0.8,0.35,0.9);
 	l1->AddEntry(h_DATA, "DATA", "l");
 	l1->AddEntry(h_MC, "MC", "l");
@@ -1518,11 +1743,9 @@ void SalvaHisto(TString name, THStack* h_MC, TH1F* h_DATA, TString save, bool lo
 	pad22->cd();
 	
 	ratio->Divide(last_hist);
-	ratio->Draw();
 	ratio->GetYaxis()->SetRangeUser(0, 2);
 	ratio->SetTitle("");
 	ratio->SetStats(0);
-	c1->Update();	
 	ratio->GetYaxis()->SetTitleSize(0.1);
 // 	ratio->GetYaxis()->SetTitleFont(43);
 	ratio->GetYaxis()->SetLabelSize(0.14);
@@ -1533,27 +1756,40 @@ void SalvaHisto(TString name, THStack* h_MC, TH1F* h_DATA, TString save, bool lo
 	ratio->GetXaxis()->SetLabelSize(0.15);
 	ratio->GetXaxis()->SetTitleSize(0.15);
 	ratio->GetXaxis()->SetTitleOffset(0.75);
-	ratio->SetLineColor(kBlack);
-	ratio->SetMarkerColor(kBlack);	
+	ratio->SetLineColor(kBlack);	
+	ratio->Draw();
 	c1->Update();
 	pad22->Update();
-	float min_pad = pad22->GetUxmin();
-	float max_pad = pad22->GetUxmax();
 	TLine *line = new TLine(pad22->GetUxmin(), 1, pad22->GetUxmax(), 1);
 	line->SetLineColor(kGreen);
 	line->SetLineWidth(1);
 	line->Draw();
-	
-	TF1* f1 = new TF1("f1", "pol1", min_pad, max_pad);
-	ratio->Fit("f1","R");	
-	gStyle->SetOptFit(1111);
+
+// 	TF1* f1 = new TF1("f1", "pol1", pad22->GetUxmin(), pad22->GetUxmax());
+// 	ratio->Fit("f1","R");
+// 
+//     TLatex* latexFit = new TLatex();
+//     for(int i = 0; i < f1->GetNpar()+1; i++){
+//        	latexFit->SetTextSize(0.1);
+//     	if(i == 2){
+//     		float yPos = 0.8;
+// 	    	TString longstring = Form("#chi^{2} = %5.3g", f1->GetChisquare());
+//   	       	latexFit->DrawLatex(pad22->GetUxmin()+fabs(pad22->GetUxmin()/(float)10), yPos, longstring);
+//   	    }   
+//     	float yPos = 1.2 + i*0.5;
+//     	TString longstring = Form("%s = %5.3g #pm %5.3g", f1->GetParName(i),f1->GetParameter(i),f1->GetParError(i));
+//        	latexFit->DrawLatex(pad22->GetUxmin()+fabs(pad22->GetUxmin()/(float)10), yPos, longstring);
+//     }
 		
 	TString save_name_pdf = name + ".pdf";
 	TString save_name_png = name + ".png";
 	
 // 	c1->Print(save_name_pdf);
-	c1->Print(save_name_png);
+// 	c1->Print(save_name_png);
 	c1->Print(save);
+
+
+
 
 }
 
@@ -1706,4 +1942,3 @@ void SalvaHisto(TString name, TH1F* h_MC, TH1F* h_DATA, TString save, bool logx,
 // 	c1->Print(save_name_png);
 	c1->Print(save);
 }
-	
