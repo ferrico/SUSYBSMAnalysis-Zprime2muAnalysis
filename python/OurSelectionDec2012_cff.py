@@ -41,6 +41,7 @@ from SUSYBSMAnalysis.Zprime2muAnalysis.hltTriggerMatch_cfi import trigger_match,
 loose_cut = 'isGlobalMuon && ' \
             'isTrackerMuon && ' \
             'pt > %s && ' \
+            'abs(eta) < 2.4 && ' \
             'abs(dB) < 0.2 && ' \
             'isolationR03.sumPt / innerTrack.pt < 0.10 && ' \
             'globalTrack.hitPattern.trackerLayersWithMeasurement > 5 && ' \
@@ -63,8 +64,11 @@ dimuons = cms.EDProducer('Zprime2muCompositeCandidatePicker',
                          src = cms.InputTag('allDimuons'),
                          cut = cms.string(''),
                          max_candidates = cms.uint32(1),
+                         sort_by_pt = cms.bool(True),
                          do_remove_overlap = cms.bool(True),
                          back_to_back_cos_angle_min = cms.double(-0.9998), # this corresponds to the angle (pi - 0.02) rad = 178.9 deg
-                         vertex_chi2_max = cms.double(10),
+#                         vertex_chi2_max = cms.double(10),
+                         vertex_chi2_max = cms.double(20),
                          dpt_over_pt_max = cms.double(0.3)
                          )
+

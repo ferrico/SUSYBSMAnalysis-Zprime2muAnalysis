@@ -30,6 +30,7 @@ private:
 
 L3MuonSanitizer::L3MuonSanitizer(const ParameterSet& cfg) {
   src = cfg.getParameter<InputTag>("src");
+  consumes<MuonTrackLinksCollection>(src);
   produces<MuonCollection>();
 }
 
@@ -42,7 +43,7 @@ void L3MuonSanitizer::produce(Event& event,
   event.getByLabel(src, muons);
 
   // Make the output collection.
-  auto_ptr<MuonCollection> cands(new MuonCollection);
+  unique_ptr<MuonCollection> cands(new MuonCollection);
 
   if (!muons.failedToGet()) {
     MuonTrackLinksCollection::const_iterator muon;
@@ -79,7 +80,7 @@ void L3MuonSanitizer::produce(Event& event,
   //  edm::LogWarning("L3MuonSanitizer")
   //    << "no collection " << src << " in event; producing empty collection";
 
-  event.put(cands);
+  event.put(std::move(cands), "cands");
 }
 
 DEFINE_FWK_MODULE(L3MuonSanitizer);

@@ -17,7 +17,7 @@ struct Zprime2muTriggerPathsAndFilters {
 };
 
 trigger::TriggerObjectCollection get_L3_muons(const edm::Event& event,
-					      const std::string& filter,
+					      const std::string& filter, 
 					      const edm::InputTag& trigger_summary_src = edm::InputTag("hltTriggerSummaryAOD", "", "HLT"),
 					      const std::string& collection="hltL3MuonCandidates");
 

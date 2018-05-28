@@ -33,6 +33,7 @@
 #include "HLTrigger/HLTcore/interface/HLTConfigProvider.h"
 #include "FWCore/Common/interface/TriggerNames.h"
 #include "DataFormats/Common/interface/TriggerResults.h"
+#include "HLTrigger/HLTcore/interface/HLTPrescaleProvider.h"
 
 
 //
@@ -64,6 +65,7 @@ class GetPrescaleL1HLT : public edm::EDProducer {
       HLTConfigProvider hlt_cfg;
         edm::InputTag _tagHlt;
         std::string hlt_process_name;
+	HLTPrescaleProvider hltPrescaleProvider_;
       // ----------member data ---------------------------
 };
 
@@ -80,7 +82,7 @@ class GetPrescaleL1HLT : public edm::EDProducer {
 // constructors and destructor
 //
 GetPrescaleL1HLT::GetPrescaleL1HLT(const edm::ParameterSet& iConfig)
-:_tagHlt(iConfig.getParameter<edm::InputTag>("hlt_src"))
+:_tagHlt(iConfig.getParameter<edm::InputTag>("hlt_src")), hltPrescaleProvider_(iConfig, consumesCollector(), *this)
 {
 
     produces<int>("HLTPrescale");
@@ -120,7 +122,7 @@ void
 GetPrescaleL1HLT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
 
-
+  HLTConfigProvider const& hlt_cfg = hltPrescaleProvider_.hltConfigProvider();
 
   bool found = false;
   std::string trigger_path = "HLT_Mu24_eta2p1_v3";
@@ -145,18 +147,18 @@ GetPrescaleL1HLT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     if (found) {
         if (hlt_results->accept(path_index)) {
 //            std::cout<<"path is accepted"<<std::endl;
-            if (iEvent.isRealData()) prescales = hlt_cfg.prescaleValues(iEvent, iSetup, trigger_path);
+            if (iEvent.isRealData()) prescales = hltPrescaleProvider_.prescaleValues(iEvent, iSetup, trigger_path);
           }
     }
 
-   std::auto_ptr<int> l1Prescale(new int(prescales.first));
-   std::auto_ptr<int> hltPrescale(new int(prescales.second));
-   std::auto_ptr<int> totalPrescale(new int(prescales.first*prescales.second));
+   std::unique_ptr<int> l1Prescale(new int(prescales.first));
+   std::unique_ptr<int> hltPrescale(new int(prescales.second));
+   std::unique_ptr<int> totalPrescale(new int(prescales.first*prescales.second));
 
 
-  iEvent.put(hltPrescale, "HLTPrescale");
-  iEvent.put(l1Prescale, "L1Prescale");
-  iEvent.put(totalPrescale, "TotalPrescale");
+  iEvent.put(std::move(hltPrescale), "HLTPrescale");
+  iEvent.put(std::move(l1Prescale), "L1Prescale");
+  iEvent.put(std::move(totalPrescale), "TotalPrescale");
 
 /* This is an event example
    //Read 'ExampleData' from the Event
@@ -165,7 +167,7 @@ GetPrescaleL1HLT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
    //Use the ExampleData to create an ExampleData2 which 
    // is put into the Event
-   std::auto_ptr<ExampleData2> pOut(new ExampleData2(*pIn));
+   std::unique_ptr<ExampleData2> pOut(new ExampleData2(*pIn));
    iEvent.put(pOut);
 */
 
@@ -193,7 +195,8 @@ void
 GetPrescaleL1HLT::beginRun(edm::Run& run, edm::EventSetup const& setup)
 {
   bool changed = true;
-  if (!hlt_cfg.init(run, setup, hlt_process_name, changed))
+  //if (!hlt_cfg.init(run, setup, hlt_process_name, changed))
+    if (!hltPrescaleProvider_.init(run,setup,hlt_process_name,changed))
     throw cms::Exception("PrescaleToCommon") << "HLTConfigProvider::init failed with process name " << hlt_process_name << "\n";
   
 //  return true;

@@ -42,6 +42,7 @@ private:
 template <typename CollectionType>
 HLTLeptonSanitizer<CollectionType>::HLTLeptonSanitizer(const ParameterSet& cfg) {
   src = cfg.getParameter<InputTag>("src");
+  consumes<CollectionType>(src);
   produces<CollectionType>();
 }
 
@@ -53,7 +54,7 @@ void HLTLeptonSanitizer<CollectionType>::produce(Event& event,
   event.getByLabel(src, leptons);
 
   // Make the output collection.
-  auto_ptr<CollectionType> cands(new CollectionType);
+  unique_ptr<CollectionType> cands(new CollectionType);
 
   if (!leptons.failedToGet())
     // Copy the existing one.
@@ -66,7 +67,7 @@ void HLTLeptonSanitizer<CollectionType>::produce(Event& event,
   //  edm::LogWarning("HLTLeptonSanitizer")
   //    << "no collection " << src << " in event; producing empty collection";
 
-  event.put(cands);
+  event.put(std::move(cands), "cands");
 }
 
 typedef HLTLeptonSanitizer<RecoChargedCandidateCollection> L2MuonSanitizer;
