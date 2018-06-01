@@ -81,7 +81,8 @@ bool DibosonGenMass::filter(edm::Event& event, const edm::EventSetup&) {
 
     massWW = sqrt((ener1+ener2)*(ener1+ener2)-(px1+px2)*(px1+px2)-(py1+py2)*(py1+py2)-(pz1+pz2)*(pz1+pz2));
 
-    //std::cout<<"WW mass = "<<massWW<<std::endl;
+if(     massWW >= min_mass && massWW<=max_mass)
+    	std::cout<<"WW mass = "<<massWW<<std::endl;
 
 
    return 

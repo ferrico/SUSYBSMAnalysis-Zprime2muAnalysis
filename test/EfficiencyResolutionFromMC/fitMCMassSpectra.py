@@ -7,8 +7,7 @@ from SUSYBSMAnalysis.Zprime2muAnalysis.roottools import *
 from SUSYBSMAnalysis.Zprime2muAnalysis.MCSamples import *
 import bckgshape_syst
 import bckgshape_tools
-#hists_dir = '/afs/cern.ch/work/c/cschnaib/Zprime2muAnalysis/DataMCSpectraComparision/mc/76X_v2/' # should be here oops
-hists_dir = '/afs/cern.ch/work/c/cschnaib/DataMCSpectraComparision/mc/76X_v2/'
+hists_dir = '/afs/cern.ch/work/f/ferrico/private/ZPrime_code/CMSSW_8_0_21/src/SUSYBSMAnalysis/Zprime2muAnalysis/test/DataMCSpectraComparison/mc/'
 
 set_zp2mu_style()
 ROOT.gStyle.SetPadTopMargin(0.02)
@@ -23,7 +22,7 @@ fitlow = 400
 fithigh = 5500
 high = 5500
 # Run2015(B+C+D)
-int_lumi = 2800.
+int_lumi = 37196.459
 
 # Make nominal MC histogram
 histMC = bckgshape_tools.make_mc_hist(True,False,int_lumi,low,high,rebin,hists_dir)

@@ -4,11 +4,13 @@ import os
 from SUSYBSMAnalysis.Zprime2muAnalysis.roottools import *
 from SUSYBSMAnalysis.Zprime2muAnalysis.MCSamples import *
 ps = plot_saver('plots/shapesyst')
-int_lumi = 2800.
+int_lumi = 37196.459
 
 #************************************************************************************
 # Helper functions
 #************************************************************************************
+
+from fitdymass import variable
 
 def make_mc_hist(do_non_dy,doPI,int_lumi,low,high,rebin,hists_dir):
     '''
@@ -17,7 +19,17 @@ def make_mc_hist(do_non_dy,doPI,int_lumi,low,high,rebin,hists_dir):
     - output is a TH1
     '''
     dy_samples = [dy50to120, dy120to200, dy200to400, dy400to800, dy800to1400, dy1400to2300, dy2300to3500, dy3500to4500, dy4500to6000]
-    non_dy_samples = [ttbar_pow, tWtop, tWantitop, ww_incl, wz, zz_incl]
+    non_dy_samples = [WWinclusive, WW200to600, WW600to1200, WW1200to2500, WW2500, 
+    						WZ, ZZ,
+    						Wantitop, tW, Wjets, 
+#     						ttbar_lep, 
+#     						ttbar_lep50to500
+    						ttbar_lep50to800, ttbar_lep_800to1200, ttbar_lep_1200to1800, ttbar_lep1800toInf,
+#     						qcd50to80, 
+    						qcd80to120, qcd120to170, qcd170to300, qcd300to470, qcd470to600, qcd600to800, qcd800to1000, qcd1000to1400, 
+    						qcd1400to1800, qcd1800to2400, qcd2400to3200, qcd3200, 
+    						dyInclusive50
+    						]
     hists_dy = []
     for sample in dy_samples:
         fn = 'ana_datamc_%s.root' % sample.name
@@ -27,7 +39,7 @@ def make_mc_hist(do_non_dy,doPI,int_lumi,low,high,rebin,hists_dir):
         w = sample.partial_weight * int_lumi
         print sample.name, 'w = ', w
         #h = d.Get('DileptonMass').Clone('%s' % sample.name)
-        h = d.Get('DimuonMassVertexConstrained').Clone('%s' % sample.name)
+        h = d.Get(variable).Clone('%s' % sample.name)
         h.Rebin(rebin)
         h.GetXaxis().SetRangeUser(low, high)
         h.Scale(w)
@@ -42,7 +54,7 @@ def make_mc_hist(do_non_dy,doPI,int_lumi,low,high,rebin,hists_dir):
         d = f.Our2012MuonsPlusMuonsMinusHistos
         w = sample.partial_weight * int_lumi
         print sample.name, 'w = ', w
-        h = d.Get('DimuonMassVertexConstrained').Clone('%s' % sample.name)
+        h = d.Get(variable).Clone('%s' % sample.name)
         #h = d.Get('DileptonMass').Clone('%s' % sample.name)
         h.Rebin(rebin)
         h.GetXaxis().SetRangeUser(low, high)
@@ -396,7 +408,7 @@ if __name__=='__main__':
     '''
     import bckgshape_syst
     #hists_dir = '/afs/cern.ch/work/c/cschnaib/Zprime2muAnalysis/DataMCSpectraComparision/mc/76X_v2/' # should be here oops
-    hists_dir = '/afs/cern.ch/work/c/cschnaib/DataMCSpectraComparision/mc/76X_v2/'
+    hists_dir = '/afs/cern.ch/work/f/ferrico/private/ZPrime_code/CMSSW_8_0_21/src/SUSYBSMAnalysis/Zprime2muAnalysis/test/DataMCSpectraComparison/mc'
 
     set_zp2mu_style()
     ROOT.gStyle.SetPadTopMargin(0.02)
@@ -410,7 +422,7 @@ if __name__=='__main__':
     fithigh = 5500
     high = 5500
     # Run2015(B+C+D)
-    int_lumi = 2800.
+    int_lumi = 37196.459
 
     # Make nominal MC histogram
     histMC = make_mc_hist(True,False,int_lumi,low,high,rebin,hists_dir)

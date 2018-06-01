@@ -19,8 +19,8 @@ lg = ROOT.TLegend(0.15, 0.15, 0.5, 0.4)
 
 ps = plot_saver('plots/bckgshape_syst')
 
-mass_low  =   90.
-mass_high = 3500.
+mass_low  =   60
+mass_high = 6000
 
 #
 #- Efficiency variation vs mass, from fit to simulation

@@ -13,7 +13,9 @@
 #include "DataFormats/PatCandidates/interface/PackedTriggerPrescales.h"
 #include "DataFormats/Common/interface/ValueMap.h"
 #include "DataFormats/Common/interface/View.h"
-
+#include "SUSYBSMAnalysis/Zprime2muAnalysis/src/GeneralizedEndpoint.h"
+#include "TLorentzVector.h"
+#include "TRandom.h"
 
 
 class Zprime2muLeptonProducer_miniAOD : public edm::EDProducer {
@@ -161,17 +163,51 @@ pat::Muon* Zprime2muLeptonProducer_miniAOD::cloneAndSwitchMuonTrack(const pat::M
   
   reco::Particle::Point vtx(newTrack->vx(), newTrack->vy(), newTrack->vz());
   reco::Particle::LorentzVector p4;
-  
-  const double p = newTrack->p();
-  
-  p4.SetXYZT(newTrack->px(), newTrack->py(), newTrack->pz(), sqrt(p*p + mass*mass));  
-  
-  mu->setCharge(newTrack->charge());
-  
-  mu->setP4(p4);
-  
-  mu->setVertex(vtx);
 
+  //////////   For not applying pt scale correction /////
+  const double p = newTrack->p();  
+  p4.SetXYZT(newTrack->px(), newTrack->py(), newTrack->pz(), sqrt(p*p + mass*mass));  
+  //////////   For not applying pt scale correction /////
+
+
+  
+	///////// only for scaling /////////
+//   float phi = newTrack->phi()*TMath::RadToDeg();
+  
+//   float mupt = GeneralizedEndpoint().GeneralizedEndpointPt(newTrack->pt(),newTrack->charge(),newTrack->eta(),phi,-1,1); //for DATA
+//   float mupt = GeneralizedEndpoint().GeneralizedEndpointPt(newTrack->pt(),newTrack->charge(),newTrack->eta(),phi,0,0);  // for MC
+
+//  	float mupt;
+// 	if(newTrack->pt() < 200)
+// 		mupt = gRandom->Gaus(newTrack->pt(), 0.003*newTrack->pt());
+// 		
+// 	if(newTrack->pt() > 200 && newTrack->pt() < 500)
+// 		mupt = gRandom->Gaus(newTrack->pt(), 0.005*newTrack->pt());
+// 		
+// 	if(newTrack->pt() > 500)
+// 		mupt = gRandom->Gaus(newTrack->pt(), 0.01*newTrack->pt());
+// 		
+// 	std::cout<<"Vecchio = "<<newTrack->pt()<<"\tnuovo = "<<mupt;
+
+// 		
+// 		
+
+// 	float px = mupt*TMath::Cos(newTrack->phi());
+// 	float py = mupt*TMath::Sin(newTrack->phi());
+// 	float pz = mupt*TMath::SinH(newTrack->eta());
+// 	float p = mupt*TMath::CosH(newTrack->eta());
+// 	p4.SetXYZT(px, py, pz, sqrt(p*p + mass*mass));
+
+//  	std::cout<<"my definition = "<<mupt<<std::endl;
+
+	/////// only for scaling data /////////
+
+
+  mu->setP4(p4);  
+
+  mu->setCharge(newTrack->charge());
+
+  mu->setVertex(vtx);
 
   mu->addUserInt("trackUsedForMomentum", type);
   

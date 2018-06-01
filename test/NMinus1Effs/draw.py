@@ -25,7 +25,7 @@ def draw_test(tag, printStats, lumi, do_tight=False):
     # 'plots' = '/afs/cern.ch/work/c/cschnaib/Zprime2muAnalysis/NMinus1Effs/plots/TAG/tag'
     # TAG = MC/Data production TAG
     # tag = sub tag for each version of plots made with a single production TAG
-    psn = 'plots'
+    psn = 'plots/nota/' + cartella
     if tag:
         psn = 'plots/%s'%tag
 
@@ -40,26 +40,55 @@ def draw_test(tag, printStats, lumi, do_tight=False):
     data = nm1entry('data', True, lumi)#lumiCD )
 
     # 50 < m < 120 GeV
-    samples50m120 = [dy50to120,dy120to200,dy200to400,ttbar_pow,ww_incl,wz,zz_incl,tWtop,tWantitop,qcd80to120,qcd120to170,qcd170to300,qcd300to470,qcd470to600,qcd600to800,qcd800to1000,qcd1000to1400,qcd1400to1800,qcd1800to2400,qcd2400to3200,qcd3200,wjets]
-    mc_samples_50m120 = [nm1entry(sample,False,lumi) for sample in samples50m120]
+#     samples50m120 = [WWinclusive, WW200to600, WW600to1200, WW1200to2500, WW2500, 
+#     						WZ, ZZ,
+# #     						WZ_ext, ZZ_ext,
+#     						Wantitop, tW, Wjets, 
+# #     						ttbar_lep, 
+# 							ttbar_lep50to500, ttbar_lep_500to800, ttbar_lep_800to1200, ttbar_lep_1200to1800, ttbar_lep_1800,
+# #     						qcd50to80, 
+#     						qcd80to120, qcd120to170, qcd170to300, qcd300to470, qcd470to600, qcd600to800, qcd800to1000, qcd1000to1400, 
+#     						qcd1400to1800, qcd1800to2400, qcd2400to3200, qcd3200, 
+#     						dy50to120, dy120to200, dy200to400, dy400to800, dy800to1400, dy1400to2300, dy2300to3500, dy3500to4500, dy4500to6000, 
+#     						dyInclusive50
+#     						]
+#     mc_samples_50m120 = [nm1entry(sample,False,lumi) for sample in samples50m120]
 
     # m > 120 GeV
-    samples120m = [dy50to120,dy120to200,dy200to400,dy400to800,dy800to1400,dy1400to2300,dy2300to3500,dy3500to4500,dy4500to6000,ttbar_pow,ww_incl,wz,zz_incl,tWtop,tWantitop,qcd80to120,qcd120to170,qcd170to300,qcd300to470,qcd470to600,qcd600to800,qcd800to1000,qcd1000to1400,qcd1400to1800,qcd1800to2400,qcd2400to3200,qcd3200,wjets]
+    samples120m = [ dyInclusive50,
+					qcd80to120, qcd120to170, 
+# 				qcd170to300, 
+# 			qcd300to470, qcd470to600, qcd600to800, 
+# 			qcd800to1000, qcd1000to1400, qcd1400to1800, qcd1800to2400, qcd2400to3200, qcd3200,
+					Wantitop, tW, 
+					ttbar_lep50to500, ttbar_lep_500to800, ttbar_lep_800to1200, ttbar_lep_1200to1800, ttbar_lep_1800,
+					Wjets, 
+					WWinclusive, WW200to600, WW600to1200, WW1200to2500, WW2500, 
+					ZZ, WZ, 
+					ZZ_ext, WZ_ext, 
+					dy50to120, 
+					dy120to200, dy200to400, dy400to800, dy800to1400, 
+					dy1400to2300, dy2300to3500, dy3500to4500, dy4500to6000
+				]
+				
     mc_samples_120m = [nm1entry(sample,False,lumi) for sample in samples120m]
 
     mass_ranges = [
          ('60m120',(60,120)),
          ('120m',(120,2500)),
+         ('all', (60, 2500)),
         ]
 
     to_use = {
-        '60m120':   [mc_samples_50m120,data],
+        '60m120':   [mc_samples_120m,data],
         '120m':   [mc_samples_120m,data],
+        'all':    [mc_samples_120m,data],
         }
 
     ymin = {
-        '60m120':  0.7,
-        '120m':    0.5,
+        '60m120':  0.8,
+        '120m':    0.8,
+        'all': 0.8,
         }
 
     #global_ymin = 0.
@@ -93,6 +122,8 @@ def draw_test(tag, printStats, lumi, do_tight=False):
                     nminus1_num.SetBinContent(i+1, num)
                     nminus1_den.SetBinContent(i+1, den)
                 eff,ycp,eylcp,eyhcp = binomial_divide(nminus1_num, nminus1_den)
+                print "Data"
+                print ycp
             else:
                 color = ROOT.kGreen+2
                 fill = 1001
@@ -111,6 +142,8 @@ def draw_test(tag, printStats, lumi, do_tight=False):
                         den[i].append(get_integral(hden, *mass_range, integral_only=True, include_last_bin=False, nm1=True))
                 nm1Temp = ROOT.TH1F('temp','',l,0,l)
                 eff,y,eyl,eyh = eff_wald(num, den, l, nMC, pw, nm1Temp)
+            	print "MC"
+            	print y
             eff.SetTitle(pretty_name)
             eff.GetYaxis().SetRangeUser(global_ymin if global_ymin is not None else ymin[name], 1.01)
             eff.GetXaxis().SetTitle('cut')
@@ -143,6 +176,24 @@ def draw_test(tag, printStats, lumi, do_tight=False):
             eff.Write("arp%d"%iarp)
             iarp+=1
 
+
+#         t = ROOT.TPaveLabel(0.50, 0.525, 0.90, 0.625, period_1, 'brNDC')
+#     	t.SetTextFont(42)
+#     	t.SetTextSize(0.5)
+#     	t.SetBorderSize(0)
+#     	t.SetFillColor(0)
+#     	t.SetFillStyle(0)
+    	tt = ROOT.TPaveLabel(0.50, 0.425, 0.90, 0.525, categoria_1, 'brNDC')
+    	tt.SetTextFont(42)
+    	tt.SetTextSize(0.5)
+    	tt.SetBorderSize(0)
+    	tt.SetFillColor(0)
+    	tt.SetFillStyle(0)
+    	tt.Draw() 
+#     	t.Draw() 
+        
+        
+        
         lg.Draw()
         ps.save(name)
         print(name, pretty_name)
