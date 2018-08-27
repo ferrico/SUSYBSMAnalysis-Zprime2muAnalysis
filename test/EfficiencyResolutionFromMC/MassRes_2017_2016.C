@@ -30,15 +30,15 @@
 
 void MassRes_2017_2016(){
 
-// 	TString reco = "";
+	TString reco = "";
 // 	TString reco = "_Tracker";
 // 	TString reco = "_Picky";
-	TString reco = "_Dyt";
+// 	TString reco = "_Dyt";
 // 	TString reco = "_Std";
 
 
 /////////////////		
-
+/*
 // 		int mrange[] = {120, 200, 300, 400, 600, 800, 1000, 1300, 1600, 2000, 2500, 3100, 3800, 4500, 5500};
 		int mrange[] = {50, 120, 200, 400, 800, 1400, 2300, 3500, 4500, 6000};
 		float m_bin[Mass_Size] = {0};
@@ -58,12 +58,12 @@ Double_t EE_err_NUM[] = {0.00402769, 0.00228012, 0.000794486, 0.000707661, 0.000
 Double_t OVER_NUM[] = {0.0121136, 0.0123153, 0.0171217, 0.0225639, 0.0306829, 0.0367427, 0.0396735, 0.044615, 0.0483288};
 Double_t OVER_err_NUM[] = {0.00256508, 0.00428202, 0.000451137, 0.000331311, 0.000392848, 0.000453297, 0.000466042, 0.000533505, 0.00057163};
 
-Double_t BB_DEN[] = {0.012208, 0.0120287, 0.0119409, 0.0174322, 0.0254559, 0.0340009, 0.0404013, 0.0499427, 0.0604885};
-Double_t BB_err_DEN[] = {0.00142152, 0.00439734, 0.000300529, 0.000240414, 0.00030358, 0.000383466, 0.000399481, 0.000469644, 0.000572177};
-Double_t BE_DEN[] = {0.00751876, 0.00288252, 0.0170089, 0.0213036, 0.0312977, 0.0392552, 0.0465222, 0.0539283, 0.0605706};
-Double_t BE_err_DEN[] = {0.00496885, 0.0024088, 0.000532085, 0.000276548, 0.000342674, 0.000454591, 0.000592726, 0.000809543, 0.00108767};
-Double_t EE_DEN[] = {0.0158476, 0.0205895, 0.0239989, 0.0318579, 0.033917, 0.0385545, 0.0509452, 0.0589408, 0.0669057};
-Double_t EE_err_DEN[] = {0.00340222, 0.0091585, 0.000745845, 0.000756648, 0.000773661, 0.000996658, 0.00136894, 0.00147092, 0.00155974};
+Double_t BB_NUM[] = {1.73424, 1.82771, 1.93097, 2.14394, 2.2151, 2.79494, 0};
+Double_t BB_err_NUM[] = {0.0173382, 0.0251559, 0.0348061, 0.077419, 0.104286, 0.271012, 0};
+Double_t BE_NUM[] = {2.04857, 2.18292, 2.22831, 2.6225, 2.64235, 2.75568};
+Double_t BE_err_NUM[] = {0.0177532, 0.0273882, 0.0371344, 0.0948848, 0.151615, 0.344476};
+Double_t EE_NUM[] = {2.74435, 2.85996, 3.11789, 3.26651, 3.78673, 3.79397};
+Double_t EE_err_NUM[] = {0.0344901, 0.0521654, 0.077046, 0.158944, 0.25484, 0.645366};
 Double_t OVER_DEN[] = {0.014178, 0.0155545, 0.0160738, 0.0209007, 0.0288207, 0.0360665, 0.042806, 0.0505229, 0.0595823};
 Double_t OVER_err_DEN[] = {0.00281762, 0.0159895, 0.000460507, 0.000309344, 0.000367631, 0.000453319, 0.000523288, 0.000626403, 0.000777513};
 
@@ -74,12 +74,12 @@ Double_t OVER_err_DEN[] = {0.00281762, 0.0159895, 0.000460507, 0.000309344, 0.00
 		float OVER_ratio[Mass_Size] = {0};
 		float OVER_ratio_err[Mass_Size] = {0};
 		float EE_ratio[Mass_Size] = {0};
-		float EE_ratio_err[Mass_Size] = {0};
+		float EE_ratio_err[Mass_Size] = {0};*/
 /////////////////
 
 
 /////////////////
-/*		int pt_BB[] = {52, 72, 100, 152, 200, 300, 452, 800};
+		int pt_BB[] = {52, 72, 100, 152, 200, 300, 452, 800};
 		float pt_bin_BB[7] = {0};
 		float pt_bin_err_BB[7] = {0};
 		for(int i = 0; i < 7; i++){
@@ -95,6 +95,14 @@ Double_t OVER_err_DEN[] = {0.00281762, 0.0159895, 0.000460507, 0.000309344, 0.00
 			pt_bin_err_BE[i] = (pt_BE[i+1] - pt_BE[i]) / 2;
 		}
 
+		int pt_OVER[] = {52, 72, 100, 152, 200, 300, 452};
+		float pt_bin_OVER[6] = {0};
+		float pt_bin_err_OVER[6] = {0};
+		for(int i = 0; i < 6; i++){
+			pt_bin_OVER[i] = (pt_OVER[i] + pt_OVER[i+1]) / 2;
+			pt_bin_err_OVER[i] = (pt_OVER[i+1] - pt_OVER[i]) / 2;
+		}
+		
 		int pt_EE[] = {52, 72, 100, 152, 200, 300, 452};
 		float pt_bin_EE[6] = {0};
 		float pt_bin_err_EE[6] = {0};
@@ -104,42 +112,40 @@ Double_t OVER_err_DEN[] = {0.00281762, 0.0159895, 0.000460507, 0.000309344, 0.00
 		}
 
 
+Double_t BB_NUM[] = {1.64653, 1.72135, 1.81862, 1.98522, 2.04666, 2.29669, 2.58045};
+Double_t BB_err_NUM[] = {0.00950111, 0.0135683, 0.0189514, 0.0417809, 0.0543318, 0.12454, 0.369474};
 
-		float BB_NUM[] = {1.64921, 1.75854, 1.91713, 1.89008, 2.31855, 2.55133, 1.56992};
+Double_t BE_NUM[] = {1.98657, 2.03968, 2.22724, 2.36562, 2.48765, 2.7288};
 
-		float BB_DEN[] = {1.6577, 1.71697, 1.82817, 1.91262, 2.15577, 2.40231, 3.38848};
+Double_t BE_err_NUM[] = {0.0101925, 0.014663, 0.022967, 0.0513278, 0.0760388, 0.184031};
 
+Double_t EE_NUM[] = {2.51771, 2.70474, 2.91516, 3.11278, 3.2664, 3.53952};
 
-		float BB_err_NUM[] = {0.020515, 0.0298464, 0.0449316, 0.0839773, 0.127892, 0.385846, 0.896881};
+Double_t EE_err_NUM[] = {0.018408, 0.0287977, 0.042275, 0.0916176, 0.140157, 0.336349};
 
-		float BB_err_DEN[] = {0.00959631, 0.013513, 0.0188022, 0.0368154, 0.0543271, 0.119831, 0.457507};
-
-
-
-		float BE_NUM[] = {1.87074, 1.98607, 2.00033, 2.10491, 2.52572, 3.99623};
-
-		float BE_DEN[] = {1.91781, 1.98912, 2.08325, 2.19315, 2.48865, 2.89399};
+Double_t OVER_NUM[7] = {0};
+Double_t OVER_err_NUM[7] = {0};
 
 
-		float BE_err_NUM[] = {0.0208921, 0.0307667, 0.0440376, 0.093281, 0.160731, 0.660037};
+Double_t BB_DEN[] = {1.73424, 1.82771, 1.93097, 2.14394, 2.2151, 2.79494, 0};
+Double_t BB_err_DEN[] = {0.0173382, 0.0251559, 0.0348061, 0.077419, 0.104286, 0.271012, 0};
+Double_t BE_DEN[] = {2.04857, 2.18292, 2.22831, 2.6225, 2.64235, 2.75568};
+Double_t BE_err_DEN[] = {0.0177532, 0.0273882, 0.0371344, 0.0948848, 0.151615, 0.344476};
+Double_t EE_DEN[] = {2.74435, 2.85996, 3.11789, 3.26651, 3.78673, 3.79397};
+Double_t EE_err_DEN[] = {0.0344901, 0.0521654, 0.077046, 0.158944, 0.25484, 0.645366};
+Double_t OVER_DEN[7] = {0};
+Double_t OVER_err_DEN[7] = {0};
 
-		float BE_err_DEN[] = {0.00954004, 0.013927, 0.0202899, 0.0420597, 0.0697226, 0.176383};
-
-
-		float EE_NUM[] = {2.42271, 2.58769, 2.81455, 2.86423, 3.08963, 3.10203};
-
-		float EE_DEN[] = {2.4641, 2.63812, 2.79207, 3.04894, 3.32456, 3.76875};
-
-
-		float EE_err_NUM[] = {0.0372571, 0.0554597, 0.0841685, 0.145758, 0.22425, 0.657327};
-		float EE_err_DEN[] = {0.0173261, 0.025645, 0.0383928, 0.0846091, 0.119976, 0.316784};
 
 		float BB_ratio[7] = {0};
 		float BB_ratio_err[7] = {0};
 		float BE_ratio[6] = {0};
 		float BE_ratio_err[6] = {0};
 		float EE_ratio[6] = {0};
-		float EE_ratio_err[6] = {0};*/
+		float EE_ratio_err[6] = {0};
+		
+		float OVER_ratio[7] = {0};
+		float OVER_ratio_err[7] = {0};
 /////////////////
 
 
@@ -193,8 +199,8 @@ Double_t OVER_err_DEN[] = {0.00136445, 0.00198262, 0.00240835, 0.00277925, 0.003
 	int selection;
 	int counter_max;
 	
-	selection = 0; // vs mass
-// 	selection = 1; // vs pt
+// 	selection = 0; // vs mass
+	selection = 1; // vs pt
 // 	selection = 2; // pt resolution	
 	
 	if(selection == 0) counter_max = Mass_Size;
@@ -230,8 +236,8 @@ Double_t OVER_err_DEN[] = {0.00136445, 0.00198262, 0.00240835, 0.00277925, 0.003
 	}
 
 
-	TString numerator = "2017_MC" + reco;;
-	TString denominator = "2016_MC" + reco;
+	TString numerator = "2017_Data" + reco;;
+	TString denominator = "2018_Data" + reco;
 	TString axis_name = numerator + " / " + denominator + " -1";
 	TString save_name_BB_png, save_name_BB_pdf, save_name_BE_png, save_name_BE_pdf, save_name_EE_png, save_name_EE_pdf, save_name_OVER_png, save_name_OVER_pdf;
 	if(selection == 0){
@@ -265,14 +271,14 @@ Double_t OVER_err_DEN[] = {0.00136445, 0.00198262, 0.00240835, 0.00277925, 0.003
 		save_name_EE_pdf = "EE_ratio_" + numerator + "_" + denominator + "_PtRes.pdf";
 	}
 	
-	TGraphErrors* g_BB = new TGraphErrors(Mass_Size, m_bin, BB_ratio, m_bin_err, BB_ratio_err);
-	TGraphErrors* g_BE = new TGraphErrors(Mass_Size, m_bin, BE_ratio, m_bin_err, BE_ratio_err);
-	TGraphErrors* g_OVER = new TGraphErrors(Mass_Size, m_bin, OVER_ratio, m_bin_err, OVER_ratio_err);
-	TGraphErrors* g_EE = new TGraphErrors(Mass_Size, m_bin, EE_ratio, m_bin_err, EE_ratio_err);
-// 	TGraphErrors* g_BB = new TGraphErrors(7, pt_bin_BB, BB_ratio, pt_bin_err_BB, BB_ratio_err);
-// 	TGraphErrors* g_BE = new TGraphErrors(6, pt_bin_BE, BE_ratio, pt_bin_err_BE, BE_ratio_err);
-// 	TGraphErrors* g_OVER = new TGraphErrors(6, pt_bin_OVER, OVER_ratio, pt_bin_err_OVER, OVER_ratio_err);
-// 	TGraphErrors* g_EE = new TGraphErrors(6, pt_bin_EE, EE_ratio, pt_bin_err_EE, EE_ratio_err);
+// 	TGraphErrors* g_BB = new TGraphErrors(Mass_Size, m_bin, BB_ratio, m_bin_err, BB_ratio_err);
+// 	TGraphErrors* g_BE = new TGraphErrors(Mass_Size, m_bin, BE_ratio, m_bin_err, BE_ratio_err);
+// 	TGraphErrors* g_OVER = new TGraphErrors(Mass_Size, m_bin, OVER_ratio, m_bin_err, OVER_ratio_err);
+// 	TGraphErrors* g_EE = new TGraphErrors(Mass_Size, m_bin, EE_ratio, m_bin_err, EE_ratio_err);
+	TGraphErrors* g_BB = new TGraphErrors(7, pt_bin_BB, BB_ratio, pt_bin_err_BB, BB_ratio_err);
+	TGraphErrors* g_BE = new TGraphErrors(6, pt_bin_BE, BE_ratio, pt_bin_err_BE, BE_ratio_err);
+	TGraphErrors* g_OVER = new TGraphErrors(6, pt_bin_OVER, OVER_ratio, pt_bin_err_OVER, OVER_ratio_err);
+	TGraphErrors* g_EE = new TGraphErrors(6, pt_bin_EE, EE_ratio, pt_bin_err_EE, EE_ratio_err);
 // 	TGraphErrors* g_BB = new TGraphErrors(PtRes_Size-1, pt_bin, BB_ratio, pt_bin_err, BB_ratio_err);
 // 	TGraphErrors* g_BE = new TGraphErrors(PtRes_Size-1, pt_bin, BE_ratio, pt_bin_err, BE_ratio_err);
 // 	TGraphErrors* g_OVER = new TGraphErrors(PtRes_Size-1, pt_bin, OVER_ratio, pt_bin_err, OVER_ratio_err);

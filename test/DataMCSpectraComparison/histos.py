@@ -10,20 +10,12 @@ from SUSYBSMAnalysis.Zprime2muAnalysis.Zprime2muAnalysis_cfg import process
 from SUSYBSMAnalysis.Zprime2muAnalysis.Zprime2muAnalysis_cff import goodDataFiltersMiniAOD
 
 process.source.fileNames =[#'file:./pat.root'
-# '/store/mc/RunIIFall17MiniAOD/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/94X_mc2017_realistic_v10-v1/00000/005DC030-D3F4-E711-889A-02163E01A62D.root'
-# '/store/data/Run2017F/SingleMuon/MINIAOD/17Nov2017-v1/00000/3E7C07F9-E6F1-E711-841A-0CC47A4C8E46.root'
-'/store/mc/RunIIFall17MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_400_800/MINIAODSIM/94X_mc2017_realistic_v10-v2/00000/18DC77AC-AC0F-E811-9798-02163E01A327.root'
-# '/store/mc/RunIIFall17MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_200_400/MINIAODSIM/94X_mc2017_realistic_v10-v1/40000/08EC7DA2-3F03-E811-81A7-FA163EE9233C.root',
-# '/store/mc/RunIIFall17MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_200_400/MINIAODSIM/94X_mc2017_realistic_v10-v1/40000/A8CFD527-9902-E811-A1A6-EC0D9A8225FE.root',
-# '/store/mc/RunIIFall17MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_200_400/MINIAODSIM/94X_mc2017_realistic_v10-v1/40000/B8266912-3702-E811-A677-3417EBE70069.root',
-# '/store/mc/RunIIFall17MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_200_400/MINIAODSIM/94X_mc2017_realistic_v10-v1/40000/D4BD70F6-3901-E811-8E22-FA163EB7EA75.root' 
+'/store/data/Run2018A/SingleMuon/MINIAOD/PromptReco-v2/000/316/239/00000/00765293-4759-E811-B89D-FA163EC3C021.root'
 			   ]
 process.maxEvents.input = -1
 
-process.GlobalTag.globaltag ='94X_mc2017_realistic_v10' # MC --- change line 440
-# process.GlobalTag.globaltag ='94X_mc2017_realistic_v14' # MC 50to120 --- change line 440
-# process.GlobalTag.globaltag ='94X_dataRun2_ReReco17_forValidation' # Run 2017BCDE #change line 440
-# process.GlobalTag.globaltag ='94X_dataRun2_ReReco_EOY17_v2' # Run 2017F #change line 440
+process.GlobalTag.globaltag ='101X_dataRun2_Prompt_v9' # DATA A_v1
+# process.GlobalTag.globaltag ='101X_dataRun2_Prompt_v10' # DATA A_v2,3
 #process.options.wantSummary = cms.untracked.bool(True)# false di default
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000 # default 1000
 
@@ -105,7 +97,7 @@ cuts = {
 # 	'Our2012'  : OurSelectionDec2012,
 	'Our2016'  : OurSelection2016,
 	#'OurNoIso' : OurSelectionDec2012,
-	'Simple'   : OurSelectionDec2012, # The selection cuts in the module listed here are ignored below.
+	'Simple'   : OurSelection2016, # The selection cuts in the module listed here are ignored below.
 	#'OurMuPrescaledNew'  : OurSelectionNew,
 	#'OurMuPrescaled2012' : OurSelectionDec2012
 	}
@@ -393,7 +385,7 @@ for cut_name, Selection in cuts.iteritems():
     setattr(process, pathname, path)
 
 
-def ntuplify(process, fill_gen_info=True):
+def ntuplify(process, fill_gen_info=False):
 
 
     if miniAOD:
@@ -407,8 +399,8 @@ def ntuplify(process, fill_gen_info=True):
 						jet_src = cms.InputTag("slimmedJets"),
                                            beamspot_src = cms.InputTag('offlineBeamSpot'),
                                            vertices_src = cms.InputTag('offlineSlimmedPrimaryVertices'),
-								TriggerResults_src = cms.InputTag('TriggerResults', '', 'PAT'),	#mc
-# 								TriggerResults_src = cms.InputTag('TriggerResults', '', 'RECO'),	#data
+# 								TriggerResults_src = cms.InputTag('TriggerResults', '', 'PAT'),	#mc
+								TriggerResults_src = cms.InputTag('TriggerResults', '', 'RECO'),	#data
                                            genEventInfo = cms.untracked.InputTag('generator'),
                                            metFilter = cms.VInputTag( cms.InputTag("Flag_HBHENoiseFilter"), cms.InputTag("Flag_HBHENoiseIsoFilter"), cms.InputTag("Flag_EcalDeadCellTriggerPrimitiveFilter"), cms.InputTag("Flag_eeBadScFilter"), cms.InputTag("Flag_globalTightHalo2016Filter"))
                                            )
@@ -476,10 +468,8 @@ def check_prescale(process, trigger_paths, hlt_process_name='HLT'):
     process.pCheckPrescale = cms.Path(process.CheckPrescale)
 
 def for_data(process):
-	process.GlobalTag.globaltag ='94X_mc2017_realistic_v10' # MC  --- #change line 52 
-# 	process.GlobalTag.globaltag ='94X_mc2017_realistic_v14' # MC 50dy120 --- #change line 52 
-# 	process.GlobalTag.globaltag ='94X_dataRun2_ReReco17_forValidation' # Run 2017BCDE #change line 52
-# 	process.GlobalTag.globaltag ='94X_dataRun2_ReReco_EOY17_v2' # Run 2017F #change line 52
+	process.GlobalTag.globaltag ='101X_dataRun2_Prompt_v9' # DATA A_v1
+# 	process.GlobalTag.globaltag ='101X_dataRun2_Prompt_v10' # DATA A_v2,3
 	ntuplify(process)
     #check_prescale(process, trigger_paths) ####### Now it seams that there are no prescaled path ########
 
@@ -560,18 +550,16 @@ config.Site.storageSite = 'T2_IT_Bari'
         from SUSYBSMAnalysis.Zprime2muAnalysis.goodlumis import *
 
         dataset_details = [
-						('SingleMuonRun2017B-17Nov2017', '/SingleMuon/Run2017B-17Nov2017-v1/MINIAOD'),
-						('SingleMuonRun2017C-17Nov2017', '/SingleMuon/Run2017C-17Nov2017-v1/MINIAOD'),
-						('SingleMuonRun2017D-17Nov2017', '/SingleMuon/Run2017D-17Nov2017-v1/MINIAOD'),
-						('SingleMuonRun2017E-17Nov2017', '/SingleMuon/Run2017E-17Nov2017-v1/MINIAOD'),
-# 						('SingleMuonRun2017F-17Nov2017', '/SingleMuon/Run2017F-17Nov2017-v1/MINIAOD'),
+						('SingleMuonRun2018A_v1-PromptReco', '/SingleMuon/Run2018A-PromptReco-v1/MINIAOD'),
+# 						('SingleMuonRun2018A_v2-PromptReco', '/SingleMuon/Run2018A-PromptReco-v2/MINIAOD'),
+# 						('SingleMuonRun2018A_v3-PromptReco', '/SingleMuon/Run2018A-PromptReco-v3/MINIAOD'),
             ]
 
         lumi_lists = [
 		# 'NoLumiMask'
 		#           'DCSOnly',
 		#            'Run2012PlusDCSOnlyMuonsOnly',
-		'Run2017MuonsOnly',
+		'Run2018MuonsOnly',
 		# 'Run2015',
 		]
 

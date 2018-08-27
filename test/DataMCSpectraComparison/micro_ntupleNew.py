@@ -7,7 +7,7 @@ ROOT.gStyle.SetPaintTextFormat("%.3f");
 
 # path = '/afs/cern.ch/work/f/ferrico/private/PickEvent_2017/CMSSW_9_2_0/src/pickevents_RunB3_MINIAOD.root'
 
-path = './data/Run2017MuonsOnly/ana_datamc_data.root'
+path = '/eos/user/f/ferrico/LXPLUS/ROOT_FILE_2018/DATA/ana_datamc_data.root'
 # path = './mc/mc_YesEtaCut_NoScale/MC_OK/ana_datamc_ttbar_lep.root'
 
 # path = 'zp2mu_histos.root'
@@ -66,7 +66,7 @@ for x in lines:
         prev_lumi  = curr_lumi
         prev_event = curr_event
         prev_sum_pt = curr_sum_pt
-        if(float(mass) > 200 and float(mass) < 400):
+        if(float(mass) > 899.5 and float(mass) < 4000):
         	print mass, curr_run, curr_lumi, curr_event, eta, curr_sum_pt
 #        	print mass, curr_run, curr_lumi, curr_event, eta, curr_sum_pt
     else:

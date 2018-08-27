@@ -42,7 +42,7 @@ def do(cmd):
 latest_dataset = '/SingleMuon/Run2016C-PromptReco-v2/AOD'
 #lumi_masks = ['Run2012PlusDCSOnlyMuonsOnly', 'Run2012MuonsOnly'] #, 'DCSOnly', 'Run2012']
 #lumi_masks = ['DCSOnly', 'Run2015', 'Run2015MuonsOnly'] #, 'Run2012PlusDCSOnlyMuonsOnly', 'DCSOnly']
-lumi_masks = ['Run2017MuonsOnly'] #, 'Run2012PlusDCSOnlyMuonsOnly', 'DCSOnly']
+lumi_masks = ['Run2018MuonsOnly'] #, 'Run2012PlusDCSOnlyMuonsOnly', 'DCSOnly']
 #lumi_masks = ['DCSOnly'] #, 'Run2012PlusDCSOnlyMuonsOnly', 'DCSOnly']
 
 
@@ -140,7 +140,7 @@ elif cmd == 'gatherdata':
     for lumi_mask in lumi_masks:
         print lumi_mask
 #        dirs = glob.glob('crab/crab_ana_datamc_%s_ExpressPhysicsRun2015B*' % lumi_mask)
-        dirs = glob.glob('crab/crab_ana_datamc_%s_SingleMuonRun2017*' % lumi_mask)
+        dirs = glob.glob('crab/crab_ana_datamc_%s_SingleMuonRun2018*' % lumi_mask)
 #        dirs = glob.glob('crab/crab_ana_datamc_%s_ExpressPhysicsRun2015B-Express_251161_251252' % lumi_mask)
         files = []
         for d in dirs:
@@ -217,7 +217,6 @@ elif cmd == 'checkavail':
 #print "ll", ll
     runrange = sorted(int(x) for x in ll.getCompactList().keys())
     dcs_ll = LumiList('/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions16/13TeV/DCSOnly/json_DCSONLY.txt') # JMTBAD import from goodlumis
-    #dcs_ll = LumiList('/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/DCSOnly/json_DCSONLY.txt') # JMTBAD import from goodlumis
 	
 
     #print "dcs_ll", dcs_ll
@@ -226,31 +225,8 @@ elif cmd == 'checkavail':
     dcs_ll.removeRuns(xrange(dcs_runrange[0], runrange[0]))
     dcs_ll.removeRuns(xrange(runrange[-1]+1, dcs_runrange[-1]))
 
-#- 2012A:    190450-193686
-#- 2012B:    193752-196531
-#- 2012C v1: 197556-198913
-#- 2012C v2: 198934-203772
-#- 2012D:    203773-
-#- Reasons for excluding some runs:
-#    191350, 192989, 192890, 193091, 204900, 206251, 207871: VdM scan
-#    193092: very low pile-up run
-#ok = LumiList(compactList={ "208540": [[99, 101]], "208551": [[581, 586]]})#list of LS already checked
     ok = LumiList(compactList={
-#              "246958": [[1, 61]],
-#              "246959": [[1, 77]],
-#              "246960": [[1, 1], [37, 44]],
-#              "246963": [[1, 11], [13, 13], [15, 312], [314, 314], [316, 448]],
-#              "246965": [[1, 5]],
-#              "247047": [[1, 5], [13, 13], [15, 15]],
-#              "247049": [[3, 5]],
-#              "247052": [[1, 60]],
-#              "247054": [[2, 5], [14, 79]],
-#              "247056": [[1, 5], [13, 18]],
-#              "247057": [[1, 5], [13, 18], [26, 26]],
-#              "247059": [[1, 3]],
-#              "247060": [[1, 2], [4, 4]],
-#              "247063": [[1, 5], [13, 18]],
-#              "247068": [[1, 104], [106, 106], [108, 116], [118, 118], [121, 133]]
+
                   })#from lumiSummary.json
 
     print 'run range for', latest_dataset, ':', runrange[0], runrange[-1]

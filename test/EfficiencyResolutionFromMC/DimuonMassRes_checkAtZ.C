@@ -81,7 +81,7 @@ gROOT->SetBatch();
 						1999000, 200000, 200000, 200000, 38969, 
 						990064, 1000000, 998034, 2995828,
 						-1, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000,
-						26923935
+						-1
 						};
 						
 	float sigma[40] = {6025.2, 2762530, 471100, 117276, 7823, 648.2, 186.9, 32.3992112, 9.4183, 0.84265, 0.114943, 0.00682981, 0.000165445,
@@ -94,7 +94,7 @@ gROOT->SetBatch();
 						1921.8
 						};
 
-	float LUMINOSITY = 41903;
+	float LUMINOSITY = 11791.68;
 
 	float weight[43] = {0};
 	
@@ -330,9 +330,9 @@ gROOT->SetBatch();
 
 	ne = treeMC->GetEntries();
 	std::cout<<"START"<<std::endl;
-	for ( int p=0; p < ne ;p++){
+// 	for ( int p=0; p < ne ;p++){
 // 	for ( int p=0; p<10000 ;p++){
-// 	for ( int p=0; p<1 ;p++){
+	for ( int p=0; p<1 ;p++){
 		if(p % 100000 == 0) std::cout<<p<<" su "<<ne<<std::endl;		
 		
 		treeMC->GetEntry(p);
@@ -427,7 +427,7 @@ gROOT->SetBatch();
 
 
      TChain *treeDATA = new TChain("SimpleNtupler/t");
-     treeDATA->Add("/eos/user/f/ferrico/LXPLUS/ROOT_FILE_2017/DATA/ana_datamc_data.root");
+     treeDATA->Add("/eos/user/f/ferrico/LXPLUS/ROOT_FILE_2018/DATA/ana_datamc_data.root");
 //      treeDATA->Add("../DataMCSpectraComparison/data/Run2017MuonsOnly/ana_datamc_data.root");
      treeDATA->SetBranchAddress("event",&event);
      treeDATA->SetBranchAddress("run",&run);
@@ -519,7 +519,7 @@ gROOT->SetBatch();
 			lep_2.SetPtEtaPhiM(lep_tk_pt[1], lep_tk_eta[1], lep_tk_phi[1], 0.105);
 			ZPrime = lep_1 + lep_2;
 
-			mass 		 = ZPrime.M(); // resolution using Tracker track		
+/*			mass 		 = ZPrime.M(); // resolution using Tracker track		
 			DileptonMass_2d_vsPt_DATA->Fill(mass, lep_tk_pt[0]);
 		    DileptonMass_2d_vsPt_DATA->Fill(mass, lep_tk_pt[1]);
   
@@ -534,7 +534,7 @@ gROOT->SetBatch();
 		  else{ 
     		DileptonMass_2d_vsPt_BE_DATA->Fill(mass, lep_tk_pt[0]);
 		    DileptonMass_2d_vsPt_BE_DATA->Fill(mass, lep_tk_pt[1]);
-		  }	/*
+		  }	*/
     
 			mass         = dil_mass; //vertex_m	
 		
@@ -589,7 +589,6 @@ gROOT->SetBatch();
 // 		    DileptonMass_2d_vsPt_EE->Fill(mass, dil_lep_pt[1]);
 // 		  }                                                                         
 
-			*/
 			
 			
 			

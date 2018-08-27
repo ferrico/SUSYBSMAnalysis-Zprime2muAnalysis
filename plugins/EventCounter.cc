@@ -106,7 +106,12 @@ EventCounter::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
  	count_["weights"]->Fill(1); 
   
   }  
-
+//   if (genInfoProduct.isValid())   	
+//    		count_["weights"]->Fill((*genInfoProduct).weight());
+//   else{ 
+//  	count_["weights"]->Fill(-99); 
+//   
+//   }  
 
 
 }
