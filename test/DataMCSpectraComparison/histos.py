@@ -14,8 +14,9 @@ process.source.fileNames =[#'file:./pat.root'
 			   ]
 process.maxEvents.input = -1
 
-process.GlobalTag.globaltag ='101X_dataRun2_Prompt_v9' # DATA A_v1
-# process.GlobalTag.globaltag ='101X_dataRun2_Prompt_v10' # DATA A_v2,3
+# process.GlobalTag.globaltag ='101X_dataRun2_Prompt_v9' # DATA A_v1
+# process.GlobalTag.globaltag ='101X_dataRun2_Prompt_v10' # DATA A_v2,3 e B_v1
+process.GlobalTag.globaltag ='101X_dataRun2_Prompt_v11' # DATA B_v2 e C
 #process.options.wantSummary = cms.untracked.bool(True)# false di default
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000 # default 1000
 
@@ -468,8 +469,9 @@ def check_prescale(process, trigger_paths, hlt_process_name='HLT'):
     process.pCheckPrescale = cms.Path(process.CheckPrescale)
 
 def for_data(process):
-	process.GlobalTag.globaltag ='101X_dataRun2_Prompt_v9' # DATA A_v1
-# 	process.GlobalTag.globaltag ='101X_dataRun2_Prompt_v10' # DATA A_v2,3
+# 	process.GlobalTag.globaltag ='101X_dataRun2_Prompt_v9' # DATA A_v1
+# 	process.GlobalTag.globaltag ='101X_dataRun2_Prompt_v10' # DATA A_v2,3 e b_v1
+	process.GlobalTag.globaltag ='101X_dataRun2_Prompt_v11' # DATA B_v2 e C
 	ntuplify(process)
     #check_prescale(process, trigger_paths) ####### Now it seams that there are no prescaled path ########
 
@@ -550,9 +552,15 @@ config.Site.storageSite = 'T2_IT_Bari'
         from SUSYBSMAnalysis.Zprime2muAnalysis.goodlumis import *
 
         dataset_details = [
-						('SingleMuonRun2018A_v1-PromptReco', '/SingleMuon/Run2018A-PromptReco-v1/MINIAOD'),
+# 						('SingleMuonRun2018A_v1-PromptReco', '/SingleMuon/Run2018A-PromptReco-v1/MINIAOD'),
 # 						('SingleMuonRun2018A_v2-PromptReco', '/SingleMuon/Run2018A-PromptReco-v2/MINIAOD'),
 # 						('SingleMuonRun2018A_v3-PromptReco', '/SingleMuon/Run2018A-PromptReco-v3/MINIAOD'),
+# 						('SingleMuonRun2018B_v1-PromptReco', '/SingleMuon/Run2018B-PromptReco-v1/MINIAOD'),
+						('SingleMuonRun2018B_v2-PromptReco', '/SingleMuon/Run2018B-PromptReco-v2/MINIAOD'),
+						('SingleMuonRun2018C_v1-PromptReco', '/SingleMuon/Run2018C-PromptReco-v1/MINIAOD'),
+						('SingleMuonRun2018C_v2-PromptReco', '/SingleMuon/Run2018C-PromptReco-v2/MINIAOD'),
+						('SingleMuonRun2018C_v3-PromptReco', '/SingleMuon/Run2018C-PromptReco-v3/MINIAOD'),
+
             ]
 
         lumi_lists = [

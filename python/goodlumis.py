@@ -7,9 +7,9 @@ def for_cmssw(ll):
 # These run numbers guide the combination of the prompt and DCS-only
 # JSONs.
 first_run = 314472 #first DCS run or first analyzed run
-last_rereco_run = 316723
-last_prompt_run = 316723
-last_run = 316723 #last DCS run or last analyzed run
+last_rereco_run = 321221
+last_prompt_run = 321221
+last_run = 321221 #last DCS run or last analyzed run
 
 # Sometimes the same run-range json gets made in other versions.
 prompt_version = ''

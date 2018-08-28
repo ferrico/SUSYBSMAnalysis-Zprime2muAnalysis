@@ -44,6 +44,19 @@ latest_dataset = '/SingleMuon/Run2016C-PromptReco-v2/AOD'
 #lumi_masks = ['DCSOnly', 'Run2015', 'Run2015MuonsOnly'] #, 'Run2012PlusDCSOnlyMuonsOnly', 'DCSOnly']
 lumi_masks = ['Run2018MuonsOnly'] #, 'Run2012PlusDCSOnlyMuonsOnly', 'DCSOnly']
 #lumi_masks = ['DCSOnly'] #, 'Run2012PlusDCSOnlyMuonsOnly', 'DCSOnly']
+datasets = [
+	'SingleMuonRun2018A_v1-PromptReco',
+	'SingleMuonRun2018A_v2-PromptReco',
+	'SingleMuonRun2018A_v3-PromptReco',
+	'SingleMuonRun2018B_v1-PromptReco',
+	'SingleMuonRun2018B_v2-PromptReco',
+	'SingleMuonRun2018C_v1-PromptReco',
+	'SingleMuonRun2018C_v2-PromptReco',
+	'SingleMuonRun2018C_v3-PromptReco',
+
+            ]
+
+
 
 
 if cmd == 'setdirs':
@@ -73,6 +86,11 @@ elif cmd == 'checkstatus':
     for sample in samples:
         print sample.name
         do('crab status -d crab/crab_ana_datamc_%(name)s ' % sample)
+    for lumi_mask in lumi_masks:
+    	for dataset in datasets:
+    		print 'crab_ana_datamc_%s_%s' % (lumi_mask,dataset)
+        	do('crab status -d crab/crab_ana_datamc_%s_%s' % (lumi_mask,dataset))
+
         
 elif cmd == 'report':
     from SUSYBSMAnalysis.Zprime2muAnalysis.MCSamples import samples
@@ -98,6 +116,12 @@ elif cmd == 'getoutput':
     for sample in samples:
         print sample.name
         do('crab getoutput -d crab/crab_ana_datamc_%(name)s --checksum=no ' % sample)
+    for lumi_mask in lumi_masks:
+    	for dataset in datasets:
+    		print 'crab_ana_datamc_%s_%s' % (lumi_mask,dataset)
+        	do('crab getoutput -d crab/crab_ana_datamc_%s_SingleMuonRun2018%s --checksum=no ' % (lumi_mask,dataset))
+
+    
 
 #elif cmd == 'publishmc':
 #    from SUSYBSMAnalysis.Zprime2muAnalysis.MCSamples import samples

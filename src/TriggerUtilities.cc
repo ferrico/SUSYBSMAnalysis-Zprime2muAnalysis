@@ -24,11 +24,16 @@ Zprime2muTriggerPathsAndFilters::Zprime2muTriggerPathsAndFilters(const edm::Even
 
   if (!event.isRealData())                { path = "HLT_Mu50_v5", filter = "hltL3fL1sMu22Or25L1f0L2f10QL3Filtered50Q", prescaled_path = "HLT_Mu27_v5", prescaled_filter = "hltL3fL1sMu22Or25L1f0L2f10QL3Filtered27Q"; }
 
-  else if (run > 314472 and run <= 316271)                 { path = "HLT_Mu50_v12", filter = "hltL3fL1sMu22Or25L1f0L2f10QL3Filtered50Q", prescaled_path = "HLT_Mu27_v12", prescaled_filter = "hltL3fL1sMu22Or25L1f0L2f10QL3Filtered27Q"; }
-  else if (run > 316272 and run < 999999)                 { path = "HLT_Mu50_v13", filter = "hltL3fL1sMu22Or25L1f0L2f10QL3Filtered50Q", prescaled_path = "HLT_Mu27_v13", prescaled_filter = "hltL3fL1sMu22Or25L1f0L2f10QL3Filtered27Q"; }
+  else if (run > 314472 and run <= 316271)                  { path = "HLT_Mu50_v12", filter = "hltL3fL1sMu22Or25L1f0L2f10QL3Filtered50Q", path_2 = "HLT_OldMu100_v3", filter_2 = "hltL3fL1sMu22Or25L1f0L2f10QL3Filtered100Q", path_3 = "HLT_TkMu100_v2", filter_3 = "hltL3fL1sMu25f0TkFiltered100Q",  prescaled_path = "HLT_Mu27_v12", prescaled_filter = "hltL3fL1sMu22Or25L1f0L2f10QL3Filtered27Q", prescaled_path_2 = "HLT_Mu27_v12", prescaled_filter_2 = "hltL3fL1sMu25L1f0L2f10QL3Filtered27Q", prescaled_path_3 = "HLT_Mu27_v12", prescaled_filter_3 = "hltL3fL1sMu25L1f0L2f10QL3Filtered27Q";}
+  else if (run > 316272 and run <= 999999)                 { path = "HLT_Mu50_v13", filter = "hltL3fL1sMu22Or25L1f0L2f10QL3Filtered50Q", path_2 = "HLT_OldMu100_v3", filter_2 = "hltL3fL1sMu22Or25L1f0L2f10QL3Filtered100Q", path_3 = "HLT_TkMu100_v2", filter_3 = "hltL3fL1sMu25f0TkFiltered100Q",  prescaled_path = "HLT_Mu27_v13", prescaled_filter = "hltL3fL1sMu22Or25L1f0L2f10QL3Filtered27Q", prescaled_path_2 = "HLT_Mu27_v13", prescaled_filter_2 = "hltL3fL1sMu25L1f0L2f10QL3Filtered27Q", prescaled_path_3 = "HLT_Mu27_v13", prescaled_filter_3 = "hltL3fL1sMu25L1f0L2f10QL3Filtered27Q";}
+//   else if (run > 314472 and run <= 316271)                  { path = "HLT_Mu50_v12", filter = "hltL3fL1sMu22Or25L1f0L2f10QL3Filtered50Q", path_2 = "HLT_Mu50_v12", filter_2 = "hltL3fL1sMu22Or25L1f0L2f10QL3Filtered50Q", path_3 = "HLT_Mu50_v12", filter_3 = "hltL3fL1sMu22Or25L1f0L2f10QL3Filtered50Q",  prescaled_path = "HLT_Mu27_v12", prescaled_filter = "hltL3fL1sMu22Or25L1f0L2f10QL3Filtered27Q", prescaled_path_2 = "HLT_Mu27_v12", prescaled_filter_2 = "hltL3fL1sMu25L1f0L2f10QL3Filtered27Q", prescaled_path_3 = "HLT_Mu27_v12", prescaled_filter_3 = "hltL3fL1sMu25L1f0L2f10QL3Filtered27Q";}
+//   else if (run > 316272 and run < 999999)                 { path = "HLT_Mu50_v13", filter = "hltL3fL1sMu22Or25L1f0L2f10QL3Filtered50Q", path_2 = "HLT_Mu50_v13", filter_2 = "hltL3fL1sMu22Or25L1f0L2f10QL3Filtered50Q", path_3 = "HLT_Mu50_v13", filter_3 = "hltL3fL1sMu22Or25L1f0L2f10QL3Filtered50Q",  prescaled_path = "HLT_Mu27_v13", prescaled_filter = "hltL3fL1sMu22Or25L1f0L2f10QL3Filtered27Q", prescaled_path_2 = "HLT_Mu27_v13", prescaled_filter_2 = "hltL3fL1sMu25L1f0L2f10QL3Filtered27Q", prescaled_path_3 = "HLT_Mu27_v13", prescaled_filter_3 = "hltL3fL1sMu25L1f0L2f10QL3Filtered27Q";}
+
     else
         valid = false;
-}
+
+
+	}
 
 trigger::TriggerObjectCollection get_L3_muons(const edm::Event& event, const std::string& filter, const edm::InputTag& trigger_summary_src, const std::string& collection) {
   trigger::TriggerObjectCollection L3_muons;
