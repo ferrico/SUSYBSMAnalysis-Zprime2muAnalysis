@@ -114,7 +114,11 @@ elif cmd == 'kill':
     for sample in samples:
         print sample.name
         do('crab kill -d crab/crab_ana_datamc_%(name)s ' % sample)
-#         do('crab kill -d crab_kFactor/crab_ana_datamc_%(name)s ' % sample)
+    for lumi_mask in lumi_masks:
+    	for dataset in datasets:
+    		print 'crab_ana_datamc_%s_%s' % (lumi_mask,dataset)
+        	do('crab kill -d crab/crab_ana_datamc_%s_%s' % (lumi_mask,dataset))
+
 
 elif cmd == 'getoutput':
     from SUSYBSMAnalysis.Zprime2muAnalysis.MCSamples import samples
