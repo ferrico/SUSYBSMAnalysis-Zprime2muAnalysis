@@ -306,7 +306,6 @@ void Zprime2muLeptonProducer_miniAOD::embedTriggerMatch_or(pat::Muon* new_mu, co
         new_mu->addUserFloat(ex + "TriggerMatchPt",     L3_mu.pt());
         new_mu->addUserFloat(ex + "TriggerMatchEta",    L3_mu.eta());
         new_mu->addUserFloat(ex + "TriggerMatchPhi",    L3_mu.phi());
-
     }
     else if (best_3 >=0 && best_2 <0 && best_1 <0){
         const pat::TriggerObjectStandAlone& L3_mu = L3_3[best_3];
@@ -318,6 +317,72 @@ void Zprime2muLeptonProducer_miniAOD::embedTriggerMatch_or(pat::Muon* new_mu, co
         new_mu->addUserFloat(ex + "TriggerMatchEta",    L3_mu.eta());
         new_mu->addUserFloat(ex + "TriggerMatchPhi",    L3_mu.phi());
     }
+    else if (best_1< 0 && best_2 >=0 && best_3 >=0){
+    	if(best_2 < best_3){
+    	    const pat::TriggerObjectStandAlone& L3_mu = L3_2[best_2];
+	        L3_matched_2[best_2] = 1;
+        	
+    	    int id = L3_mu.pdgId();
+	        new_mu->addUserFloat(ex + "TriggerMatchCharge", -id/abs(id));
+        	new_mu->addUserFloat(ex + "TriggerMatchPt",     L3_mu.pt());
+    	    new_mu->addUserFloat(ex + "TriggerMatchEta",    L3_mu.eta());
+	        new_mu->addUserFloat(ex + "TriggerMatchPhi",    L3_mu.phi());
+    	}
+    	else{
+    	    const pat::TriggerObjectStandAlone& L3_mu = L3_3[best_3];
+	        L3_matched_3[best_3] = 1;
+        
+    	    int id = L3_mu.pdgId();
+	        new_mu->addUserFloat(ex + "TriggerMatchCharge", -id/abs(id));
+        	new_mu->addUserFloat(ex + "TriggerMatchPt",     L3_mu.pt());
+    	    new_mu->addUserFloat(ex + "TriggerMatchEta",    L3_mu.eta());
+	        new_mu->addUserFloat(ex + "TriggerMatchPhi",    L3_mu.phi());
+    	}    	
+    }
+    else if (best_1 >=0 && best_2 <0 && best_3 >=0){
+    	if(best_1 < best_3){
+    	    const pat::TriggerObjectStandAlone& L3_mu = L3[best_1];
+	        L3_matched[best_1] = 1;
+        
+    	    int id = L3_mu.pdgId();
+	        new_mu->addUserFloat(ex + "TriggerMatchCharge", -id/abs(id));
+        	new_mu->addUserFloat(ex + "TriggerMatchPt",     L3_mu.pt());
+    	    new_mu->addUserFloat(ex + "TriggerMatchEta",    L3_mu.eta());
+	        new_mu->addUserFloat(ex + "TriggerMatchPhi",    L3_mu.phi());
+    	}
+    	else{
+    	    const pat::TriggerObjectStandAlone& L3_mu = L3_3[best_3];
+	        L3_matched_3[best_3] = 1;
+        
+    	    int id = L3_mu.pdgId();
+	        new_mu->addUserFloat(ex + "TriggerMatchCharge", -id/abs(id));
+        	new_mu->addUserFloat(ex + "TriggerMatchPt",     L3_mu.pt());
+    	    new_mu->addUserFloat(ex + "TriggerMatchEta",    L3_mu.eta());
+	        new_mu->addUserFloat(ex + "TriggerMatchPhi",    L3_mu.phi());
+    	}
+    }
+    else if (best_1 >=0 && best_2 >=0 && best_3 <0){
+    	if(best_1 < best_2){
+    	    const pat::TriggerObjectStandAlone& L3_mu = L3[best_1];
+	        L3_matched[best_1] = 1;
+        
+    	    int id = L3_mu.pdgId();
+	        new_mu->addUserFloat(ex + "TriggerMatchCharge", -id/abs(id));
+        	new_mu->addUserFloat(ex + "TriggerMatchPt",     L3_mu.pt());
+    	    new_mu->addUserFloat(ex + "TriggerMatchEta",    L3_mu.eta());
+	        new_mu->addUserFloat(ex + "TriggerMatchPhi",    L3_mu.phi());
+    	}
+    	else{
+    	    const pat::TriggerObjectStandAlone& L3_mu = L3_2[best_2];
+	        L3_matched_2[best_2] = 1;
+        	
+    	    int id = L3_mu.pdgId();
+	        new_mu->addUserFloat(ex + "TriggerMatchCharge", -id/abs(id));
+        	new_mu->addUserFloat(ex + "TriggerMatchPt",     L3_mu.pt());
+    	    new_mu->addUserFloat(ex + "TriggerMatchEta",    L3_mu.eta());
+	        new_mu->addUserFloat(ex + "TriggerMatchPhi",    L3_mu.phi());
+    	}
+    }    
     else if (best_1 >=0 && best_2 >=0 && best_3 >=0){
 		if((best_dR_1 < best_dR_3 && best_dR_3 < best_dR_2) || (best_dR_1 < best_dR_2 && best_dR_2 < best_dR_3)){
 	        const pat::TriggerObjectStandAlone& L3_mu = L3[best_1];
@@ -349,27 +414,7 @@ void Zprime2muLeptonProducer_miniAOD::embedTriggerMatch_or(pat::Muon* new_mu, co
    		    new_mu->addUserFloat(ex + "TriggerMatchEta",    L3_mu.eta());
     	    new_mu->addUserFloat(ex + "TriggerMatchPhi",    L3_mu.phi());
 		}
-   	}  /*
-    else if (best_3 > -999999 && best_1 >=0 && best_2 >=0 && best_dR_1 <= best_dR_2){
-        const pat::TriggerObjectStandAlone& L3_mu = L3[best_1];
-        L3_matched[best_1] = 1;
-        
-        int id = L3_mu.pdgId();
-        new_mu->addUserFloat(ex + "TriggerMatchCharge", -id/abs(id));
-        new_mu->addUserFloat(ex + "TriggerMatchPt",     L3_mu.pt());
-        new_mu->addUserFloat(ex + "TriggerMatchEta",    L3_mu.eta());
-        new_mu->addUserFloat(ex + "TriggerMatchPhi",    L3_mu.phi());
-    }
-    else if (best_3 > -999999 && best_1 >=0 && best_2 >=0 && best_dR_1 > best_dR_2){
-        const pat::TriggerObjectStandAlone& L3_mu = L3_2[best_2];
-        L3_matched_2[best_2] = 1;
-        
-        int id = L3_mu.pdgId();
-        new_mu->addUserFloat(ex + "TriggerMatchCharge", -id/abs(id));
-        new_mu->addUserFloat(ex + "TriggerMatchPt",     L3_mu.pt());
-        new_mu->addUserFloat(ex + "TriggerMatchEta",    L3_mu.eta());
-        new_mu->addUserFloat(ex + "TriggerMatchPhi",    L3_mu.phi());
-    }*/
+   	}
     else {
         // std::cout<<"embedded trigger function 4"<<std::endl;
         new_mu->addUserFloat(ex + "TriggerMatchPt",    defaultpTvalue);
@@ -449,8 +494,8 @@ std::pair<pat::Muon*,int> Zprime2muLeptonProducer_miniAOD::doLepton(const edm::E
   // {TriggerMatch, prescaledTriggerMatch} x {Pt, Eta, Phi,
   // Charge}. (Maybe embed whole candidates later.)
   
-   embedTriggerMatch(new_mu, "",          L3_muons,           L3_muons_matched);
-//   embedTriggerMatch_or(new_mu, "",         L3_muons, L3_muons_2,        L3_muons_matched, L3_muons_matched_2);
+//    embedTriggerMatch(new_mu, "",          L3_muons,           L3_muons_matched);
+  embedTriggerMatch_or(new_mu, "",         L3_muons, L3_muons_2, L3_muons_3, L3_muons_matched, L3_muons_matched_2, L3_muons_matched_3);
   embedTriggerMatch(new_mu, "prescaled", prescaled_L3_muons, prescaled_L3_muons_matched);
 
   // Evaluate cuts here with string object selector, and any code that
@@ -600,7 +645,7 @@ void Zprime2muLeptonProducer_miniAOD::produce(edm::Event& event, const edm::Even
          //FilterMatched[j] = 1;
          L3_muons_3.push_back(obj);
     }
-		if (obj.filterLabels()[h] ==	pandf.prescaled_filter){
+	if (obj.filterLabels()[h] == pandf.prescaled_filter){
 	    //FilterMatched[j] = 1;
 	    prescaled_L3_muons.push_back(obj);
 	  } 

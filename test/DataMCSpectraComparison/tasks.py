@@ -97,6 +97,11 @@ elif cmd == 'report':
     for sample in samples:
         print sample.name
         do('crab report -d crab/crab_ana_datamc_%(name)s ' % sample)
+    for lumi_mask in lumi_masks:
+    	for dataset in datasets:
+    		print 'crab_ana_datamc_%s_%s' % (lumi_mask,dataset)
+        	do('crab report -d crab/crab_ana_datamc_%s_%s' % (lumi_mask,dataset))
+
         
 elif cmd == 'resubmit':
     from SUSYBSMAnalysis.Zprime2muAnalysis.MCSamples import samples
@@ -119,7 +124,7 @@ elif cmd == 'getoutput':
     for lumi_mask in lumi_masks:
     	for dataset in datasets:
     		print 'crab_ana_datamc_%s_%s' % (lumi_mask,dataset)
-        	do('crab getoutput -d crab/crab_ana_datamc_%s_SingleMuonRun2018%s --checksum=no ' % (lumi_mask,dataset))
+        	do('crab getoutput -d crab/crab_ana_datamc_%s_%s --checksum=no ' % (lumi_mask,dataset))
 
     
 
