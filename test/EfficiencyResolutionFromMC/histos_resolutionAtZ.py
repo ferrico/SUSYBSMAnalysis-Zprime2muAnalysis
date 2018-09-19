@@ -66,6 +66,7 @@ else:
 import SUSYBSMAnalysis.Zprime2muAnalysis.OurSelectionNew_cff as OurSelectionNew
 import SUSYBSMAnalysis.Zprime2muAnalysis.OurSelectionDec2012_cff as OurSelectionDec2012
 import SUSYBSMAnalysis.Zprime2muAnalysis.OurSelection2016_cff as OurSelection2016
+import SUSYBSMAnalysis.Zprime2muAnalysis.OurSelection2018_cff as OurSelection2018
 
 # CandCombiner includes charge-conjugate decays with no way to turn it
 # off. To get e.g. mu+mu+ separate from mu-mu-, cut on the sum of the
@@ -90,7 +91,7 @@ dils = [
 # filter somewhere below.
 cuts = {
 #     'Simple'   : OurSelection2016, # The selection cuts in the module listed here are ignored below.
-	'Our2016'  : OurSelection2016,
+	'Our2016'  : OurSelection2018,
     }
 
 # Loop over all the cut sets defined and make the lepton, allDilepton
