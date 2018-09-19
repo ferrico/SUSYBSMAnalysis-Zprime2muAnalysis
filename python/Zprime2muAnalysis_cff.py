@@ -18,7 +18,7 @@ goodDataFiltersMiniAOD = [primaryVertexMiniAOD]
 
 
 from MuonPhotonMatch_cff import muonPhotonMatch, muonPhotonMatchMiniAOD
-from OurSelection2016_cff import allDimuons, dimuons, loose_cut
+from OurSelection2018_cff import allDimuons, dimuons, loose_cut
 #from OurSelectionDec2012_cff import allDimuons, dimuons, loose_cut
 
 leptons = cms.EDProducer('Zprime2muLeptonProducer',

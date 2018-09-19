@@ -42,7 +42,7 @@ process.HardInteractionFilterRes = process.HardInteractionFilter.clone(use_reson
 
 process.load('SUSYBSMAnalysis.Zprime2muAnalysis.EfficiencyFromMC_cfi')
 
-import SUSYBSMAnalysis.Zprime2muAnalysis.OurSelection2016_cff as OurSelection
+import SUSYBSMAnalysis.Zprime2muAnalysis.OurSelection2018_cff as OurSelection
 process.allDimuonsOur = OurSelection.allDimuons.clone()
 process.dimuonsOur = OurSelection.dimuons.clone(src = 'allDimuonsOur')
 process.OurEfficiencyFromMCMini = process.EfficiencyFromMCMini.clone(dimuon_src = 'dimuonsOur', acceptance_max_eta_2 = 2.4)

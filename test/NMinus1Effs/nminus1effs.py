@@ -12,7 +12,7 @@ if miniAOD:
 else:
     from SUSYBSMAnalysis.Zprime2muAnalysis.HistosFromPAT_cfi import HistosFromPAT
 # from SUSYBSMAnalysis.Zprime2muAnalysis.OurSelectionDec2012_cff import loose_cut, trigger_match, tight_cut, allDimuons
-from SUSYBSMAnalysis.Zprime2muAnalysis.OurSelection2016_cff import loose_cut, trigger_match, tight_cut, allDimuons
+from SUSYBSMAnalysis.Zprime2muAnalysis.OurSelection2018_cff import loose_cut, trigger_match, tight_cut, allDimuons
 
 #### if you run on data change HLT2 in
 ##Zprime2muAnalysis_cff
@@ -58,7 +58,7 @@ cuts = [
     ('Iso',     'isolationR03.sumPt / innerTrack.pt < 0.10'),
     ('TkLayers','globalTrack.hitPattern.trackerLayersWithMeasurement > 5'),
     ('PxHits',  'globalTrack.hitPattern.numberOfValidPixelHits >= 1'),
-    ('MuHits',  'globalTrack.hitPattern.numberOfValidMuonHits > 0'),
+    ('MuHits', '(globalTrack.hitPattern.numberOfValidMuonHits > 0) || (tunePMuonBestTrack.hitPattern.numberOfValidMuonHits > 0)'),
 #     ('MuMatch', ('numberOfMatchedStations > 1', 'isTrackerMuon')),
     ('MuMatch', ('( numberOfMatchedStations > 1 || (numberOfMatchedStations == 1 && !(stationMask == 1 || stationMask == 16)) || (numberOfMatchedStations == 1 && (stationMask == 1 || stationMask == 16) && numberOfMatchedRPCLayers > 2))', 'isTrackerMuon')),
     ]
