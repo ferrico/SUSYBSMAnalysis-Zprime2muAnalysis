@@ -10,18 +10,27 @@ from SUSYBSMAnalysis.Zprime2muAnalysis.Zprime2muAnalysis_cfg import process
 from SUSYBSMAnalysis.Zprime2muAnalysis.Zprime2muAnalysis_cff import goodDataFiltersMiniAOD
 
 process.source.fileNames =[#'file:./pat.root'
+'/store/mc/RunIIFall17MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_4500_6000/MINIAODSIM/94X_mc2017_realistic_v10-v1/20000/04D4A5EA-8306-E811-B9E2-002590DE6E6A.root',
+# '/store/mc/RunIIFall17MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_1400_2300/MINIAODSIM/94X_mc2017_realistic_v10-v1/20000/62F0C367-9205-E811-A5F0-A4BF0112BE4C.root',
+# '/store/mc/RunIIFall17MiniAODv2/WW_TuneCP5_13TeV-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/10000/78D0C451-D144-E811-9596-0025905A612E.root'
+# '/store/mc/RunIIFall17MiniAODv2/ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/10000/3C629B15-7542-E811-B59B-0025905D1CB4.root'
+
+# '/store/mc/RunIIFall17MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_1400_2300/MINIAODSIM/94X_mc2017_realistic_v10-v1/20000/703EF728-9205-E811-AF39-EC0D9A8221FE.root',
+# '/store/mc/RunIIFall17MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_1400_2300/MINIAODSIM/94X_mc2017_realistic_v10-v1/80000/B6EC6CCE-5208-E811-8035-FA163E5FFCB8.root',
+# '/store/mc/RunIIFall17MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_1400_2300/MINIAODSIM/94X_mc2017_realistic_v10-v1/80000/E2D70E7A-5208-E811-9759-FA163E497E58.root'
 # '/store/mc/RunIIFall17MiniAOD/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/94X_mc2017_realistic_v10-v1/00000/005DC030-D3F4-E711-889A-02163E01A62D.root'
 # '/store/data/Run2017F/SingleMuon/MINIAOD/17Nov2017-v1/00000/3E7C07F9-E6F1-E711-841A-0CC47A4C8E46.root'
-'/store/mc/RunIIFall17MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_400_800/MINIAODSIM/94X_mc2017_realistic_v10-v2/00000/18DC77AC-AC0F-E811-9798-02163E01A327.root'
+# '/store/mc/RunIIFall17MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_400_800/MINIAODSIM/94X_mc2017_realistic_v10-v2/00000/18DC77AC-AC0F-E811-9798-02163E01A327.root'
 # '/store/mc/RunIIFall17MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_200_400/MINIAODSIM/94X_mc2017_realistic_v10-v1/40000/08EC7DA2-3F03-E811-81A7-FA163EE9233C.root',
 # '/store/mc/RunIIFall17MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_200_400/MINIAODSIM/94X_mc2017_realistic_v10-v1/40000/A8CFD527-9902-E811-A1A6-EC0D9A8225FE.root',
 # '/store/mc/RunIIFall17MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_200_400/MINIAODSIM/94X_mc2017_realistic_v10-v1/40000/B8266912-3702-E811-A677-3417EBE70069.root',
-# '/store/mc/RunIIFall17MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_200_400/MINIAODSIM/94X_mc2017_realistic_v10-v1/40000/D4BD70F6-3901-E811-8E22-FA163EB7EA75.root' 
+# '/store/mc/RunIIFall17MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_200_400/MINIAODSIM/94X_mc2017_realistic_v10-v1/40000/D4BD70F6-3901-E811-8E22-FA163EB7EA75.root' ,
+# '/store/mc/RunIIFall17MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_2300_3500/MINIAODSIM/94X_mc2017_realistic_v10-v2/00000/D82D0F12-EC11-E811-A6E3-842B2B019EE3.root'
 			   ]
 process.maxEvents.input = -1
 
-process.GlobalTag.globaltag ='94X_mc2017_realistic_v10' # MC --- change line 440
 # process.GlobalTag.globaltag ='94X_mc2017_realistic_v14' # MC 50to120 --- change line 440
+process.GlobalTag.globaltag ='94X_mc2017_realistic_v10' # MC --- change line 440
 # process.GlobalTag.globaltag ='94X_dataRun2_ReReco17_forValidation' # Run 2017BCDE #change line 440
 # process.GlobalTag.globaltag ='94X_dataRun2_ReReco_EOY17_v2' # Run 2017F #change line 440
 #process.options.wantSummary = cms.untracked.bool(True)# false di default
@@ -52,7 +61,7 @@ if miniAOD:
 	####################################
 	####################################
 	
-	HistosFromPAT.usekFactor = False #### Set TRUE to use K Factor #####
+	HistosFromPAT.usekFactor = True #### Set TRUE to use K Factor #####
 
 	####################################
 	####################################
@@ -82,7 +91,7 @@ else:
 import SUSYBSMAnalysis.Zprime2muAnalysis.OurSelectionNew_cff as OurSelectionNew
 import SUSYBSMAnalysis.Zprime2muAnalysis.OurSelectionDec2012_cff as OurSelectionDec2012
 import SUSYBSMAnalysis.Zprime2muAnalysis.OurSelection2016_cff as OurSelection2016
-
+import SUSYBSMAnalysis.Zprime2muAnalysis.OurSelection2018_cff as OurSelection2018
 
 
 
@@ -103,9 +112,10 @@ dils = [('MuonsPlusMuonsMinus',          '%(leptons_name)s:muons@+ %(leptons_nam
 # filter somewhere below.
 cuts = {
 # 	'Our2012'  : OurSelectionDec2012,
-	'Our2016'  : OurSelection2016,
+# 	'Our2016'  : OurSelection2016,
+	'Our2016'  : OurSelection2018,
 	#'OurNoIso' : OurSelectionDec2012,
-	'Simple'   : OurSelectionDec2012, # The selection cuts in the module listed here are ignored below.
+	'Simple'   : OurSelection2018, # The selection cuts in the module listed here are ignored below.
 	#'OurMuPrescaledNew'  : OurSelectionNew,
 	#'OurMuPrescaled2012' : OurSelectionDec2012
 	}
@@ -125,8 +135,9 @@ if miniAOD and Electrons:
 		('MuonsElectronsAllSigns',       '%(leptons_name)s:muons@+ %(leptons_name)s:electrons@+',     ''),
 		]
 	
-	cuts = {'Our2012'  : OurSelectionDec2012,
-		'Our2016'  : OurSelection2016,
+	cuts = {
+		'Our2012'  : OurSelectionDec2012,
+		'Our2016'  : OurSelection2018,
 		'EmuVeto'  : OurSelectionDec2012, # this switches on the dRMuEl veto
 		'Simple'   : OurSelectionDec2012, # The selection cuts in the module listed here are ignored below.
 		}
@@ -199,7 +210,8 @@ for cut_name, Selection in cuts.iteritems():
         if cut_name == 'Simple':
             alldil.electron_cut_mask = cms.uint32(0)
             #alldil.loose_cut = 'isGlobalMuon && pt > 20.'#to be changed for first runs
-            alldil.loose_cut = 'isGlobalMuon && pt > 20.'
+            alldil.loose_cut = 'isGlobalMuon && pt > 20.' 
+#             alldil.loose_cut = 'isTrackerMuon && pt > 20.' #for reconstruction stadies
             alldil.tight_cut = ''
             dil.max_candidates = 100
             dil.sort_by_pt = True
@@ -231,25 +243,38 @@ for cut_name, Selection in cuts.iteritems():
        #define the list of MC samples to be read here. be careful that if WWinclusive or tautau sample are not commented it will apply the filters when running locally.
 
     samples = [
-    	('DYJetsToLL_M50', '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'),
+#     	('DYJetsToLL_M50', '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'),
 #  												   	('DYJetsToLL_M-50_ext', '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAOD-94X_mc2017_realistic_v10_ext1-v1/MINIAODSIM')
 # 	    ('dy50to120', '/ZToMuMu_NNPDF31_13TeV-powheg_M_50_120/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM'),
-#     	('dy120to200', '/ZToMuMu_NNPDF31_13TeV-powheg_M_120_200/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v2/MINIAODSIM'),
-# 	    ('dy200to400', '/ZToMuMu_NNPDF31_13TeV-powheg_M_200_400/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'),
-#     	('dy400to800', '/ZToMuMu_NNPDF31_13TeV-powheg_M_400_800/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v2/MINIAODSIM'),
-# 	    ('dy800to1400', '/ZToMuMu_NNPDF31_13TeV-powheg_M_800_1400/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'),
-#     	('dy1400to2300', '/ZToMuMu_NNPDF31_13TeV-powheg_M_1400_2300/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'),
-#     	('dy2300to3500', '/ZToMuMu_NNPDF31_13TeV-powheg_M_2300_3500/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v2/MINIAODSIM'),
-#     	('dy3500to4500', '/ZToMuMu_NNPDF31_13TeV-powheg_M_3500_4500/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'),
+    	('dy120to200', '/ZToMuMu_NNPDF31_13TeV-powheg_M_120_200/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v2/MINIAODSIM'),
+	    ('dy200to400', '/ZToMuMu_NNPDF31_13TeV-powheg_M_200_400/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'),
+    	('dy400to800', '/ZToMuMu_NNPDF31_13TeV-powheg_M_400_800/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v2/MINIAODSIM'),
+	    ('dy800to1400', '/ZToMuMu_NNPDF31_13TeV-powheg_M_800_1400/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'),
+    	('dy1400to2300', '/ZToMuMu_NNPDF31_13TeV-powheg_M_1400_2300/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'),
+    	('dy2300to3500', '/ZToMuMu_NNPDF31_13TeV-powheg_M_2300_3500/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v2/MINIAODSIM'),
+    	('dy3500to4500', '/ZToMuMu_NNPDF31_13TeV-powheg_M_3500_4500/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'),
     	('dy4500to6000', '/ZToMuMu_NNPDF31_13TeV-powheg_M_4500_6000/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'),
 # 
+#     	('WZ', '/WZ_TuneCP5_13TeV-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM'),
+# 	    ('ZZ', '/ZZ_TuneCP5_13TeV-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM'),
+
+# 		('WW', '/WW_TuneCP5_13TeV-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM'),
+# 	    ('Wantitop', '/ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM'),
+#     	('tW', '/ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM'),
+#     	('ttbar', '/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10_ext1-v1/MINIAODSIM'),
+
+
+
+
+
+
+
 #     	('WZ', '/WZ_TuneCUETP8M1_13TeV-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM'),
 # 	    ('ZZ', '/ZZ_TuneCUETP8M1_13TeV-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM'),
 # 		('WW', '/WW_TuneCUETP8M1_13TeV-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM'),
-# 
+
 # 	    ('Wantitop', '/ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM'),
 #     	('tW', '/ST_tW_top_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM'),
-# 
 #####     	('ttbar', '/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10_ext1-v2/MINIAODSIM'),
 #     	('ttbar', '/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10_ext1-v1/MINIAODSIM'),
 
@@ -304,6 +329,7 @@ for cut_name, Selection in cuts.iteritems():
         process.load('SUSYBSMAnalysis.Zprime2muAnalysis.DileptonPreselector_cfi')
         process.load("SUSYBSMAnalysis.Zprime2muAnalysis.EventCounter_cfi")
 	pobj = process.EventCounter * process.dileptonPreseletor *  process.muonPhotonMatchMiniAOD * reduce(lambda x,y: x*y, path_list)
+# 	pobj = process.EventCounter *  process.muonPhotonMatchMiniAOD * reduce(lambda x,y: x*y, path_list)
     else:
     	pobj = process.muonPhotonMatch * reduce(lambda x,y: x*y, path_list)
 
@@ -407,8 +433,8 @@ def ntuplify(process, fill_gen_info=True):
 						jet_src = cms.InputTag("slimmedJets"),
                                            beamspot_src = cms.InputTag('offlineBeamSpot'),
                                            vertices_src = cms.InputTag('offlineSlimmedPrimaryVertices'),
-								TriggerResults_src = cms.InputTag('TriggerResults', '', 'PAT'),	#mc
-# 								TriggerResults_src = cms.InputTag('TriggerResults', '', 'RECO'),	#data
+# 								TriggerResults_src = cms.InputTag('TriggerResults', '', 'PAT'),	#mc
+								TriggerResults_src = cms.InputTag('TriggerResults', '', 'RECO'),	#data
                                            genEventInfo = cms.untracked.InputTag('generator'),
                                            metFilter = cms.VInputTag( cms.InputTag("Flag_HBHENoiseFilter"), cms.InputTag("Flag_HBHENoiseIsoFilter"), cms.InputTag("Flag_EcalDeadCellTriggerPrimitiveFilter"), cms.InputTag("Flag_eeBadScFilter"), cms.InputTag("Flag_globalTightHalo2016Filter"))
                                            )
@@ -476,8 +502,8 @@ def check_prescale(process, trigger_paths, hlt_process_name='HLT'):
     process.pCheckPrescale = cms.Path(process.CheckPrescale)
 
 def for_data(process):
-	process.GlobalTag.globaltag ='94X_mc2017_realistic_v10' # MC  --- #change line 52 
 # 	process.GlobalTag.globaltag ='94X_mc2017_realistic_v14' # MC 50dy120 --- #change line 52 
+	process.GlobalTag.globaltag ='94X_mc2017_realistic_v10' # MC  --- #change line 52 
 # 	process.GlobalTag.globaltag ='94X_dataRun2_ReReco17_forValidation' # Run 2017BCDE #change line 52
 # 	process.GlobalTag.globaltag ='94X_dataRun2_ReReco_EOY17_v2' # Run 2017F #change line 52
 	ntuplify(process)
@@ -536,7 +562,7 @@ if __name__ == '__main__' and 'submit' in sys.argv:
 from CRABClient.UserUtilities import config
 config = config()
 config.General.requestName = 'ana_datamc_%(name)s'
-config.General.workArea = 'crab'
+config.General.workArea = 'crab_scale'
 #config.General.transferLogs = True
 config.JobType.pluginName = 'Analysis'
 config.JobType.psetName = 'histos_crab.py'   
@@ -626,7 +652,7 @@ config.Data.lumiMask = '%(lumi_mask)s' #######
 config.Data.splitting = 'EventAwareLumiBased'
 #config.Data.splitting = 'FileBased'
 config.Data.totalUnits = -1
-config.Data.unitsPerJob  = 100000
+config.Data.unitsPerJob  = 50000
     ''')
 
        

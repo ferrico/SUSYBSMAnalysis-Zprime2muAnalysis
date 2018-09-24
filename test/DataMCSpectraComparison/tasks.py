@@ -83,23 +83,35 @@ elif cmd == 'checkstatus':
     for sample in samples:
         print sample.name
         do('crab status -d crab/crab_ana_datamc_%(name)s ' % sample)
-    for lumi_mask in lumi_masks:
-    	for dataset in datasets:
-    		print 'crab_ana_datamc_%s_%s' % (lumi_mask,dataset)
-        	do('crab status -d crab/crab_ana_datamc_%s_%s' % (lumi_mask,dataset))
+#     for lumi_mask in lumi_masks:
+#     	for dataset in datasets:
+#     		print 'crab_ana_datamc_%s_%s' % (lumi_mask,dataset)
+#         	do('crab status -d crab/crab_ana_datamc_%s_%s' % (lumi_mask,dataset))
 
         
 elif cmd == 'report':
     from SUSYBSMAnalysis.Zprime2muAnalysis.MCSamples import samples
-    for sample in samples:
-        print sample.name
-        do('crab report -d crab/crab_ana_datamc_%(name)s ' % sample)
+#     for sample in samples:
+#         print sample.name
+#         do('crab report -d crab/crab_ana_datamc_%(name)s ' % sample)
+    for lumi_mask in lumi_masks:
+    	for dataset in datasets:
+    		print 'crab_ana_datamc_%s_%s' % (lumi_mask,dataset)
+        	do('crab report -d crab/crab_ana_datamc_%s_%s' % (lumi_mask,dataset))
         
 elif cmd == 'resubmit':
     from SUSYBSMAnalysis.Zprime2muAnalysis.MCSamples import samples
     for sample in samples:
         print sample.name
-        do('crab resubmit -d crab/crab_ana_datamc_%(name)s ' % sample)
+        do('crab resubmit -d crab_1/crab_ana_datamc_%(name)s ' % sample)
+    for lumi_mask in lumi_masks:
+    	for dataset in datasets:
+    		print 'crab_ana_datamc_%s_%s' % (lumi_mask,dataset)
+        	do('crab resubmit -d crab/crab_ana_datamc_%s_%s' % (lumi_mask,dataset))
+    for lumi_mask in lumi_masks:
+    	for dataset in datasets:
+    		print 'crab_ana_datamc_%s_%s' % (lumi_mask,dataset)
+        	do('crab resubmit -d crab_scale/crab_ana_datamc_%s_%s' % (lumi_mask,dataset))
 
 elif cmd == 'kill':
     from SUSYBSMAnalysis.Zprime2muAnalysis.MCSamples import samples
@@ -117,10 +129,11 @@ elif cmd == 'getoutput':
     for sample in samples:
         print sample.name
         do('crab getoutput -d crab/crab_ana_datamc_%(name)s --checksum=no ' % sample)
-    for lumi_mask in lumi_masks:
-    	for dataset in datasets:
-    		print 'crab_ana_datamc_%s_%s' % (lumi_mask,dataset)
-        	do('crab getoutput -d crab/crab_ana_datamc_%s_%s --checksum=no ' % (lumi_mask,dataset))
+        do('crab getoutput -d crab_scale/crab_ana_datamc_%(name)s --checksum=no ' % sample)
+#     for lumi_mask in lumi_masks:
+#     	for dataset in datasets:
+#     		print 'crab_ana_datamc_%s_%s' % (lumi_mask,dataset)
+#         	do('crab getoutput -d crab/crab_ana_datamc_%s_%s --checksum=no ' % (lumi_mask,dataset))
 
 
 #elif cmd == 'publishmc':
@@ -163,7 +176,6 @@ elif cmd == 'gatherdata':
 
     for lumi_mask in lumi_masks:
         print lumi_mask
-#        dirs = glob.glob('crab/crab_ana_datamc_%s_ExpressPhysicsRun2015B*' % lumi_mask)
         dirs = glob.glob('crab/crab_ana_datamc_%s_SingleMuonRun2017*' % lumi_mask)
 #        dirs = glob.glob('crab/crab_ana_datamc_%s_ExpressPhysicsRun2015B-Express_251161_251252' % lumi_mask)
         files = []

@@ -763,13 +763,11 @@ void SimpleNtupler_miniAOD::analyze(const edm::Event& event, const edm::EventSet
     
     // This only works for DY/Z'/RSG events, and really just for PYTHIA!
     hardInteraction->Fill(event);
-    int EventWeight = 1.;
+    float EventWeight = 1.;
     edm::Handle<GenEventInfoProduct> gen_ev_info;
     event.getByLabel(genEventInfo_, gen_ev_info);
     EventWeight = gen_ev_info->weight();
     t.genWeight = ( EventWeight > 0 ) ? 1 : -1;
-
-    
     //
     // Store Generator Level information
     //
@@ -1409,8 +1407,9 @@ void SimpleNtupler_miniAOD::analyze(const edm::Event& event, const edm::EventSet
         // Global track
         //
 	t.lep_isGlobalMuon[w] = mu->isGlobalMuon();
+	
         // Global track tracker information
-        if (mu->isGlobalMuon()){
+     if (mu->isGlobalMuon()){
 		t.lep_glb_numberOfValidTrackerHits[w] = mu->globalTrack()->hitPattern().numberOfValidTrackerHits();
 		t.lep_chi2dof[w] = mu->globalTrack()->normalizedChi2();
 		t.lep_glb_numberOfValidTrackerLayers[w] = mu->globalTrack()->hitPattern().trackerLayersWithMeasurement();
@@ -1448,7 +1447,7 @@ void SimpleNtupler_miniAOD::analyze(const edm::Event& event, const edm::EventSet
         // number of stations with matched segments
 	t.lep_numberOfMatchedStations[w] = mu->numberOfMatchedStations();
 	// number of layers with matched rpc hits
-	t.lep_numberOfMatchedRPCLayers[w] = mu->numberOfChambersCSCorDT();
+	t.lep_numberOfMatchedRPCLayers[w] = mu->numberOfMatchedRPCLayers();
         // get bit map of stations with matched segments
         // bits 0-1-2-3 = DT stations 1-2-3-4
         // bits 4-5-6-7 = CSC stations 1-2-3-4

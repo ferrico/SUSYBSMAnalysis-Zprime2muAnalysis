@@ -877,8 +877,8 @@ void Zprime2muHistosFromPAT::analyze(const edm::Event& event, const edm::EventSe
 // 			 	}
 
 				gM = gM - 400;
-			   	_kFactor = 1.047 - 0.000143 * gM + 5.167e-08 * pow(gM,2) - 7.84e-12 * pow(gM,3);
-			   	_kFactor_bb = 1.036 - 0.0001441 * gM + 5.068e-08 * pow(gM,2) - 7.581e-12 * pow(gM,3);
+			   	_kFactor = 1.067 - 0.000112 * gM + 3.176e-08 * pow(gM,2) - 4.068e-12 * pow(gM,3);
+			   	_kFactor_bb = 1.036 - 0.0001441 * gM + 5.058e-08 * pow(gM,2) - 7.581e-12 * pow(gM,3);
 	 		   	_kFactor_be = 1.052 - 0.0001471 * gM + 5.903e-08 * pow(gM,2) - 9.037e-12 * pow(gM,3);
 
 			 	

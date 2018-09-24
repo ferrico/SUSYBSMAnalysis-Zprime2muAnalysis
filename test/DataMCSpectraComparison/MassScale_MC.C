@@ -23,25 +23,25 @@
 #include "TPaveStats.h"
 #include "TPad.h"
 
-	double cruijff(double *x,double *par) {
+// 	double cruijff(double *x,double *par) {
 // 		double arg = 0;
-		double sigma;
-		double alpha;
-		
-		if (x[0] >= par[0]){
-			sigma = par[2];
-			alpha = par[4];
-		}
-		else{
-			sigma = par[1];
-			alpha = par[3];
-		}
-		double delta_x = x[0] - par[0];
-		double delta_x2 = delta_x * delta_x;
-	
-		return exp(- delta_x2 / (2 * sigma * sigma + alpha * delta_x2));
-	
-	}
+// 		double sigma;
+// 		double alpha;
+// 		
+// 		if (x[0] >= par[0]){
+// 			sigma = par[2];
+// 			alpha = par[4];
+// 		}
+// 		else{
+// 			sigma = par[1];
+// 			alpha = par[3];
+// 		}
+// 		double delta_x = x[0] - par[0];
+// 		double delta_x2 = delta_x * delta_x;
+// 	
+// 		return exp(- delta_x2 / (2 * sigma * sigma + alpha * delta_x2));
+// 	
+// 	}
 
 
 
@@ -52,7 +52,7 @@ gStyle->SetOptFit(1);
 gStyle->SetLegendTextSize(0.03);
 gROOT->Reset();
 gROOT->SetBatch();
-// gROOT->LoadMacro("cruijff.C");
+gROOT->LoadMacro("cruijff.C+");
 
 
 	    Double_t MASS_BIN[15] = {0};//{100, 200, 300, 400, 600, 800, 1000, 1400, 1800, 2200, 2800, 3400, 4000, 5000, 6000};
@@ -167,36 +167,36 @@ gROOT->SetBatch();
 // 	pt_minus_res_NS->SetTitle("p_{T}- residuals: p_{T}- NoScale wrt Gen");
 
 	
+    TString samples[15] =  {
+                            "Wantitop", "tW", 
+                            "ttbar",
+                            "WW",
+                            "ZZ",
+                            "WZ",
+                            "dy50to120", "dy120to200", "dy200to400", "dy400to800", "dy800to1400", "dy1400to2300", "dy2300to3500", "dy3500to4500", "dy4500to6000",
+                            };
 	
-     TString samples[39] =  {"dyInclusive50", 
-	 						"qcd80to120", "qcd120to170", "qcd170to300", "qcd300to470", "qcd470to600", "qcd600to800", "qcd800to1000", "qcd1000to1400", "qcd1400to1800", "qcd1800to2400", "qcd2400to3200", "qcd3200", 
-	 						"Wantitop", "tW", 
-	 						"ttbar_lep50to500", "ttbar_lep_500to800", "ttbar_lep_800to1200", "ttbar_lep_1200to1800", "ttbar_lep1800toInf", 
-	 						"Wjets", 
-	 						"WWinclusive", "WW200to600", "WW600to1200", "WW1200to2500", "WW2500", 
-	 						"ZZ", "WZ", "ZZ_ext", "WZ_ext", 
-	 						"dy50to120", "dy120to200", "dy200to400", "dy400to800", "dy800to1400", "dy1400to2300", "dy2300to3500", "dy3500to4500", "dy4500to6000"};
-
-
-	float events[39] = {19385554,  6986740, 6708572, 6958708, 4150588, 3959986, 3896412, 3992112, 2999069, 396409, 397660, 399226, 391735, 
-						6933094, 6952830,
-						79092400, 200000, 199800, 200000, 40829, 
-						29705748,
-						1999000, 200000, 200000, 200000, 38969, 
-						990064, 1000000, 998034, 2995828,
-						2977600, 100000, 100000, 98400, 100000, 100000, 100000, 100000, 100000
-						};
-	float sigma[39] = {6025.2, 2762530, 471100, 117276, 7823, 648.2, 186.9, 32.3992112, 9.4183, 0.84265, 0.114943, 0.00682981, 0.000165445,
+	float events[15] = {
+						7780870, 7581624,
+						33844772,
+						7791498,
+						1949768,
+						3928630,
+						2961000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000,
+					};
+						
+	float sigma[15] = {
 						35.6, 35.6,
-						87.31, 0.32611, 0.03265, 0.00305, 0.00017, 
-						61526.7,
-						12.178, 1.385, 0.0566, 0.0035, 0.00005,
-						16.523, 47.13, 16.523, 47.13,
-						1975, 19.32,  2.731, 0.241, 0.01678, 0.00139, 0.00008948, 0.0000041, 4.56E-7
-						};
-	float LUMINOSITY = 36295.39;
+						831.76,
+						118.7,
+						16.523,
+						47.13,
+						2112.905, 20.553, 2.8861, 0.25126, 0.017075, 1.366E-3, 8.178E-5, 3.191E-6, 2.787E-7,
+						};         
+         
+	float LUMINOSITY = 41903.837;
 
-	float weight[39] = {0};
+	float weight[15] = {0};
 	
 	Double_t BB_NS[15] = {0};
 	Double_t BB_S[15] = {0};
@@ -253,6 +253,7 @@ gROOT->SetBatch();
   Int_t event;
   Int_t run;
   unsigned lumi;
+  Int_t prev_event = -88;
 
   float lep_pt[2];
   float lep_phi[2];
@@ -282,8 +283,8 @@ gROOT->SetBatch();
     float gen_lep_eta[2];
     float gen_lep_pt[2];
     
-    float M[562242];
-    float MS[562242];
+//     float M[562242];
+//     float MS[562242];
     
     
 	TLorentzVector c_base;
@@ -344,30 +345,21 @@ gROOT->SetBatch();
 	reco = false;
 	noIB = false;
 			
-	for(int i = 0; i < 39; i++){
-// 		weight[i] = LUMINOSITY * sigma[i] / events[i];
-		weight[i] = 1;
+	for(int i = 0; i < 15; i++){
+		weight[i] = LUMINOSITY * sigma[i] / events[i];
+// 		weight[i] = 1;
 	}
 	
                         	
-// 	TFile *scale = new TFile("/afs/cern.ch/work/f/ferrico/private/ZPrime_code/CMSSW_8_0_21/src/SUSYBSMAnalysis/Zprime2muAnalysis/test/MCMCSpectraComparison/MC/YesScale_YesEtaCut/Run2016MuonsOnly/", "READ");
-  for(int j=30; j < 39; j++){   
+  for(int j=6; j < 15; j++){   
 
-// 	if(j != 35) continue;  // 30 per dy50to120 ---- 33 per dy400to800 ---- 35 per dy1400to2300 //
 
 	 printf("openning.. %s %i  --- %.5f\n",samples[j].Data(),j , weight[j]);    
-     TChain *treeMC = new TChain("SimpleNtupler/t");
-     if(j == 35)
-     	TChain *treeMC = new TChain("SimpleNtupler/t;3");
-//      treeMC->Add("mc/mc_YesEtaCut_NoScale/ana_datamc_"+samples[j]+".root");
-//       treeMC->Add("mc/YesScale/ana_datamc_"+samples[j]+".root");
-    if(noIB)
-      treeMC->Add("mc/DY_scale_genInfo_NOIB/ana_datamc_"+samples[j]+".root");
-    else
-      treeMC->Add("mc/DY_scale_genInfo_status1/ana_datamc_"+samples[j]+".root");
-      
-      
 
+     TChain *treeMC = new TChain("SimpleNtupler/t");
+
+     treeMC->Add("/eos/user/f/ferrico/LXPLUS/ROOT_FILE_2017/MC_scale/ana_datamc_" + samples[j] + ".root");        
+            
      treeMC->SetBranchAddress("event",&event);
      treeMC->SetBranchAddress("run",&run);
      treeMC->SetBranchAddress("lumi",&lumi);
@@ -418,126 +410,67 @@ gROOT->SetBatch();
 		// next event
 		
 		treeMC->GetEntry(p);
-// 		std::cout<<p<<"   BASE       "<<run<<"   "<<lumi<<"   "<<event<<"   "<<dil_mass<<std::endl;
-		ok = false;
-		
-		next = false;
-		
-		if(fabs(lep_eta[0])<2.4 && fabs(lep_eta[1])<2.4 && GoodDataRan && GoodVtx && lep_pt[0]>53. && lep_pt[1]>53. && lep_isTrackerMuon[0]==1 && lep_isTrackerMuon[1]==1 && lep_isGlobalMuon[0]==1 && lep_isGlobalMuon[1]==1 && fabs(lep_dB[0]) < 0.2 && fabs(lep_dB[1]) < 0.2 && ( lep_numberOfMatchedStations[0] > 1 || (lep_numberOfMatchedStations[0] == 1 && !(lep_stationMask[0] == 1 || lep_stationMask[0] == 16)) || (lep_numberOfMatchedStations[0] == 1 && (lep_stationMask[0] == 1 || lep_stationMask[0] == 16) && lep_numberOfMatchedRPCLayers[0] > 2))  && (lep_numberOfMatchedStations[1] > 1 || (lep_numberOfMatchedStations[1] == 1 && !(lep_stationMask[1] == 1 || lep_stationMask[1] == 16)) || (lep_numberOfMatchedStations[1] == 1 && (lep_stationMask[1] == 1 || lep_stationMask[1] == 16) && lep_numberOfMatchedRPCLayers[1] > 2)) && lep_glb_numberOfValidMuonHits[0]>0 && lep_glb_numberOfValidMuonHits[1]>0 && lep_glb_numberOfValidPixelHits[0]>=1 && lep_glb_numberOfValidPixelHits[1]>=1 && lep_glb_numberOfValidTrackerLayers[0]>5 && lep_glb_numberOfValidTrackerLayers[1]>5 && lep_sumPt[0]/lep_tk_pt[0]<0.10 && lep_sumPt[1]/lep_tk_pt[1]<0.10 && lep_pt_err[0]/lep_pt[0]<0.3 && lep_pt_err[1]/lep_pt[1]<0.3 && cos_angle>-0.9998 && lep_id[0]*lep_id[1]<0 && (lep_triggerMatchPt[0]>50 || lep_triggerMatchPt[1]>50) && vertex_chi2 < 20){
-// 		if(dil_mass > 900 && fabs(lep_eta[0])<2.4 && fabs(lep_eta[1])<2.4 && GoodDataRan && GoodVtx && lep_pt[0]>53. && lep_pt[1]>53. && lep_isTrackerMuon[0]==1 && lep_isTrackerMuon[1]==1 && lep_isGlobalMuon[0]==1 && lep_isGlobalMuon[1]==1 && fabs(lep_dB[0]) < 0.2 && fabs(lep_dB[1]) < 0.2 && ( lep_numberOfMatchedStations[0] > 1 || (lep_numberOfMatchedStations[0] == 1 && !(lep_stationMask[0] == 1 || lep_stationMask[0] == 16)) || (lep_numberOfMatchedStations[0] == 1 && (lep_stationMask[0] == 1 || lep_stationMask[0] == 16) && lep_numberOfMatchedRPCLayers[0] > 2))  && (lep_numberOfMatchedStations[1] > 1 || (lep_numberOfMatchedStations[1] == 1 && !(lep_stationMask[1] == 1 || lep_stationMask[1] == 16)) || (lep_numberOfMatchedStations[1] == 1 && (lep_stationMask[1] == 1 || lep_stationMask[1] == 16) && lep_numberOfMatchedRPCLayers[1] > 2)) && lep_glb_numberOfValidMuonHits[0]>0 && lep_glb_numberOfValidMuonHits[1]>0 && lep_glb_numberOfValidPixelHits[0]>=1 && lep_glb_numberOfValidPixelHits[1]>=1 && lep_glb_numberOfValidTrackerLayers[0]>5 && lep_glb_numberOfValidTrackerLayers[1]>5 && lep_sumPt[0]/lep_tk_pt[0]<0.10 && lep_sumPt[1]/lep_tk_pt[1]<0.10 && lep_pt_err[0]/lep_pt[0]<0.3 && lep_pt_err[1]/lep_pt[1]<0.3 && cos_angle>-0.9998 && lep_id[0]*lep_id[1]<0 && (lep_triggerMatchPt[0]>50 || lep_triggerMatchPt[1]>50) && vertex_chi2 < 20){
 
-			treeMC->GetEntry(p);
-			c_daughter_0.SetPtEtaPhiM(lep_pt[0], lep_eta[0], lep_phi[0], 0.10566);
-			c_daughter_1.SetPtEtaPhiM(lep_pt[1], lep_eta[1], lep_phi[1], 0.10566);
-			c_base = c_daughter_0 + c_daughter_1;
-			c_run = run;
-			c_lumi = lumi;
-			c_event = event;
-			if(reco){
-				gen_eta_first = lep_eta[0];
-				gen_eta_second = lep_eta[1];
-			}
-			else{
-			gen_eta_first = gen_lep_eta[0];
-			gen_eta_second = gen_lep_eta[1];
-			}			
-			pt_first = lep_pt[0];
-			pt_second = lep_pt[1];
-			gen_pt_first = gen_lep_pt[0];
-			gen_pt_second = gen_lep_pt[1];
-			max_pt = pt_first+pt_second;
-			MASS = c_base.M();
-			MASS_SCALE = dil_mass;
-			MASS_GEN = gen_dil_mass;
-// 			if(lep_id[0] > 0){
-// 				pt_minus = lep_pt[0];
-// 				pt_plus = lep_pt[1];
-// 			}
-// 			else{
-// 				pt_minus = lep_pt[1];
-// 				pt_plus = lep_pt[0];
-// 			}
-// 			if(gen_lep_qOverPt[0] > 0){
-// 				gen_pt_plus	= 1/gen_lep_qOverPt[0];
-// 				gen_pt_minus	= 1/gen_lep_qOverPt[1];
-// 			}
-// 			else{
-// 				gen_pt_plus	= 1/gen_lep_qOverPt[1];
-// 				gen_pt_minus	= 1/gen_lep_qOverPt[0];
-// 			}			
-
+		
+		if(
+			GoodVtx && 
+			fabs(lep_eta[0])<2.4 && fabs(lep_eta[1])<2.4 && 
+			lep_pt[0]>53. && lep_pt[1]>53. && 
+			lep_isTrackerMuon[0]==1 && lep_isTrackerMuon[1]==1 && 
+			lep_isGlobalMuon[0]==1 && lep_isGlobalMuon[1]==1 && 
+			fabs(lep_dB[0]) < 0.2 && fabs(lep_dB[1]) < 0.2 && 
+			( lep_numberOfMatchedStations[0] > 1 || (lep_numberOfMatchedStations[0] == 1 && !(lep_stationMask[0] == 1 || lep_stationMask[0] == 16)) || (lep_numberOfMatchedStations[0] == 1 && (lep_stationMask[0] == 1 || lep_stationMask[0] == 16) && lep_numberOfMatchedRPCLayers[0] > 2))  && (lep_numberOfMatchedStations[1] > 1 || (lep_numberOfMatchedStations[1] == 1 && !(lep_stationMask[1] == 1 || lep_stationMask[1] == 16)) || (lep_numberOfMatchedStations[1] == 1 && (lep_stationMask[1] == 1 || lep_stationMask[1] == 16) && lep_numberOfMatchedRPCLayers[1] > 2)) && 
+			lep_glb_numberOfValidMuonHits[0]>0 && lep_glb_numberOfValidMuonHits[1]>0 && 
+			lep_glb_numberOfValidPixelHits[0]>=1 && lep_glb_numberOfValidPixelHits[1]>=1 && 
+			lep_glb_numberOfValidTrackerLayers[0]>5 && lep_glb_numberOfValidTrackerLayers[1]>5 && 
+			lep_sumPt[0]/lep_tk_pt[0]<0.10 && lep_sumPt[1]/lep_tk_pt[1]<0.10 && 
+			lep_pt_err[0]/lep_pt[0]<0.3 && lep_pt_err[1]/lep_pt[1]<0.3 && 
+			cos_angle>-0.9998 && 
+			lep_id[0]*lep_id[1]<0 && 
+			(lep_triggerMatchPt[0]>50 || lep_triggerMatchPt[1]>50) && 
+			vertex_chi2 < 20
+			){
 			
-			if(p < ne-1){
-				treeMC->GetEntry(pp);				
-				int ddd = 0;
-				while(c_run == run && c_lumi == lumi && c_event == event){
-// 					if(ddd > 0) std::cout<<ddd<<std::endl;
-					if(fabs(lep_eta[0])<2.4 && fabs(lep_eta[1])<2.4 && GoodDataRan && GoodVtx && lep_pt[0]>53. && lep_pt[1]>53. && lep_isTrackerMuon[0]==1 && lep_isTrackerMuon[1]==1 && lep_isGlobalMuon[0]==1 && lep_isGlobalMuon[1]==1 && fabs(lep_dB[0]) < 0.2 && fabs(lep_dB[1]) < 0.2 && ( lep_numberOfMatchedStations[0] > 1 || (lep_numberOfMatchedStations[0] == 1 && !(lep_stationMask[0] == 1 || lep_stationMask[0] == 16)) || (lep_numberOfMatchedStations[0] == 1 && (lep_stationMask[0] == 1 || lep_stationMask[0] == 16) && lep_numberOfMatchedRPCLayers[0] > 2))  && (lep_numberOfMatchedStations[1] > 1 || (lep_numberOfMatchedStations[1] == 1 && !(lep_stationMask[1] == 1 || lep_stationMask[1] == 16)) || (lep_numberOfMatchedStations[1] == 1 && (lep_stationMask[1] == 1 || lep_stationMask[1] == 16) && lep_numberOfMatchedRPCLayers[1] > 2)) && lep_glb_numberOfValidMuonHits[0]>0 && lep_glb_numberOfValidMuonHits[1]>0 && lep_glb_numberOfValidPixelHits[0]>=1 && lep_glb_numberOfValidPixelHits[1]>=1 && lep_glb_numberOfValidTrackerLayers[0]>5 && lep_glb_numberOfValidTrackerLayers[1]>5 && lep_sumPt[0]/lep_tk_pt[0]<0.10 && lep_sumPt[1]/lep_tk_pt[1]<0.10 && lep_pt_err[0]/lep_pt[0]<0.3 && lep_pt_err[1]/lep_pt[1]<0.3 && cos_angle>-0.9998 && lep_id[0]*lep_id[1]<0 && (lep_triggerMatchPt[0]>50 || lep_triggerMatchPt[1]>50) && vertex_chi2 < 20){
-						n_daughter_0.SetPtEtaPhiM(lep_pt[0], lep_eta[0], lep_phi[0], 0.10566);
-						n_daughter_1.SetPtEtaPhiM(lep_pt[1], lep_eta[1], lep_phi[1], 0.10566);
-						n_base = n_daughter_0 + n_daughter_1;
-// 						if(MASS_GEN < gen_dil_mass){
-						if(max_pt < (lep_pt[0]+lep_pt[1])){
-							MASS = n_base.M();
-							MASS_SCALE = dil_mass;
-							MASS_GEN = gen_dil_mass;
-							if(reco){
-								gen_eta_first = lep_eta[0];
-								gen_eta_second = lep_eta[1];
-							}
-							else{
-								gen_eta_first = gen_lep_eta[0];
-								gen_eta_second = gen_lep_eta[1];
-							}	
-							pt_first = lep_pt[0];
-							pt_second = lep_pt[1];
-							max_pt = pt_first + pt_second;
-							gen_pt_first = gen_lep_pt[0];
-							gen_pt_second = gen_lep_pt[1];
-// 							if(lep_id[0] > 0){
-// 								pt_minus = lep_pt[0];
-// 								pt_plus = lep_pt[1];
-// 							}
-// 							else{
-// 								pt_minus = lep_pt[1];
-// 								pt_plus = lep_pt[0];
-// 							}
-// 							if(gen_lep_qOverPt[0] > 0){
-// 								gen_pt_plus	= 1/gen_lep_qOverPt[0];
-// 								gen_pt_minus	= 1/gen_lep_qOverPt[1];
-// 							}
-// 							else{
-// 								gen_pt_plus	= 1/gen_lep_qOverPt[1];
-// 								gen_pt_minus	= 1/gen_lep_qOverPt[0];
-// 							}	
-						}
-						n_doppioni++;
-					}
-						
-					pp++;
-					p++;
-					ddd++;
-					treeMC->GetEntry(pp);					
+				if(prev_event == event) continue; //to remove double event; take the first --> they are already sorted in pt
+				prev_event = event;
+
+				c_daughter_0.SetPtEtaPhiM(lep_pt[0], lep_eta[0], lep_phi[0], 0.10566);
+				c_daughter_1.SetPtEtaPhiM(lep_pt[1], lep_eta[1], lep_phi[1], 0.10566);
+				c_base = c_daughter_0 + c_daughter_1;
+
+				if(reco){
+					gen_eta_first = lep_eta[0];
+					gen_eta_second = lep_eta[1];
 				}
-			}				
+				else{
+					gen_eta_first = gen_lep_eta[0];
+					gen_eta_second = gen_lep_eta[1];
+				}			
+				pt_first = lep_pt[0];
+				pt_second = lep_pt[1];
+				gen_pt_first = gen_lep_pt[0];
+				gen_pt_second = gen_lep_pt[1];
+// 				max_pt = pt_first+pt_second;
 
-// 			std::cout<<p<<") "<<c_run<<"   "<<c_lumi<<"   "<<c_event<<"   "<<MASS<<"   "<<MASS_SCALE<<"   "<<std::endl;
-// 			std::cout<<p<<") "<<run<<"   "<<lumi<<"   "<<event<<"   "<<MASS<<"   "<<MASS_SCALE<<"   "<<p_count<<"   "<<n_count<<std::endl;
+				MASS = c_base.M();
+				MASS_SCALE = dil_mass;
+				MASS_GEN = gen_dil_mass;
 
-			res->Fill(MASS, (MASS - MASS_SCALE)/MASS, weight[j]);
-			res_NS->Fill(MASS_GEN, (MASS_GEN - MASS)/MASS_GEN, weight[j]);
-			res_S->Fill(MASS_GEN, (MASS_GEN - MASS_SCALE)/MASS_GEN, weight[j]);
+				res->Fill(MASS, (MASS - MASS_SCALE)/MASS, weight[j]);
+				res_NS->Fill(MASS_GEN, (MASS_GEN - MASS)/MASS_GEN, weight[j]);
+				res_S->Fill(MASS_GEN, (MASS_GEN - MASS_SCALE)/MASS_GEN, weight[j]);
 			
-			if(fabs(gen_eta_first)>1.2 || fabs(gen_eta_second)>1.2){
-				res_be->Fill(MASS, (MASS - MASS_SCALE)/MASS, weight[j]);
-				res_be_NS->Fill(MASS_GEN, (MASS_GEN - MASS)/MASS_GEN, weight[j]);
-				res_be_S->Fill(MASS_GEN, (MASS_GEN - MASS_SCALE)/MASS_GEN, weight[j]);
-			}
-			if(fabs(gen_eta_first)<1.2 && fabs(gen_eta_second)<1.2){
-				res_bb->Fill(MASS, (MASS - MASS_SCALE)/MASS, weight[j]);
-				res_bb_NS->Fill(MASS_GEN, (MASS_GEN - MASS)/MASS_GEN, weight[j]);
-				res_bb_S->Fill(MASS_GEN, (MASS_GEN - MASS_SCALE)/MASS_GEN, weight[j]);
-			}
+				if(fabs(gen_eta_first)<1.2 && fabs(gen_eta_second)<1.2){
+					res_bb->Fill(MASS, (MASS - MASS_SCALE)/MASS, weight[j]);
+					res_bb_NS->Fill(MASS_GEN, (MASS_GEN - MASS)/MASS_GEN, weight[j]);
+					res_bb_S->Fill(MASS_GEN, (MASS_GEN - MASS_SCALE)/MASS_GEN, weight[j]);
+				}
+				else{
+// 				(fabs(gen_eta_first)>1.2 || fabs(gen_eta_second)>1.2){
+					res_be->Fill(MASS, (MASS - MASS_SCALE)/MASS, weight[j]);
+					res_be_NS->Fill(MASS_GEN, (MASS_GEN - MASS)/MASS_GEN, weight[j]);
+					res_be_S->Fill(MASS_GEN, (MASS_GEN - MASS_SCALE)/MASS_GEN, weight[j]);
+				}
 
 // 			res->Fill(MASS, (MASS - MASS_SCALE)/MASS);
 // 			res_NS->Fill(MASS, (MASS_GEN - MASS)/MASS_GEN);
@@ -553,15 +486,13 @@ gROOT->SetBatch();
 // 				res_bb_NS->Fill(MASS, (MASS_GEN - MASS)/MASS_GEN);
 // 				res_bb_S->Fill(MASS_SCALE, (MASS_GEN - MASS_SCALE)/MASS_GEN);
 // 			}
-
-
-			
+		
 
 		} // if selection
 	
 	} // for event
 	
-	std::cout<<"number of samples: "<<j-29<<std::endl;
+// 	std::cout<<"number of samples: "<<j-15<<std::endl;
 // 	std::cout<<res_bb_NS->GetStdDev()<<std::endl;
 // 	std::cout<<res_bb_S->GetStdDev()<<std::endl;
 // 	std::cout<<res_be_NS->GetStdDev()<<std::endl;
@@ -581,13 +512,9 @@ gROOT->SetBatch();
 	
 	std::cout<<"STOP"<<std::endl;
 	
-	std::cout<<"Doppioni = "<<p_doppioni<<" --- "<<n_doppioni<<std::endl;
-		
     
     TCanvas *canvas = new TCanvas("canvas", "canvas", 210,45,1000,700);
-//    	TString nome_file;   	
-    float  min, max;
-//     TF1 *func;
+    float  fit_min, fit_max;
     float fattore = 1.5;
   
     for(int i=1; i <= res_bb_NS->GetNbinsX(); i++){
@@ -603,19 +530,28 @@ gROOT->SetBatch();
 //           MIN = MEAN_PT.at(i-1) - 1.5 * RMS_PT.at(i-1);
 //           MAX = MEAN_PT.at(i-1) + 1.5 * RMS_PT.at(i-1);
 
-           min = -fattore * proiezione_BB_NS->GetRMS();
-           max = fattore * proiezione_BB_NS->GetRMS();
-          TF1 *f1 = new TF1("f1","gaus",min,max);
-          proiezione_BB_NS->Fit("f1","R");
-//           RMS_RES_PT_GEM.push_back(resolution_bb_NS->GetRMS());
-//           RMS_RES_PT_ERR_GEM.push_back(resolution_bb_NS->GetRMSError());
+	 	fit_min = proiezione_BB_NS->GetMean() - 2.0*proiezione_BB_NS->GetRMS();
+	 	fit_max = proiezione_BB_NS->GetMean() + 1.7*proiezione_BB_NS->GetRMS();
+	 	TF1 *gaus = new TF1("gaus","gaus",fit_min,fit_max);
+	 	gaus->SetParameters(0, proiezione_BB_NS->GetMean(), proiezione_BB_NS->GetRMS());
+	    proiezione_BB_NS->Fit("gaus","M0R+");
+    
+	    TF1* f1 = new  TF1("cruijff", "cruijff", fit_min,fit_max, 5);
+	    f1->SetParameters(gaus->GetParameter(0), gaus->GetParameter(1), gaus->GetParameter(2), 0., 0.);// #15, 0.001);             
+	    f1->SetParNames("Constant","Mean","Sigma","AlphaL","AlphaR");
+	    f1->SetLineColor(kBlue);
+	    f1->SetLineWidth(2);
+	    proiezione_BB_NS->Fit("cruijff","MR+"); 
+	    TString title = Form("BB: Mass resolution for %.0f < m_{ll} <%.0f", MASS_BINS[i-1], MASS_BINS[i]);
+// 	    proiezione_BB_NS->SetTitle(title);
+// 	    proiezione_BB_NS->GetXaxis()->SetTitle("Reco / Gen - 1");
+    
 		resolution_bb_NS->SetBinContent(i, f1->GetParameter(2));
 		resolution_bb_NS->SetBinError(i, f1->GetParError(2));
 
 		mean_bb_NS->SetBinContent(i, f1->GetParameter(1));
 		mean_bb_NS->SetBinError(i, f1->GetParError(1));
-
-		
+	
 		BB_NS[i-1] = f1->GetParameter(2);
 		BB_NS_err[i-1] = f1->GetParError(2);
 		
@@ -624,18 +560,186 @@ gROOT->SetBatch();
 //           PT_GEM.push_back(res_bb_NS->GetXaxis()->GetBinCenter(i));
 //           PT_ERR_GEM.push_back((MASS_BINS[i]-MASS_BINS[i-1])/2);
 
-          if(i==1)
+        if(i==1)
               canvas->Print("./MassScale/MC/BB_NS.pdf[");
 
-              canvas->Print("./MassScale/MC/BB_NS.pdf");
+        canvas->Print("./MassScale/MC/BB_NS.pdf");
 
-          if(i==res_bb_NS->GetNbinsX())
+        if(i==res_bb_NS->GetNbinsX())
               canvas->Print("./MassScale/MC/BB_NS.pdf]");
 
-          canvas->Write();
+        canvas->Write();
 
       }
 
+    for(int i=1; i <= res_bb_S->GetNbinsX(); i++){
+
+          NOME = Form("Mass Resolution: %.0f < mass < %.0f", MASS_BINS[i-1], MASS_BINS[i]);
+          TCanvas *canvas = new TCanvas(NOME, NOME, 200,10,700,500);
+          TH1D* proiezione_BB_S = res_bb_S->ProjectionY(NOME,i,i);
+//           resolution_bb_S->GetXaxis()->SetTitle("Mass resolution");
+//           resolution_bb_S->GetYaxis()->SetTitle("entries");
+//           resolution_bb_S->SetTitle("Z' Mass Res (Z' mass function) - GEM");
+//           MEAN_PT.push_back(resolution_bb_S->GetMean());
+//           RMS_PT.push_back(resolution_bb_S->GetRMS());
+//           MIN = MEAN_PT.at(i-1) - 1.5 * RMS_PT.at(i-1);
+//           MAX = MEAN_PT.at(i-1) + 1.5 * RMS_PT.at(i-1);
+
+	 	fit_min = proiezione_BB_S->GetMean() - 2.0*proiezione_BB_S->GetRMS();
+	 	fit_max = proiezione_BB_S->GetMean() + 1.7*proiezione_BB_S->GetRMS();
+	 	TF1 *gaus = new TF1("gaus","gaus",fit_min,fit_max);
+	 	gaus->SetParameters(0, proiezione_BB_S->GetMean(), proiezione_BB_S->GetRMS());
+	    proiezione_BB_S->Fit("gaus","M0R+");
+    
+	    TF1* f1 = new  TF1("cruijff", "cruijff", fit_min,fit_max, 5);
+	    f1->SetParameters(gaus->GetParameter(0), gaus->GetParameter(1), gaus->GetParameter(2), 0., 0.);// #15, 0.001);             
+	    f1->SetParNames("Constant","Mean","Sigma","AlphaL","AlphaR");
+	    f1->SetLineColor(kBlue);
+	    f1->SetLineWidth(2);
+	    proiezione_BB_S->Fit("cruijff","MR+"); 
+	    TString title = Form("BB: Mass resolution for %.0f < m_{ll} <%.0f", MASS_BINS[i-1], MASS_BINS[i]);
+// 	    proiezione_BB_S->SetTitle(title);
+// 	    proiezione_BB_S->GetXaxis()->SetTitle("Reco / Gen - 1");
+    
+		resolution_bb_S->SetBinContent(i, f1->GetParameter(2));
+		resolution_bb_S->SetBinError(i, f1->GetParError(2));
+
+		mean_bb_S->SetBinContent(i, f1->GetParameter(1));
+		mean_bb_S->SetBinError(i, f1->GetParError(1));
+	
+		BB_S[i-1] = f1->GetParameter(2);
+		BB_S_err[i-1] = f1->GetParError(2);
+		
+		std::cout<<" ---------------------------------------------------------------------------- BB NO SCALE"<<MASS_BINS[i-1]<<" "<<MASS_BINS[i]<<"      "<<f1->GetParameter(2)<<std::endl;
+		
+//           PT_GEM.push_back(res_bb_S->GetXaxis()->GetBinCenter(i));
+//           PT_ERR_GEM.push_back((MASS_BINS[i]-MASS_BINS[i-1])/2);
+
+        if(i==1)
+              canvas->Print("./MassScale/MC/BB_S.pdf[");
+
+        canvas->Print("./MassScale/MC/BB_S.pdf");
+
+        if(i==res_bb_S->GetNbinsX())
+              canvas->Print("./MassScale/MC/BB_S.pdf]");
+
+        canvas->Write();
+
+      }
+
+    for(int i=1; i <= res_be_NS->GetNbinsX(); i++){
+
+          NOME = Form("Mass Resolution: %.0f < mass < %.0f", MASS_BINS[i-1], MASS_BINS[i]);
+          TCanvas *canvas = new TCanvas(NOME, NOME, 200,10,700,500);
+          TH1D* proiezione_BE_NS = res_be_NS->ProjectionY(NOME,i,i);
+//           resolution_be_NS->GetXaxis()->SetTitle("Mass resolution");
+//           resolution_be_NS->GetYaxis()->SetTitle("entries");
+//           resolution_be_NS->SetTitle("Z' Mass Res (Z' mass function) - GEM");
+//           MEAN_PT.push_back(resolution_be_NS->GetMean());
+//           RMS_PT.push_back(resolution_be_NS->GetRMS());
+//           MIN = MEAN_PT.at(i-1) - 1.5 * RMS_PT.at(i-1);
+//           MAX = MEAN_PT.at(i-1) + 1.5 * RMS_PT.at(i-1);
+
+	 	fit_min = proiezione_BE_NS->GetMean() - 2.0*proiezione_BE_NS->GetRMS();
+	 	fit_max = proiezione_BE_NS->GetMean() + 1.7*proiezione_BE_NS->GetRMS();
+	 	TF1 *gaus = new TF1("gaus","gaus",fit_min,fit_max);
+	 	gaus->SetParameters(0, proiezione_BE_NS->GetMean(), proiezione_BE_NS->GetRMS());
+	    proiezione_BE_NS->Fit("gaus","M0R+");
+    
+	    TF1* f1 = new  TF1("cruijff", "cruijff", fit_min,fit_max, 5);
+	    f1->SetParameters(gaus->GetParameter(0), gaus->GetParameter(1), gaus->GetParameter(2), 0., 0.);// #15, 0.001);             
+	    f1->SetParNames("Constant","Mean","Sigma","AlphaL","AlphaR");
+	    f1->SetLineColor(kBlue);
+	    f1->SetLineWidth(2);
+	    proiezione_BE_NS->Fit("cruijff","MR+"); 
+	    TString title = Form("BE: Mass resolution for %.0f < m_{ll} <%.0f", MASS_BINS[i-1], MASS_BINS[i]);
+// 	    proiezione_BE_NS->SetTitle(title);
+// 	    proiezione_BE_NS->GetXaxis()->SetTitle("Reco / Gen - 1");
+    
+		resolution_be_NS->SetBinContent(i, f1->GetParameter(2));
+		resolution_be_NS->SetBinError(i, f1->GetParError(2));
+
+		mean_be_NS->SetBinContent(i, f1->GetParameter(1));
+		mean_be_NS->SetBinError(i, f1->GetParError(1));
+	
+		BE_NS[i-1] = f1->GetParameter(2);
+		BE_NS_err[i-1] = f1->GetParError(2);
+		
+		std::cout<<" ---------------------------------------------------------------------------- BE NO SCALE"<<MASS_BINS[i-1]<<" "<<MASS_BINS[i]<<"      "<<f1->GetParameter(2)<<std::endl;
+		
+//           PT_GEM.push_back(res_be_NS->GetXaxis()->GetBinCenter(i));
+//           PT_ERR_GEM.push_back((MASS_BINS[i]-MASS_BINS[i-1])/2);
+
+        if(i==1)
+              canvas->Print("./MassScale/MC/BE_NS.pdf[");
+
+        canvas->Print("./MassScale/MC/BE_NS.pdf");
+
+        if(i==res_be_NS->GetNbinsX())
+              canvas->Print("./MassScale/MC/BE_NS.pdf]");
+
+        canvas->Write();
+
+      }
+
+    for(int i=1; i <= res_be_S->GetNbinsX(); i++){
+
+          NOME = Form("Mass Resolution: %.0f < mass < %.0f", MASS_BINS[i-1], MASS_BINS[i]);
+          TCanvas *canvas = new TCanvas(NOME, NOME, 200,10,700,500);
+          TH1D* proiezione_BE_S = res_be_S->ProjectionY(NOME,i,i);
+//           resolution_be_S->GetXaxis()->SetTitle("Mass resolution");
+//           resolution_be_S->GetYaxis()->SetTitle("entries");
+//           resolution_be_S->SetTitle("Z' Mass Res (Z' mass function) - GEM");
+//           MEAN_PT.push_back(resolution_be_S->GetMean());
+//           RMS_PT.push_back(resolution_be_S->GetRMS());
+//           MIN = MEAN_PT.at(i-1) - 1.5 * RMS_PT.at(i-1);
+//           MAX = MEAN_PT.at(i-1) + 1.5 * RMS_PT.at(i-1);
+
+	 	fit_min = proiezione_BE_S->GetMean() - 2.0*proiezione_BE_S->GetRMS();
+	 	fit_max = proiezione_BE_S->GetMean() + 1.7*proiezione_BE_S->GetRMS();
+	 	TF1 *gaus = new TF1("gaus","gaus",fit_min,fit_max);
+	 	gaus->SetParameters(0, proiezione_BE_S->GetMean(), proiezione_BE_S->GetRMS());
+	    proiezione_BE_S->Fit("gaus","M0R+");
+    
+	    TF1* f1 = new  TF1("cruijff", "cruijff", fit_min,fit_max, 5);
+	    f1->SetParameters(gaus->GetParameter(0), gaus->GetParameter(1), gaus->GetParameter(2), 0., 0.);// #15, 0.001);             
+	    f1->SetParNames("Constant","Mean","Sigma","AlphaL","AlphaR");
+	    f1->SetLineColor(kBlue);
+	    f1->SetLineWidth(2);
+	    proiezione_BE_S->Fit("cruijff","MR+"); 
+	    TString title = Form("BE: Mass resolution for %.0f < m_{ll} <%.0f", MASS_BINS[i-1], MASS_BINS[i]);
+// 	    proiezione_BE_S->SetTitle(title);
+// 	    proiezione_BE_S->GetXaxis()->SetTitle("Reco / Gen - 1");
+    
+		resolution_be_S->SetBinContent(i, f1->GetParameter(2));
+		resolution_be_S->SetBinError(i, f1->GetParError(2));
+
+		mean_be_S->SetBinContent(i, f1->GetParameter(1));
+		mean_be_S->SetBinError(i, f1->GetParError(1));
+	
+		BE_S[i-1] = f1->GetParameter(2);
+		BE_S_err[i-1] = f1->GetParError(2);
+		
+		std::cout<<" ---------------------------------------------------------------------------- BE NO SCALE"<<MASS_BINS[i-1]<<" "<<MASS_BINS[i]<<"      "<<f1->GetParameter(2)<<std::endl;
+		
+//           PT_GEM.push_back(res_be_S->GetXaxis()->GetBinCenter(i));
+//           PT_ERR_GEM.push_back((MASS_BINS[i]-MASS_BINS[i-1])/2);
+
+        if(i==1)
+              canvas->Print("./MassScale/MC/BE_S.pdf[");
+
+        canvas->Print("./MassScale/MC/BE_S.pdf");
+
+        if(i==res_be_S->GetNbinsX())
+              canvas->Print("./MassScale/MC/BE_S.pdf]");
+
+        canvas->Write();
+
+      }
+
+
+
+/*
     for(int i=1; i <= res_bb_S->GetNbinsX(); i++){
 //           cout<<" ---------------------------------------------------------------------------- "<<i<<endl;
           NOME = Form("Mass Resolution: %.0f < mass < %.0f", MASS_BINS[i-1], MASS_BINS[i]);
@@ -668,8 +772,7 @@ gROOT->SetBatch();
           canvas->Write();
 
       }
-      
-      
+            
     for(int i=1; i <= res_be_NS->GetNbinsX(); i++){
 //           cout<<" ---------------------------------------------------------------------------- "<<i<<endl;
           NOME = Form("Mass Resolution: %.0f < mass < %.0f", MASS_BINS[i-1], MASS_BINS[i]);
@@ -752,11 +855,13 @@ gROOT->SetBatch();
           canvas->Write();
 
       }     
+*/
 
 
 	Double_t MASS_BINS_err[15] = {0};
 	MASS_BIN[0] = 50;
 	for(int i = 1; i < 16; i++){
+			MASS_BIN[i] = (MASS_BINS[i+1] + MASS_BINS[i]) / 2;
 			MASS_BINS_err[i-1] = (MASS_BINS[i] - MASS_BINS[i-1])/2;
 // 			std::cout<<MASS_BINS_err[i]<<std::endl;
 	}
@@ -766,7 +871,7 @@ gROOT->SetBatch();
 		BB[i] = BB_S[i] / BB_NS[i] - 1;
 		BE[i] = BE_S[i] / BE_NS[i] - 1;
 // 		if(i < 14)
-			std::cout<<i<<"   centro = "<<MASS_BIN[i]<<"   estremi ="<<MASS_BINS[i]<<" "<<MASS_BINS[i+1]<<" errore = "<<MASS_BINS_err[i]<<std::endl;
+			std::cout<<i<<"   centro = "<<MASS_BIN[i]<<"   estremi ="<<MASS_BINS[i]-MASS_BINS_err[i]<<" "<<MASS_BINS[i]+MASS_BINS_err[i]<<" errore = "<<MASS_BINS_err[i]<<std::endl;
 		std::cout<<i<<"  "<<BB_S[i]<<"   "<<BB_NS[i]<<"  "<<BB[i]<<std::endl;
 		std::cout<<i<<"  "<<BE_S[i]<<"   "<<BE_NS[i]<<"  "<<BE[i]<<std::endl;
 		
@@ -813,7 +918,7 @@ gROOT->SetBatch();
 	pad2->SetGridx();
 	pad2->Draw(); 	
  	pad2->cd();
-	gr_bb = new TGraphErrors(15, MASS_BIN, BB, MASS_BINS_err, BB_err);
+	TGraphErrors* gr_bb = new TGraphErrors(15, MASS_BIN, BB, MASS_BINS_err, BB_err);
 // 	gr_bb->SetTitle("Ratio: NoScale / Scale - BB");
 	gr_bb->SetTitle(" ");
 	gr_bb->SetMarkerStyle(21);
@@ -871,7 +976,7 @@ gROOT->SetBatch();
 	pad22->SetGridx();
 	pad22->Draw(); 	
  	pad22->cd();
-	gr_be = new TGraphErrors(15, MASS_BIN, BE, MASS_BINS_err, BE_err);
+	TGraphErrors* gr_be = new TGraphErrors(15, MASS_BIN, BE, MASS_BINS_err, BE_err);
 // 	gr_be->SetTitle("Ratio: NoScale / Scale - BE");
 	gr_be->SetTitle(" ");
 	gr_be->SetMarkerStyle(21);

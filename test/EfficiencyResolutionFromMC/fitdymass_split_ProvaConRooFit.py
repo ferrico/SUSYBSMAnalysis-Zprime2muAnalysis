@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os
+from ROOT import * 
 from SUSYBSMAnalysis.Zprime2muAnalysis.roottools import *
 set_zp2mu_style()
 ROOT.gStyle.SetPadTopMargin(0.02)
@@ -11,9 +12,9 @@ ROOT.TH1.AddDirectory(0)
 # ROOT.gStyle.SetOptStat(0)
 ROOT.gStyle.SetOptFit(111)
 
-# variable = 'DimuonMassVertexConstrained'
-# variable = 'DimuonMassVertexConstrained_bb'
-variable = 'DimuonMassVertexConstrained_be'
+# variable = 'mass'
+variable = 'BB_mass'
+# variable = 'BE_mass'
 
 low = fitlow = 150
 high = fithigh = 5000
@@ -27,85 +28,18 @@ int_lumi = 41903.837
 rebin = 40
 use_non_dy = True
 
-# Masses = [50, 120, 200, 400, 800, 1400, 2300, 3500, 4500]
-
-
-masses  = ['dy50to120', 'dy120to200', 'dy200to400', 'dy400to800', 'dy800to1400', 'dy1400to2300', 'dy2300to3500', 'dy3500to4500', 'dy4500to6000']
-nevents = [2961000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000]
-#sigmas  = [  1915.,  12.2,  1.53, 0.0462, 0.00586, 0.00194, 1.70e-4, 2.21e-5] # in pb, PYTHIA*1.3
-sigmas  = [2112.905, 20.553, 2.8861, 0.25126, 0.017075, 1.366E-3, 8.178E-5, 3.191E-6, 2.787E-7]
-weights = [int_lumi / nev * sig for nev,sig in zip(nevents, sigmas)]
-#weights = [x/weights[-1] for x in weights]
-
-hists = []
-hists_dir = '/eos/user/f/ferrico/LXPLUS/ROOT_FILE_2017/MC/'
-for m,w in zip(masses, weights):
-    fn = 'ana_datamc_%s.root' % m #if m != 20 else 'ana_datamc_zmumu.root'
-    fn = hists_dir + fn
-    f = ROOT.TFile(fn)
-    d = f.Our2016MuonsPlusMuonsMinusHistos
-    h = d.Get(variable).Clone('%s' % m)
-    h.Rebin(rebin)
-    h.GetXaxis().SetRangeUser(low, high)
-    print m,w
-    h.Scale(w)
-    h.Draw()
-    ps.save('rawmass%s' % m)
-    hists.append(h)
- 
-if use_non_dy:
-    from SUSYBSMAnalysis.Zprime2muAnalysis.MCSamples import *
-    non_dy_samples = [		
-    						WW,
-    						WZ,
-    						ZZ,
-    						ttbar,
-    						Wantitop, tW
-    				]    						
-#     						WWinclusive, WW200to600, WW600to1200, WW1200to2500, WW2500, 
-#     						WZ_skim,
-# 							ZZ_skim,
-#     						WZ_ext, 
-#     						ZZ_ext_skim,
-#     						Wantitop, tW, 
-#     						Wjets, 
-#     						ttbar_lep50to500, 
-# 							ttbar_lep_500to800, 
-# 							ttbar_lep_800to1200, 
-# 							ttbar_lep_1200to1800, 
-# 							ttbar_lep1800toInf,
-# 							#     						qcd50to80, 
-#     						qcd80to120, qcd120to170, 
-#     						qcd170to300, 
-#     						qcd300to470, qcd470to600, qcd600to800, qcd800to1000, qcd1000to1400, 
-#     						qcd1400to1800, qcd1800to2400, qcd2400to3200, qcd3200, 
-#     						dyInclusive50
-#     						]
-    for sample in non_dy_samples:
-        fn = 'ana_datamc_%s.root' % sample.name
-        fn = hists_dir + fn
-        f = ROOT.TFile(fn)
-        d = f.Our2016MuonsPlusMuonsMinusHistos
-
-        w = sample.partial_weight * int_lumi
-        h = d.Get(variable).Clone('%s' % sample.name)
-        h.Rebin(rebin)
-        h.GetXaxis().SetRangeUser(low, high)
-        h.Scale(w)
-        h.Draw()
-        ps.save('rawmass_%s' % sample.name)
-        print sample.name, w
-        hists.append(h)
-  
-  
-htot = hists[0].Clone()
-
-for j in xrange(1, len(hists)):
-    htot.Add(hists[j])
+fn = '../DataMCSpectraComparison/MassDistributionForFit.root'
+f = ROOT.TFile(fn)
+htot = d.Get(variable).Clone()
 
 htot.SetTitle('')
 htot.GetXaxis().SetTitle('reconstructed m(#mu^{+}#mu^{-}) (GeV)')
 htot.GetYaxis().SetTitle('Events/%i GeV/%.1f fb^{-1}' % (rebin, int_lumi/1000)) # assumes original started out with 1 GeV bins, and the xsec is in pb-1.
+
+# bb = ROOT.TFile("./BB_distribution.root", "RECREATE")
+# bb.Open()
+# htot.Write()
+# bb.Close()
 
 htot.Draw()
     
@@ -115,6 +49,24 @@ def fit_it(lo, hi):
 
     htot.Draw()
     ps.c.Update()
+    
+#     RooRealVar x("x","x",150,5500)
+#     RooDataHist MC_mass(htot->GetName(),htot->GetTitle(),RooArgSet(x),RooFit::Import(*htot, kFALSE))
+
+# 	  RooRealVar aL("aL","aL",	24, 19, 29);
+# 	  RooRealVar bL("bL","bL",	-2E-3, -2E-2, -2E-4);
+# 	  RooRealVar cL("cL","cL",	-1E-7, -7, -2E-7);
+# 	  RooRealVar kL("kL","kL",	-3.5, -7, 0);
+# 	  RooRealVar aH("aH","aH",	24, 19, 29);
+# 	  RooRealVar bH("bH", "bH",	-2E-3, -2E-2, -2E-4);
+# 	  RooRealVar cH("cH","cH",	-1E-7, -7, -2E-7);
+# 	  RooRealVar dH("dH", "dH",	-1E-10, -1E-11, -1E-9);
+# 	  RooRealVar eH("eH", "eH",	-3.5, -7, 0);
+# 	  
+# 	  RooGenericPdf g("g","g", "(x <= 500)*(exp([0] + [1]*x + [2]*x*x)*x**([3])) + \
+#     					   (x> 500)*(exp([4] + [5]*x + [6]*x*x + [7]*x*x*x)*x**([8]))",RooArgSet(x,aL,bL,cL,kL, aH, bH, cH, dH, kH)); 
+# 	  g.fitTo(MC_mass);
+    					   
 
 #     fcn = ROOT.TF1("fcn", "(x<=500)*(exp([0] + [1]*x + [2]*x*x)*x**([3])) + \
 #     						(x>500)*(exp([4] + [5]*x + [6]*x*x)*x**([7]))", lo, hi)

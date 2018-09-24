@@ -13,14 +13,16 @@ ROOT.gStyle.SetOptFit(111)
 
 # variable = 'DimuonMassVertexConstrained'
 # variable = 'DimuonMassVertexConstrained_bb'
-variable = 'DimuonMassVertexConstrained_be'
+# variable = 'DimuonMassVertexConstrained_be'
+
+
+variables = ['mass', 'BB_mass', 'BE_mass']
 
 low = fitlow = 150
 high = fithigh = 5000
 high_for_data = 2500
 
 # ps = plot_saver('plots/fitdymass/split'+ variable)
-ps = plot_saver('plots/'+ variable)
 
 
 int_lumi = 41903.837
@@ -39,79 +41,19 @@ weights = [int_lumi / nev * sig for nev,sig in zip(nevents, sigmas)]
 
 hists = []
 hists_dir = '/eos/user/f/ferrico/LXPLUS/ROOT_FILE_2017/MC/'
-for m,w in zip(masses, weights):
-    fn = 'ana_datamc_%s.root' % m #if m != 20 else 'ana_datamc_zmumu.root'
-    fn = hists_dir + fn
-    f = ROOT.TFile(fn)
-    d = f.Our2016MuonsPlusMuonsMinusHistos
-    h = d.Get(variable).Clone('%s' % m)
-    h.Rebin(rebin)
-    h.GetXaxis().SetRangeUser(low, high)
-    print m,w
-    h.Scale(w)
-    h.Draw()
-    ps.save('rawmass%s' % m)
-    hists.append(h)
- 
-if use_non_dy:
-    from SUSYBSMAnalysis.Zprime2muAnalysis.MCSamples import *
-    non_dy_samples = [		
-    						WW,
-    						WZ,
-    						ZZ,
-    						ttbar,
-    						Wantitop, tW
-    				]    						
-#     						WWinclusive, WW200to600, WW600to1200, WW1200to2500, WW2500, 
-#     						WZ_skim,
-# 							ZZ_skim,
-#     						WZ_ext, 
-#     						ZZ_ext_skim,
-#     						Wantitop, tW, 
-#     						Wjets, 
-#     						ttbar_lep50to500, 
-# 							ttbar_lep_500to800, 
-# 							ttbar_lep_800to1200, 
-# 							ttbar_lep_1200to1800, 
-# 							ttbar_lep1800toInf,
-# 							#     						qcd50to80, 
-#     						qcd80to120, qcd120to170, 
-#     						qcd170to300, 
-#     						qcd300to470, qcd470to600, qcd600to800, qcd800to1000, qcd1000to1400, 
-#     						qcd1400to1800, qcd1800to2400, qcd2400to3200, qcd3200, 
-#     						dyInclusive50
-#     						]
-    for sample in non_dy_samples:
-        fn = 'ana_datamc_%s.root' % sample.name
-        fn = hists_dir + fn
-        f = ROOT.TFile(fn)
-        d = f.Our2016MuonsPlusMuonsMinusHistos
 
-        w = sample.partial_weight * int_lumi
-        h = d.Get(variable).Clone('%s' % sample.name)
-        h.Rebin(rebin)
-        h.GetXaxis().SetRangeUser(low, high)
-        h.Scale(w)
-        h.Draw()
-        ps.save('rawmass_%s' % sample.name)
-        print sample.name, w
-        hists.append(h)
-  
-  
-htot = hists[0].Clone()
-
-for j in xrange(1, len(hists)):
-    htot.Add(hists[j])
-
-htot.SetTitle('')
-htot.GetXaxis().SetTitle('reconstructed m(#mu^{+}#mu^{-}) (GeV)')
-htot.GetYaxis().SetTitle('Events/%i GeV/%.1f fb^{-1}' % (rebin, int_lumi/1000)) # assumes original started out with 1 GeV bins, and the xsec is in pb-1.
-
-htot.Draw()
     
-def fit_it(lo, hi):
+def fit_it(lo, hi, variable):
     
     print " ----------------------------------------------------------------------------------====================== INIZIO "
+
+    fn = '../DataMCSpectraComparison/MassDistributionForFit.root'
+    f = ROOT.TFile(fn)
+    htot = f.Get(variable).Clone()
+    htot.Rebin(rebin)
+    htot.SetTitle('')
+    htot.GetXaxis().SetTitle('reconstructed m(#mu^{+}#mu^{-}) (GeV)')
+    htot.GetYaxis().SetTitle('Events/%i GeV/%.1f fb^{-1}' % (rebin, int_lumi/1000)) # assumes original started out with 1 GeV bins, and the xsec is in pb-1.    
 
     htot.Draw()
     ps.c.Update()
@@ -123,7 +65,19 @@ def fit_it(lo, hi):
     fcn = ROOT.TF1("fcn", "(x <= 500)*(exp([0] + [1]*x + [2]*x*x)*x**([3])) + \
     					   (x> 500)*(exp([4] + [5]*x + [6]*x*x + [7]*x*x*x)*x**([8]))", lo, hi)
     fcn.SetParNames("aL", "bL", "cL", "kL", "aH", "bH", "cH", "dH", "kH")
-    fcn.SetParameters(24, -2E-3, -1E-7, -3.5, 24, -2E-3, -1E-7, -1E-10, -3.5)
+#     fcn.SetParLimits(0, 20, 25)
+#     fcn.SetParLimits(1, -2E-2, -2E-4)    
+#     fcn.SetParLimits(2, -1E-5, -1E-7) 
+#     fcn.SetParLimits(3, -10.5, -0.35) 
+#     fcn.SetParLimits(4, 10, 39)
+#     fcn.SetParLimits(5, -2E-3, -2E-6)    
+#     fcn.SetParLimits(6, -1E-6, -1E-10) 
+#     fcn.SetParLimits(7, -1E-10, -1E-15) 
+#     fcn.SetParLimits(8, -10.5, -0.35) 
+    fcn.SetParameters(30, -2E-3, -1E-7, -3.5, 30, -2E-3, -1E-7, -1E-10, -3.5)
+    
+    if 'BB' in variable:
+    	fcn.SetParameters(10, -2E-3, -1E-7, -3.5, 10, -2E-3, -1E-7, -1E-10, -3.5)
 
 
 
@@ -307,11 +261,14 @@ def fit_it(lo, hi):
 # l = [60, 120, 140, 160, 200]
 l = [150]
 for lo in l:
-    print " ----------------------------------------------------------------------------------->>>>>>>>>>>>>>>>>>>>> %d " %lo
-    fit_it(lo, high)
+	for variable in variables:
+		ps = plot_saver('plots/'+ variable)
+		print " ----------------------------------------------------------------------------------->>>>>>>>>>>>>>>>>>>>> %s " %variable
+		print " ----------------------------------------------------------------------------------->>>>>>>>>>>>>>>>>>>>> %d " %lo
+		fit_it(lo, high, variable)
     
-print " ------------------------------------------------------------------------- Passo al Draw "
-print variable, high
+# print " ------------------------------------------------------------------------- Passo al Draw "
+# print variable, high
 #fit_it(400,2000)
 
 # Take different Drell-Yan mass spectra and plot them overlayed,

@@ -30,14 +30,14 @@ void DimuonMassRes_check_v3(){
 
 gStyle->SetPadTickX(1);
 gStyle->SetPadTickY(1);
-gStyle->SetOptStat(0);
+// gStyle->SetOptStat(0);
 gStyle->SetOptFit(0);
-gStyle->SetLegendTextSize(0.03);
+gStyle->SetLegendTextSize(0.0275);
 
 gROOT->LoadMacro("cruijff.C+");
 
-gROOT->Reset();
-gROOT->SetBatch();
+// gROOT->Reset();
+// gROOT->SetBatch();
 
 // 	    Double_t MASS_BINS[] = {120, 200, 300, 400, 600, 800, 1000, 1300, 1600, 2000, 2500, 3100, 3800, 4500, 5500};
 		Double_t MASS_BINS[] = {50, 120, 200, 400, 800, 1400, 2300, 3500, 4500, 6000};
@@ -148,6 +148,7 @@ gROOT->SetBatch();
   float lep_dB[2];
   float lep_sumPt[2];
   float lep_triggerMatchPt[2];
+  short lep_TuneP_numberOfValidMuonHits[2];
   short lep_glb_numberOfValidTrackerLayers[2]; 
   short lep_glb_numberOfValidPixelHits[2];
   short lep_glb_numberOfValidMuonHits[2];
@@ -196,6 +197,8 @@ gROOT->SetBatch();
 	float count_event[9] = {0};
 	float count_event_BB[9] = {0};
 	float count_event_BE[9] = {0};
+	float count_event_OVER[9] = {0};
+	float count_event_EE[9] = {0};
 
 			
 	for(int i = 0; i < 39; i++){
@@ -225,41 +228,41 @@ gROOT->SetBatch();
 
 	TH1F *res = new TH1F("Resolution", "Resolution", binnum, MASS_BINS);
 	res->GetXaxis()->SetTitle("m(#mu^{+}#mu^{-}) [GeV]");
-// 	res->GetYaxis()->SetTitle("Entries"); 
+	res->GetYaxis()->SetTitle("#sigma"); 
 	res->SetTitle("Mass residuals");
 	TH1F *res_bb = new TH1F("Resolution BB", "Resolution BB", binnum, MASS_BINS);
 	res_bb->GetXaxis()->SetTitle("m(#mu^{+}#mu^{-}) [GeV]");
-// 	res_bb->GetYaxis()->SetTitle("Entries"); 
+	res_bb->GetYaxis()->SetTitle("#sigma"); 
 	res_bb->SetTitle("BB mass residuals");
 	TH1F *res_be = new TH1F("Resolution BE", "Resolution BE", binnum, MASS_BINS);
 	res_be->GetXaxis()->SetTitle("m(#mu^{+}#mu^{-}) [GeV]");
-// 	res_be->GetYaxis()->SetTitle("Entries"); 
+	res_be->GetYaxis()->SetTitle("#sigma"); 
 	res_be->SetTitle("BE mass residuals");
 	TH1F *res_ee = new TH1F("Resolution EE", "Resolution EE", binnum, MASS_BINS);
 	res_ee->GetXaxis()->SetTitle("m(#mu^{+}#mu^{-}) [GeV]");
-// 	res_ee->GetYaxis()->SetTitle("Entries"); 
+	res_ee->GetYaxis()->SetTitle("#sigma"); 
 	res_ee->SetTitle("EE mass residuals");
 	TH1F *res_over = new TH1F("Resolution OVER", "Resolution OVER", binnum, MASS_BINS);
 	res_over->GetXaxis()->SetTitle("m(#mu^{+}#mu^{-}) [GeV]");
-// 	res_over->GetYaxis()->SetTitle("Entries"); 
+	res_over->GetYaxis()->SetTitle("#sigma"); 
 	res_over->SetTitle("OVER mass residuals");
 	
 	
 	TH1F *Pt_res_bb = new TH1F("Resolution BB", "Resolution BB", pt_binnum, PT_BINS);
 	Pt_res_bb->GetXaxis()->SetTitle("p_{T} [GeV]");
-// 	Pt_res_bb->GetYaxis()->SetTitle("Entries"); 
+	Pt_res_bb->GetYaxis()->SetTitle("#sigma"); 
 	Pt_res_bb->SetTitle("BB mass residuals");
 	TH1F *Pt_res_be = new TH1F("Resolution BE", "Resolution BE", pt_binnum, PT_BINS);
 	Pt_res_be->GetXaxis()->SetTitle("p_{T} [GeV]");
-// 	Pt_res_be->GetYaxis()->SetTitle("Entries"); 
+	Pt_res_be->GetYaxis()->SetTitle("#sigma"); 
 	Pt_res_be->SetTitle("BE mass residuals");
 	TH1F *Pt_res_ee = new TH1F("Resolution EE", "Resolution EE", pt_binnum, PT_BINS);
 	Pt_res_ee->GetXaxis()->SetTitle("p_{T} [GeV]");
-// 	Pt_res_ee->GetYaxis()->SetTitle("Entries"); 
+	Pt_res_ee->GetYaxis()->SetTitle("#sigma"); 
 	Pt_res_ee->SetTitle("EE mass residuals");
 	TH1F *Pt_res_over = new TH1F("Resolution OVER", "Resolution OVER", pt_binnum, PT_BINS);
 	Pt_res_over->GetXaxis()->SetTitle("p_{T} [GeV]");
-// 	Pt_res_over->GetYaxis()->SetTitle("Entries"); 
+	Pt_res_over->GetYaxis()->SetTitle("#sigma"); 
 	Pt_res_over->SetTitle("OVER mass residuals");
 	
   for(int j=30; j < 39; j++){   
@@ -285,6 +288,7 @@ gROOT->SetBatch();
      treeMC->SetBranchAddress("lep_triggerMatchPt",lep_triggerMatchPt);
      treeMC->SetBranchAddress("lep_isTrackerMuon",lep_isTrackerMuon);
      treeMC->SetBranchAddress("lep_isGlobalMuon",lep_isGlobalMuon);
+     treeMC->SetBranchAddress("lep_TuneP_numberOfValidMuonHits",lep_TuneP_numberOfValidMuonHits);	
      treeMC->SetBranchAddress("lep_numberOfMatchedStations",lep_numberOfMatchedStations);
      treeMC->SetBranchAddress("lep_glb_numberOfValidMuonHits",lep_glb_numberOfValidMuonHits);
      treeMC->SetBranchAddress("lep_glb_numberOfValidPixelHits",lep_glb_numberOfValidPixelHits);
@@ -338,7 +342,9 @@ int be_check = 0;
 			lep_isGlobalMuon[0]==1 && lep_isGlobalMuon[1]==1 && 
 			fabs(lep_dB[0]) < 0.2 && fabs(lep_dB[1]) < 0.2 && 
 			( lep_numberOfMatchedStations[0] > 1 || (lep_numberOfMatchedStations[0] == 1 && !(lep_stationMask[0] == 1 || lep_stationMask[0] == 16)) || (lep_numberOfMatchedStations[0] == 1 && (lep_stationMask[0] == 1 || lep_stationMask[0] == 16) && lep_numberOfMatchedRPCLayers[0] > 2))  && (lep_numberOfMatchedStations[1] > 1 || (lep_numberOfMatchedStations[1] == 1 && !(lep_stationMask[1] == 1 || lep_stationMask[1] == 16)) || (lep_numberOfMatchedStations[1] == 1 && (lep_stationMask[1] == 1 || lep_stationMask[1] == 16) && lep_numberOfMatchedRPCLayers[1] > 2)) && 
-			lep_glb_numberOfValidMuonHits[0]>0 && lep_glb_numberOfValidMuonHits[1]>0 && 
+			(lep_glb_numberOfValidMuonHits[0]>0 && lep_glb_numberOfValidMuonHits[1]>0) &&
+// 			((lep_glb_numberOfValidMuonHits[0]>0 && lep_glb_numberOfValidMuonHits[1]>0) ||
+// 			(lep_TuneP_numberOfValidMuonHits[0]>0 && lep_TuneP_numberOfValidMuonHits[1]>0)) &&
 			lep_glb_numberOfValidPixelHits[0]>=1 && lep_glb_numberOfValidPixelHits[1]>=1 && 
 			lep_glb_numberOfValidTrackerLayers[0]>5 && lep_glb_numberOfValidTrackerLayers[1]>5 && 
 			lep_sumPt[0]/lep_tk_pt[0]<0.10 && lep_sumPt[1]/lep_tk_pt[1]<0.10 && 
@@ -365,18 +371,18 @@ int be_check = 0;
 // 			lep_2.SetPtEtaPhiM(lep_dyt_pt[1], lep_dyt_eta[1], lep_dyt_phi[1], 0.105);
 			ZPrime = lep_1 + lep_2;
 
-			mass 		 = ZPrime.M(); // resolution using Tracker track		
-// 			mass         = dil_mass; //vertex_m
+// 			mass 		 = ZPrime.M(); // resolution using Tracker track		
+			mass         = dil_mass; //vertex_m
 
 			rdil    = mass    /gen_dil_mass     - 1;
 			DileptonMassResVMass_2d   ->Fill(gen_dil_mass,     rdil, weight[j]);
 
 		  if (fabs(gen_lep_eta[0]) < 0.9 && fabs(gen_lep_eta[1]) < 0.9){ 
 		  	DileptonMassResVMass_2d_BB->Fill(gen_dil_mass,     rdil, weight[j]);
-// 		  	LeptonPtResVPt_2d_BB->Fill(gen_lep_pt[0], lep_pt[0]    /gen_lep_pt[0]     - 1);			
-// 		  	LeptonPtResVPt_2d_BB->Fill(gen_lep_pt[1], lep_pt[1]    /gen_lep_pt[1]     - 1);	
-		  	LeptonPtResVPt_2d_BB->Fill(gen_lep_pt[0], lep_tk_pt[0]    /gen_lep_pt[0]     - 1);			
-		  	LeptonPtResVPt_2d_BB->Fill(gen_lep_pt[1], lep_tk_pt[1]    /gen_lep_pt[1]     - 1);	
+		  	LeptonPtResVPt_2d_BB->Fill(gen_lep_pt[0], lep_pt[0]    /gen_lep_pt[0]     - 1);			
+		  	LeptonPtResVPt_2d_BB->Fill(gen_lep_pt[1], lep_pt[1]    /gen_lep_pt[1]     - 1);	
+// 		  	LeptonPtResVaPt_2d_BB->Fill(gen_lep_pt[0], lep_tk_pt[0]    /gen_lep_pt[0]     - 1);			
+// 		  	LeptonPtResVPt_2d_BB->Fill(gen_lep_pt[1], lep_tk_pt[1]    /gen_lep_pt[1]     - 1);	
 // 		  	LeptonPtResVPt_2d_BB->Fill(gen_lep_pt[0], lep_std_pt[0]    /gen_lep_pt[0]     - 1);			
 // 		  	LeptonPtResVPt_2d_BB->Fill(gen_lep_pt[1], lep_std_pt[1]    /gen_lep_pt[1]     - 1);	
 // 		  	LeptonPtResVPt_2d_BB->Fill(gen_lep_pt[0], lep_picky_pt[0]    /gen_lep_pt[0]     - 1);			
@@ -386,13 +392,14 @@ int be_check = 0;
 		  	bb_check = 1;	
 		  	BB_eta->Fill(fabs(lep_eta[0]));
 		  	BB_eta->Fill(fabs(lep_eta[1]));	
+			count_event_BB[j-30]++;
 		  }
 		  else if (fabs(gen_lep_eta[0]) > 1.2 && fabs(gen_lep_eta[1]) > 1.2){
 		  	DileptonMassResVMass_2d_EE->Fill(gen_dil_mass,     rdil, weight[j]);
-// 		  	LeptonPtResVPt_2d_EE->Fill(gen_lep_pt[0], lep_pt[0]    /gen_lep_pt[0]     - 1);			
-// 		  	LeptonPtResVPt_2d_EE->Fill(gen_lep_pt[1], lep_pt[1]    /gen_lep_pt[1]     - 1);	
-		  	LeptonPtResVPt_2d_EE->Fill(gen_lep_pt[0], lep_tk_pt[0]    /gen_lep_pt[0]     - 1);			
-		  	LeptonPtResVPt_2d_EE->Fill(gen_lep_pt[1], lep_tk_pt[1]    /gen_lep_pt[1]     - 1);	
+		  	LeptonPtResVPt_2d_EE->Fill(gen_lep_pt[0], lep_pt[0]    /gen_lep_pt[0]     - 1);			
+		  	LeptonPtResVPt_2d_EE->Fill(gen_lep_pt[1], lep_pt[1]    /gen_lep_pt[1]     - 1);	
+// 		  	LeptonPtResVPt_2d_EE->Fill(gen_lep_pt[0], lep_tk_pt[0]    /gen_lep_pt[0]     - 1);			
+// 		  	LeptonPtResVPt_2d_EE->Fill(gen_lep_pt[1], lep_tk_pt[1]    /gen_lep_pt[1]     - 1);	
 // 		  	LeptonPtResVPt_2d_EE->Fill(gen_lep_pt[0], lep_std_pt[0]    /gen_lep_pt[0]     - 1);			
 // 		  	LeptonPtResVPt_2d_EE->Fill(gen_lep_pt[1], lep_std_pt[1]    /gen_lep_pt[1]     - 1);	
 // 		  	LeptonPtResVPt_2d_EE->Fill(gen_lep_pt[0], lep_picky_pt[0]    /gen_lep_pt[0]     - 1);			
@@ -401,14 +408,15 @@ int be_check = 0;
 // 		  	LeptonPtResVPt_2d_EE->Fill(gen_lep_pt[1], lep_dyt_pt[1]    /gen_lep_pt[1]     - 1);	
 		  	ee_check = 1;		
 		  	EE_eta->Fill(fabs(lep_eta[0]));
-		  	EE_eta->Fill(fabs(lep_eta[1]));	
+		  	EE_eta->Fill(fabs(lep_eta[1]));
+			count_event_EE[j-30]++;
 		  }
 		  else if((fabs(gen_lep_eta[0]) > 0.9 && fabs(gen_lep_eta[0]) < 1.2) || (fabs(gen_lep_eta[1]) > 0.9 && fabs(gen_lep_eta[1]) < 1.2)){
 		  	DileptonMassResVMass_2d_OVER->Fill(gen_dil_mass,     rdil, weight[j]);
-// 		  	LeptonPtResVPt_2d_OVER->Fill(gen_lep_pt[0], lep_pt[0]    /gen_lep_pt[0]     - 1);			
-// 		  	LeptonPtResVPt_2d_OVER->Fill(gen_lep_pt[1], lep_pt[1]    /gen_lep_pt[1]     - 1);	
-		  	LeptonPtResVPt_2d_OVER->Fill(gen_lep_pt[0], lep_tk_pt[0]    /gen_lep_pt[0]     - 1);			
-		  	LeptonPtResVPt_2d_OVER->Fill(gen_lep_pt[1], lep_tk_pt[1]    /gen_lep_pt[1]     - 1);	
+		  	LeptonPtResVPt_2d_OVER->Fill(gen_lep_pt[0], lep_pt[0]    /gen_lep_pt[0]     - 1);			
+		  	LeptonPtResVPt_2d_OVER->Fill(gen_lep_pt[1], lep_pt[1]    /gen_lep_pt[1]     - 1);	
+// 		  	LeptonPtResVPt_2d_OVER->Fill(gen_lep_pt[0], lep_tk_pt[0]    /gen_lep_pt[0]     - 1);			
+// 		  	LeptonPtResVPt_2d_OVER->Fill(gen_lep_pt[1], lep_tk_pt[1]    /gen_lep_pt[1]     - 1);	
 // 		  	LeptonPtResVPt_2d_OVER->Fill(gen_lep_pt[0], lep_std_pt[0]    /gen_lep_pt[0]     - 1);			
 // 		  	LeptonPtResVPt_2d_OVER->Fill(gen_lep_pt[1], lep_std_pt[1]    /gen_lep_pt[1]     - 1);	
 // 		  	LeptonPtResVPt_2d_OVER->Fill(gen_lep_pt[0], lep_picky_pt[0]    /gen_lep_pt[0]     - 1);			
@@ -418,13 +426,14 @@ int be_check = 0;
 		  	over_check = 1;
 		  	OVER_eta->Fill(fabs(lep_eta[0]));
 		  	OVER_eta->Fill(fabs(lep_eta[1]));	
+		  	count_event_OVER[j-30]++;
 		  }
 		  else{
 		  	DileptonMassResVMass_2d_BE->Fill(gen_dil_mass,     rdil, weight[j]);
-// 		  	LeptonPtResVPt_2d_BE->Fill(gen_lep_pt[0], lep_pt[0]    /gen_lep_pt[0]     - 1);			
-// 		  	LeptonPtResVPt_2d_BE->Fill(gen_lep_pt[1], lep_pt[1]    /gen_lep_pt[1]     - 1);	
-		  	LeptonPtResVPt_2d_BE->Fill(gen_lep_pt[0], lep_tk_pt[0]    /gen_lep_pt[0]     - 1);			
-		  	LeptonPtResVPt_2d_BE->Fill(gen_lep_pt[1], lep_tk_pt[1]    /gen_lep_pt[1]     - 1);	
+		  	LeptonPtResVPt_2d_BE->Fill(gen_lep_pt[0], lep_pt[0]    /gen_lep_pt[0]     - 1);			
+		  	LeptonPtResVPt_2d_BE->Fill(gen_lep_pt[1], lep_pt[1]    /gen_lep_pt[1]     - 1);	
+// 		  	LeptonPtResVPt_2d_BE->Fill(gen_lep_pt[0], lep_tk_pt[0]    /gen_lep_pt[0]     - 1);			
+// 		  	LeptonPtResVPt_2d_BE->Fill(gen_lep_pt[1], lep_tk_pt[1]    /gen_lep_pt[1]     - 1);	
 // 		  	LeptonPtResVPt_2d_BE->Fill(gen_lep_pt[0], lep_std_pt[0]    /gen_lep_pt[0]     - 1);			
 // 		  	LeptonPtResVPt_2d_BE->Fill(gen_lep_pt[1], lep_std_pt[1]    /gen_lep_pt[1]     - 1);	
 // 		  	LeptonPtResVPt_2d_BE->Fill(gen_lep_pt[0], lep_picky_pt[0]    /gen_lep_pt[0]     - 1);			
@@ -433,7 +442,8 @@ int be_check = 0;
 // 		  	LeptonPtResVPt_2d_BE->Fill(gen_lep_pt[1], lep_dyt_pt[1]    /gen_lep_pt[1]     - 1);	
 		  	be_check = 1;
 		  	BE_eta->Fill(fabs(lep_eta[0]));
-		  	BE_eta->Fill(fabs(lep_eta[1]));	
+		  	BE_eta->Fill(fabs(lep_eta[1]));
+		  	count_event_BE[j-30]++;
 		  }
 
 			/*
@@ -466,9 +476,24 @@ bb_check = ee_check = over_check = be_check = 0;
 //  TCanvas* c4 = new TCanvas("res_EE", "res_EE", 600, 600);
 //  DileptonMassResVMass_2d_EE->Draw();
 
-//  bool save = false;
- bool save = true;
+ for(int i = 0; i < 9; i++) 
+	std::cout<<count_event[i]<<", ";
+std::cout<<""<<std::endl;	     
+ for(int i = 0; i < 9; i++) 
+	std::cout<<count_event_BB[i]<<", ";
+std::cout<<""<<std::endl;
+ for(int i = 0; i < 9; i++) 
+	std::cout<<count_event_EE[i]<<", ";
+std::cout<<""<<std::endl;
+ for(int i = 0; i < 9; i++) 
+	std::cout<<count_event_OVER[i]<<", ";
+std::cout<<""<<std::endl;
+ for(int i = 0; i < 9; i++) 
+	std::cout<<count_event_BE[i]<<", ";
+std::cout<<""<<std::endl;
 
+ bool save = false;
+//  bool save = true;
 
  for(int i = 1; i <= DileptonMassResVMass_2d_BB->GetNbinsX(); i++){
  	
@@ -504,23 +529,23 @@ bb_check = ee_check = over_check = be_check = 0;
     latexFit->SetTextFont(42);
     latexFit->SetTextSize(0.030);
 // 	TString longstring_2;
-    for(int i = 0; i < funct->GetNpar()+1; i++){
-		if(i == funct->GetNpar()){
-	    	yPos = proiezione->GetMaximum() - 5*i*proiezione->GetMaximum()/(float)100;
-    		longstring = Form("#chi^{2}/ndof = %5.3f/%d = %5.3f", funct->GetChisquare(), funct->GetNDF(), funct->GetChisquare()/(Double_t)funct->GetNDF());
-        	latexFit->DrawLatex(-0.85, yPos, longstring);
-        	continue;
-		}
-    	yPos = proiezione->GetMaximum() - 5*i*proiezione->GetMaximum()/(float)100;
-    	longstring = Form("%s = %5.3g #pm %5.3g", funct->GetParName(i),funct->GetParameter(i),funct->GetParError(i));
-        latexFit->DrawLatex(-0.85, yPos, longstring);
-    }
+//     for(int i = 0; i < funct->GetNpar()+1; i++){
+// 		if(i == funct->GetNpar()){
+// 	    	yPos = proiezione->GetMaximum() - 5*i*proiezione->GetMaximum()/(float)100;
+//     		longstring = Form("#chi^{2}/ndof = %5.3f/%d = %5.3f", funct->GetChisquare(), funct->GetNDF(), funct->GetChisquare()/(Double_t)funct->GetNDF());
+//         	latexFit->DrawLatex(-0.85, yPos, longstring);
+//         	continue;
+// 		}
+//     	yPos = proiezione->GetMaximum() - 5*i*proiezione->GetMaximum()/(float)100;
+//     	longstring = Form("%s = %5.3g #pm %5.3g", funct->GetParName(i),funct->GetParameter(i),funct->GetParError(i));
+//         latexFit->DrawLatex(-0.85, yPos, longstring);
+//     }
  	 if(save){	
  	if(i==1)
- 		canvas->Print("./Check_Resolution_Code_2017_Tracker/Split_4categorie/BB_resolution.pdf[");
-	canvas->Print("./Check_Resolution_Code_2017_Tracker/Split_4categorie/BB_resolution.pdf");
+ 		canvas->Print("./Plot_18_008/BB_resolution.pdf[");
+	canvas->Print("./Plot_18_008/BB_resolution.pdf");
  	if(i==DileptonMassResVMass_2d_BB->GetNbinsX())
- 		canvas->Print("./Check_Resolution_Code_2017_Tracker/Split_4categorie/BB_resolution.pdf]");
+ 		canvas->Print("./Plot_18_008/BB_resolution.pdf]");
     canvas->Write();
 	}
 }
@@ -572,10 +597,10 @@ bb_check = ee_check = over_check = be_check = 0;
     }
  if(save){
  	if(i==1)
- 		canvas->Print("./Check_Resolution_Code_2017_Tracker/Split_4categorie/BE_resolution.pdf[");
-	canvas->Print("./Check_Resolution_Code_2017_Tracker/Split_4categorie/BE_resolution.pdf");
+ 		canvas->Print("./Plot_18_008/BE_resolution.pdf[");
+	canvas->Print("./Plot_18_008/BE_resolution.pdf");
  	if(i==DileptonMassResVMass_2d_BE->GetNbinsX())
- 		canvas->Print("./Check_Resolution_Code_2017_Tracker/Split_4categorie/BE_resolution.pdf]");
+ 		canvas->Print("./Plot_18_008/BE_resolution.pdf]");
     canvas->Write();
 	}
 }
@@ -627,10 +652,10 @@ bb_check = ee_check = over_check = be_check = 0;
     
  if(save){	 	
  	if(i==1)
- 		canvas->Print("./Check_Resolution_Code_2017_Tracker/Split_4categorie/EE_resolution.pdf[");
-	canvas->Print("./Check_Resolution_Code_2017_Tracker/Split_4categorie/EE_resolution.pdf");
+ 		canvas->Print("./Plot_18_008/EE_resolution.pdf[");
+	canvas->Print("./Plot_18_008/EE_resolution.pdf");
  	if(i==DileptonMassResVMass_2d_EE->GetNbinsX())
- 		canvas->Print("./Check_Resolution_Code_2017_Tracker/Split_4categorie/EE_resolution.pdf]");
+ 		canvas->Print("./Plot_18_008/EE_resolution.pdf]");
     canvas->Write();
 	}
 }
@@ -682,10 +707,10 @@ bb_check = ee_check = over_check = be_check = 0;
     
  if(save){	 	
  	if(i==1)
- 		canvas->Print("./Check_Resolution_Code_2017_Tracker/Split_4categorie/OVER_resolution.pdf[");
-	canvas->Print("./Check_Resolution_Code_2017_Tracker/Split_4categorie/OVER_resolution.pdf");
+ 		canvas->Print("./Plot_18_008/OVER_resolution.pdf[");
+	canvas->Print("./Plot_18_008/OVER_resolution.pdf");
  	if(i==DileptonMassResVMass_2d_OVER->GetNbinsX())
- 		canvas->Print("./Check_Resolution_Code_2017_Tracker/Split_4categorie/OVER_resolution.pdf]");
+ 		canvas->Print("./Plot_18_008/OVER_resolution.pdf]");
     canvas->Write();
 	}
 }
@@ -697,41 +722,42 @@ bb_check = ee_check = over_check = be_check = 0;
  res_bb->SetMarkerStyle(20);
  res_bb->SetMarkerSize(0.5);
  res_bb->SetMarkerColor(kRed+1);
- res_bb->GetYaxis()->SetRangeUser(0, 0.35);
+ res_bb->GetYaxis()->SetRangeUser(0, 0.15);
  res_bb->Draw();
  res_be->SetTitle("");
  res_be->SetLineColor(kGreen+1);
  res_be->SetMarkerStyle(20);
  res_be->SetMarkerSize(0.5);
  res_be->SetMarkerColor(kGreen+1);
- res_be->GetYaxis()->SetRangeUser(0, 0.35);
+ res_be->GetYaxis()->SetRangeUser(0, 0.15);
  res_be->Draw("same");
  res_ee->SetTitle("");
  res_ee->SetLineColor(kBlue+1);
  res_ee->SetMarkerStyle(20);
  res_ee->SetMarkerSize(0.5);
  res_ee->SetMarkerColor(kBlue+1);
- res_ee->GetYaxis()->SetRangeUser(0, 0.35);
+ res_ee->GetYaxis()->SetRangeUser(0, 0.15);
  res_ee->Draw("same");
  res_over->SetTitle("");
  res_over->SetLineColor(kBlack);
  res_over->SetMarkerStyle(20);
  res_over->SetMarkerSize(0.5);
  res_over->SetMarkerColor(kBlack);
- res_over->GetYaxis()->SetRangeUser(0, 0.35);
+ res_over->GetYaxis()->SetRangeUser(0, 0.15);
  res_over->Draw("same");
- TLegend *legend_3 = new TLegend(0.2,0.7,0.85,0.85);
+ TLegend *legend_3 = new TLegend(0.15,0.7,0.88,0.85);
  legend_3->AddEntry(res_bb, "BB category: both #mu |#eta| < 0.9", "lep");
  legend_3->AddEntry(res_over,"OVERLAP category: at least one #mu 0.9 < |#eta| < 1.2", "lep");
  legend_3->AddEntry(res_ee,"EE category: both #mu |#eta| > 1.2", "lep");
  legend_3->AddEntry(res_be,"BE category", "lep");
+//  legend_3->SetBorderSize(0);
  legend_3->Draw(); 
  if(save){
- c1->Print("./Check_Resolution_Code_2017_Tracker/Split_4categorie/Resolution.png");
- c1->Print("./Check_Resolution_Code_2017_Tracker/Split_4categorie/Resolution.pdf");
+ c1->Print("./Plot_18_008/Resolution.png");
+ c1->Print("./Plot_18_008/Resolution.pdf");
 	}
 	
-	
+return;
 
 //  std::cout<<"{"<<std::endl;
 //  for(int i = 0; i < binnum; i++)
@@ -748,15 +774,7 @@ bb_check = ee_check = over_check = be_check = 0;
 //  std::cout<<"};"<<std::endl;
 
 
-//  for(int i = 0; i < 9; i++) 
-// 	std::cout<<count_event[i]<<", ";
-// std::cout<<""<<std::endl;	     
-//  for(int i = 0; i < 9; i++) 
-// 	std::cout<<count_event_BB[i]<<", ";
-// std::cout<<""<<std::endl;
-//  for(int i = 0; i < 9; i++) 
-// 	std::cout<<count_event_BE[i]<<", ";
-// std::cout<<""<<std::endl;
+
 
 
  for(int i = 1; i <= LeptonPtResVPt_2d_BB->GetNbinsX(); i++){
@@ -806,10 +824,10 @@ bb_check = ee_check = over_check = be_check = 0;
     }
  	 if(save){	
  	if(i==1)
- 		canvas->Print("./Check_Resolution_Code_2017_Tracker/Split_4categorie/LeptonPt_BB_resolution.pdf[");
-	canvas->Print("./Check_Resolution_Code_2017_Tracker/Split_4categorie/LeptonPt_BB_resolution.pdf");
+ 		canvas->Print("./Plot_18_008/LeptonPt_BB_resolution.pdf[");
+	canvas->Print("./Plot_18_008/LeptonPt_BB_resolution.pdf");
  	if(i==LeptonPtResVPt_2d_BB->GetNbinsX())
- 		canvas->Print("./Check_Resolution_Code_2017_Tracker/Split_4categorie/LeptonPt_BB_resolution.pdf]");
+ 		canvas->Print("./Plot_18_008/LeptonPt_BB_resolution.pdf]");
     canvas->Write();
 	}
 }
@@ -861,10 +879,10 @@ bb_check = ee_check = over_check = be_check = 0;
     }
  if(save){
  	if(i==1)
- 		canvas->Print("./Check_Resolution_Code_2017_Tracker/Split_4categorie/LeptonPt_BE_resolution.pdf[");
-	canvas->Print("./Check_Resolution_Code_2017_Tracker/Split_4categorie/LeptonPt_BE_resolution.pdf");
+ 		canvas->Print("./Plot_18_008/LeptonPt_BE_resolution.pdf[");
+	canvas->Print("./Plot_18_008/LeptonPt_BE_resolution.pdf");
  	if(i==LeptonPtResVPt_2d_BE->GetNbinsX())
- 		canvas->Print("./Check_Resolution_Code_2017_Tracker/Split_4categorie/LeptonPt_BE_resolution.pdf]");
+ 		canvas->Print("./Plot_18_008/LeptonPt_BE_resolution.pdf]");
     canvas->Write();
 	}
 }
@@ -916,10 +934,10 @@ bb_check = ee_check = over_check = be_check = 0;
     
  if(save){	 	
  	if(i==1)
- 		canvas->Print("./Check_Resolution_Code_2017_Tracker/Split_4categorie/LeptonPt_EE_resolution.pdf[");
-	canvas->Print("./Check_Resolution_Code_2017_Tracker/Split_4categorie/LeptonPt_EE_resolution.pdf");
+ 		canvas->Print("./Plot_18_008/LeptonPt_EE_resolution.pdf[");
+	canvas->Print("./Plot_18_008/LeptonPt_EE_resolution.pdf");
  	if(i==LeptonPtResVPt_2d_EE->GetNbinsX())
- 		canvas->Print("./Check_Resolution_Code_2017_Tracker/Split_4categorie/LeptonPt_EE_resolution.pdf]");
+ 		canvas->Print("./Plot_18_008/LeptonPt_EE_resolution.pdf]");
     canvas->Write();
 	}
 }
@@ -971,10 +989,10 @@ bb_check = ee_check = over_check = be_check = 0;
     
  if(save){	 	
  	if(i==1)
- 		canvas->Print("./Check_Resolution_Code_2017_Tracker/Split_4categorie/LeptonPt_OVER_resolution.pdf[");
-	canvas->Print("./Check_Resolution_Code_2017_Tracker/Split_4categorie/LeptonPt_OVER_resolution.pdf");
+ 		canvas->Print("./Plot_18_008/LeptonPt_OVER_resolution.pdf[");
+	canvas->Print("./Plot_18_008/LeptonPt_OVER_resolution.pdf");
  	if(i==LeptonPtResVPt_2d_OVER->GetNbinsX())
- 		canvas->Print("./Check_Resolution_Code_2017_Tracker/Split_4categorie/LeptonPt_OVER_resolution.pdf]");
+ 		canvas->Print("./Plot_18_008/LeptonPt_OVER_resolution.pdf]");
     canvas->Write();
 	}
 }
@@ -985,33 +1003,33 @@ bb_check = ee_check = over_check = be_check = 0;
  Pt_res_bb->SetMarkerStyle(20);
  Pt_res_bb->SetMarkerSize(0.5);
  Pt_res_bb->SetMarkerColor(kRed+1);
- Pt_res_bb->GetYaxis()->SetRangeUser(0, 0.35);
+ Pt_res_bb->GetYaxis()->SetRangeUser(0, 0.15);
  Pt_res_bb->Draw();
  Pt_res_be->SetTitle("");
  Pt_res_be->SetLineColor(kGreen+1);
  Pt_res_be->SetMarkerStyle(20);
  Pt_res_be->SetMarkerSize(0.5);
  Pt_res_be->SetMarkerColor(kGreen+1);
- Pt_res_be->GetYaxis()->SetRangeUser(0, 0.35);
+ Pt_res_be->GetYaxis()->SetRangeUser(0, 0.15);
  Pt_res_be->Draw("same");
  Pt_res_ee->SetTitle("");
  Pt_res_ee->SetLineColor(kBlue+1);
  Pt_res_ee->SetMarkerStyle(20);
  Pt_res_ee->SetMarkerSize(0.5);
  Pt_res_ee->SetMarkerColor(kBlue+1);
- Pt_res_ee->GetYaxis()->SetRangeUser(0, 0.35);
+ Pt_res_ee->GetYaxis()->SetRangeUser(0, 0.15);
  Pt_res_ee->Draw("same");
  Pt_res_over->SetTitle("");
  Pt_res_over->SetLineColor(kBlack);
  Pt_res_over->SetMarkerStyle(20);
  Pt_res_over->SetMarkerSize(0.5);
  Pt_res_over->SetMarkerColor(kBlack);
- Pt_res_over->GetYaxis()->SetRangeUser(0, 0.35);
+ Pt_res_over->GetYaxis()->SetRangeUser(0, 0.15);
  Pt_res_over->Draw("same");
  legend_3->Draw(); 
  if(save){
- c2->Print("./Check_Resolution_Code_2017_Tracker/Split_4categorie/LeptonPt_Resolution.pdf");
- c2->Print("./Check_Resolution_Code_2017_Tracker/Split_4categorie/LeptonPt_Resolution.png");
+ c2->Print("./Plot_18_008/LeptonPt_Resolution.pdf");
+ c2->Print("./Plot_18_008/LeptonPt_Resolution.png");
 	}
 
 

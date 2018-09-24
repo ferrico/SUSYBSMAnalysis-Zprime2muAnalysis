@@ -166,26 +166,26 @@ pat::Muon* Zprime2muLeptonProducer_miniAOD::cloneAndSwitchMuonTrack(const pat::M
   reco::Particle::LorentzVector p4;
 
   //////////   Comment following lines to apply pt bias correction /////
-   const double p = newTrack->p();  
-   p4.SetXYZT(newTrack->px(), newTrack->py(), newTrack->pz(), sqrt(p*p + mass*mass));  
+//    const double p = newTrack->p();  
+//    p4.SetXYZT(newTrack->px(), newTrack->py(), newTrack->pz(), sqrt(p*p + mass*mass));  
   //////////   Comment previous lines to apply pt bias correction ----->  Uncomment following lines /////
 
 
   
-	///////// uncomment following lines to apply pt bias correction -----> comment previous lines /////////
-//  float phi = newTrack->phi()*TMath::RadToDeg();
+	///// uncomment following lines to apply pt bias correction -----> comment previous lines /////////
+ float phi = newTrack->phi()*TMath::RadToDeg();
 
 //  float mupt = GeneralizedEndpoint().GeneralizedEndpointPt(newTrack->pt(),newTrack->charge(),newTrack->eta(),phi,-1,1); //for DATA
-//  float mupt = GeneralizedEndpoint().GeneralizedEndpointPt(newTrack->pt(),newTrack->charge(),newTrack->eta(),phi,0,1);  // for MC
+ float mupt = GeneralizedEndpoint().GeneralizedEndpointPt(newTrack->pt(),newTrack->charge(),newTrack->eta(),phi,0,1);  // for MC
 
 
-//	float px = mupt*TMath::Cos(newTrack->phi());
-//	float py = mupt*TMath::Sin(newTrack->phi());
-//	float pz = mupt*TMath::SinH(newTrack->eta());
-//	float p = mupt*TMath::CosH(newTrack->eta());
-//	p4.SetXYZT(px, py, pz, sqrt(p*p + mass*mass));
+float px = mupt*TMath::Cos(newTrack->phi());
+float py = mupt*TMath::Sin(newTrack->phi());
+float pz = mupt*TMath::SinH(newTrack->eta());
+float p = mupt*TMath::CosH(newTrack->eta());
+p4.SetXYZT(px, py, pz, sqrt(p*p + mass*mass));
 
-// 	std::cout<<"my definition = "<<mupt<<std::endl;
+	std::cout<<"my definition = "<<mupt<<std::endl;
 	/////// uncomment previous lines to apply pt bias correction /////////
 
 
