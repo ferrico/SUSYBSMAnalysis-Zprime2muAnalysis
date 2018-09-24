@@ -10,7 +10,10 @@ from SUSYBSMAnalysis.Zprime2muAnalysis.Zprime2muAnalysis_cfg import process
 from SUSYBSMAnalysis.Zprime2muAnalysis.Zprime2muAnalysis_cff import goodDataFiltersMiniAOD
 
 process.source.fileNames =[#'file:./pat.root'
-'/store/data/Run2018A/SingleMuon/MINIAOD/PromptReco-v2/000/316/239/00000/00765293-4759-E811-B89D-FA163EC3C021.root'
+'file:./pickevents.root'
+# '/store/data/Run2018B/SingleMuon/MINIAOD/PromptReco-v2/000/318/733/00000/BEAE5A42-D17B-E811-A212-02163E017F53.root'
+# '/store/data/Run2018C/SingleMuon/MINIAOD/PromptReco-v2/000/319/459/00000/4C957E16-7386-E811-A469-FA163E1DFF8B.root'
+# '/store/data/Run2018A/SingleMuon/MINIAOD/PromptReco-v2/000/316/239/00000/00765293-4759-E811-B89D-FA163EC3C021.root'
 			   ]
 process.maxEvents.input = -1
 
@@ -75,7 +78,7 @@ else:
 import SUSYBSMAnalysis.Zprime2muAnalysis.OurSelectionNew_cff as OurSelectionNew
 import SUSYBSMAnalysis.Zprime2muAnalysis.OurSelectionDec2012_cff as OurSelectionDec2012
 import SUSYBSMAnalysis.Zprime2muAnalysis.OurSelection2016_cff as OurSelection2016
-
+import SUSYBSMAnalysis.Zprime2muAnalysis.OurSelection2018_cff as OurSelection2018
 
 
 
@@ -96,9 +99,9 @@ dils = [('MuonsPlusMuonsMinus',          '%(leptons_name)s:muons@+ %(leptons_nam
 # filter somewhere below.
 cuts = {
 # 	'Our2012'  : OurSelectionDec2012,
-	'Our2016'  : OurSelection2016,
+	'Our2016'  : OurSelection2018,
 	#'OurNoIso' : OurSelectionDec2012,
-	'Simple'   : OurSelection2016, # The selection cuts in the module listed here are ignored below.
+	'Simple'   : OurSelection2018, # The selection cuts in the module listed here are ignored below.
 	#'OurMuPrescaledNew'  : OurSelectionNew,
 	#'OurMuPrescaled2012' : OurSelectionDec2012
 	}
@@ -119,7 +122,7 @@ if miniAOD and Electrons:
 		]
 	
 	cuts = {'Our2012'  : OurSelectionDec2012,
-		'Our2016'  : OurSelection2016,
+		'Our2016'  : OurSelection2018,
 		'EmuVeto'  : OurSelectionDec2012, # this switches on the dRMuEl veto
 		'Simple'   : OurSelectionDec2012, # The selection cuts in the module listed here are ignored below.
 		}
