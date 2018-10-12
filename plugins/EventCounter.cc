@@ -66,8 +66,8 @@ EventCounter::EventCounter(const edm::ParameterSet& iConfig):
  count_[name] = fs->make<TH1F>(name.c_str() , name.c_str() , 2 , 0.5 ,  2.5);
  count_[name]->GetXaxis()->SetBinLabel(1, "Events");
  name = "weights";
- count_[name] = fs->make<TH1F>(name.c_str() , name.c_str() , 2 , -1.5 ,  1.5);
- count_[name]->GetXaxis()->SetBinLabel(1, "weights");
+ count_[name] = fs->make<TH1F>(name.c_str() , name.c_str() , 50000 , -25000 ,  25000);
+//  count_[name]->GetXaxis()->SetBinLabel(1, "weights");
  
 }
 
@@ -104,11 +104,14 @@ EventCounter::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   else{
  
  	count_["weights"]->Fill(1); 
+ 	
   
   }  
-
-
-
+//   if (genInfoProduct.isValid())   	
+//    		count_["weights"]->Fill((*genInfoProduct).weight());
+//   else{ 
+//  	count_["weights"]->Fill(-9); 
+//   }  
 }
 
 // ------------ method called once each job just before starting event loop  ------------

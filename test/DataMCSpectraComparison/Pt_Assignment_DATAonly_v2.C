@@ -117,12 +117,12 @@ void SaveMultipleCounting(TString name, TH1F* h[15], TH1F* h_DATA17[15], TString
 	int numberOfValidMuonHits[2][8];
 	int NotGoodQualityMuon_DATA16 = 0;
 	int NotGoodQualityMuon_DATA17 = 0;
-	int count_assignment_DATA16_till400[8];
-	int count_assignment_DATA16_400to600[8];
-	int count_assignment_DATA16_above600[8];
-	int count_assignment_DATA17_till400[8];
-	int count_assignment_DATA17_400to600[8];
-	int count_assignment_DATA17_above600[8];
+	float count_assignment_DATA16_till400[8];
+	float count_assignment_DATA16_400to600[8];
+	float count_assignment_DATA16_above600[8];
+	float count_assignment_DATA17_till400[8];
+	float count_assignment_DATA17_400to600[8];
+	float count_assignment_DATA17_above600[8];
 
 	float tot_till[8] = {0};
 	float tot_middle[8] = {0};
@@ -139,11 +139,19 @@ void SaveMultipleCounting(TString name, TH1F* h[15], TH1F* h_DATA17[15], TString
 	TString eta_vs_phi_name[2] = {"DATA16_eta_vs_phi_", "DATA17_etaVSphi_"};//DATA17_eta_vs_phi_"};
 	TString pt_vs_met_name[2] = {"DATA16_pt_vs_met_", "DATA17_ptVSmet_"};//DATA17_pt_vs_met_"};
 	TH1F* pt_DATA16[8];
+	TH1F* pt_DATA16_BB[8];
+	TH1F* pt_DATA16_BE[8];
 	TH1F* pt_DATA17[8];
+	TH1F* pt_DATA17_BB[8];
+	TH1F* pt_DATA17_BE[8];
 	TH1F* eta_DATA16[8];
 	TH1F* eta_DATA17[8];
 	TH1F* phi_DATA16[8];
 	TH1F* phi_DATA17[8];
+	TH1F* phi_DATA16_BB[8];
+	TH1F* phi_DATA17_BB[8];
+	TH1F* phi_DATA16_BE[8];
+	TH1F* phi_DATA17_BE[8];
 	TH2F* pt_vs_eta_DATA16[8];
 	TH2F* pt_vs_eta_DATA17[8];
 	TH2F* pt_vs_phi_DATA16[8];
@@ -168,6 +176,18 @@ void SaveMultipleCounting(TString name, TH1F* h[15], TH1F* h_DATA17[15], TString
 	TH1F* phi_DATA17_400to600[8];
 	TH1F* phi_DATA16_above600[8];
 	TH1F* phi_DATA17_above600[8];
+	TH1F* phi_DATA16_till400_BB[8];
+	TH1F* phi_DATA17_till400_BB[8];
+	TH1F* phi_DATA16_400to600_BB[8];
+	TH1F* phi_DATA17_400to600_BB[8];
+	TH1F* phi_DATA16_above600_BB[8];
+	TH1F* phi_DATA17_above600_BB[8];
+	TH1F* phi_DATA16_till400_BE[8];
+	TH1F* phi_DATA17_till400_BE[8];
+	TH1F* phi_DATA16_400to600_BE[8];
+	TH1F* phi_DATA17_400to600_BE[8];
+	TH1F* phi_DATA16_above600_BE[8];
+	TH1F* phi_DATA17_above600_BE[8];
 	
 	TH1D* h_count_assignment_DATA16_till400[8];
 	TH1D* h_count_assignment_DATA17_till400[8];
@@ -189,7 +209,7 @@ void SaveMultipleCounting(TString name, TH1F* h[15], TH1F* h_DATA17[15], TString
     Double_t ETA_BINS[] = {0, 0.9, 1.2, 1.5, 2.4};
     Int_t  binnum_eta = sizeof(ETA_BINS)/sizeof(Double_t)-1;
     
-    Double_t PHI_BINS[] = {-3.14, -2.356, -1.57, -0.785, 0, 0.785, 1.57, 2.356, 3.14};
+    Double_t PHI_BINS[] = {-3.2, -2.8, -2.4, -2.0, -1.6, -1.2, -0.8, -0.4, 0, 0.4, 0.8, 1.2, 1.6, 2.0, 2.4, 2.8, 3.2};//{-3.14, -2.356, -1.57, -0.785, 0, 0.785, 1.57, 2.356, 3.14};
     Int_t  binnum_phi = sizeof(PHI_BINS)/sizeof(Double_t)-1;
     
     Double_t MET_BINS[] = {0, 25, 50, 75, 100, 200, 350, 500};//, 750, 1000};
@@ -274,11 +294,19 @@ void Pt_Assignment_DATAonly_v2(){
 	for(int i = 0; i < 8; i++){
 
 		pt_DATA16[i] = new TH1F(pt_name[0] + reconstruction[i], pt_name[0] + reconstruction[i], binnum_pt, PT_BINS);
+		pt_DATA16_BB[i] = new TH1F(pt_name[0] + reconstruction[i], pt_name[0] + reconstruction[i], binnum_pt, PT_BINS);
+		pt_DATA16_BE[i] = new TH1F(pt_name[0] + reconstruction[i], pt_name[0] + reconstruction[i], binnum_pt, PT_BINS);
 		pt_DATA17[i] = new TH1F(pt_name[1] + reconstruction[i], pt_name[1] + reconstruction[i], binnum_pt, PT_BINS);
+		pt_DATA17_BB[i] = new TH1F(pt_name[1] + reconstruction[i], pt_name[1] + reconstruction[i], binnum_pt, PT_BINS);
+		pt_DATA17_BE[i] = new TH1F(pt_name[1] + reconstruction[i], pt_name[1] + reconstruction[i], binnum_pt, PT_BINS);
 		eta_DATA16[i] = new TH1F(eta_name[0] + reconstruction[i], eta_name[0] + reconstruction[i], binnum_eta, ETA_BINS);
 		eta_DATA17[i] = new TH1F(eta_name[1] + reconstruction[i], eta_name[1] + reconstruction[i],binnum_eta, ETA_BINS);
 		phi_DATA16[i] = new TH1F(phi_name[0] + reconstruction[i], phi_name[0] + reconstruction[i], binnum_phi, PHI_BINS);
+		phi_DATA16_BB[i] = new TH1F(phi_name[0] + reconstruction[i], phi_name[0] + reconstruction[i], binnum_phi, PHI_BINS);
+		phi_DATA16_BE[i] = new TH1F(phi_name[0] + reconstruction[i], phi_name[0] + reconstruction[i], binnum_phi, PHI_BINS);
 		phi_DATA17[i] = new TH1F(phi_name[1] + reconstruction[i], phi_name[1] + reconstruction[i],binnum_phi, PHI_BINS);
+		phi_DATA17_BB[i] = new TH1F(phi_name[1] + reconstruction[i], phi_name[1] + reconstruction[i],binnum_phi, PHI_BINS);
+		phi_DATA17_BE[i] = new TH1F(phi_name[1] + reconstruction[i], phi_name[1] + reconstruction[i],binnum_phi, PHI_BINS);
 		pt_vs_eta_DATA16[i] = new TH2F(pt_vs_eta_name[0] + reconstruction[i], pt_vs_eta_name[0] + reconstruction[i], binnum_eta, ETA_BINS, binnum_pt, PT_BINS);
 		pt_vs_eta_DATA17[i] = new TH2F(pt_vs_eta_name[1] + reconstruction[i], pt_vs_eta_name[1] + reconstruction[i], binnum_eta, ETA_BINS, binnum_pt, PT_BINS);
 		pt_vs_phi_DATA16[i] = new TH2F(pt_vs_phi_name[0] + reconstruction[i], pt_vs_phi_name[0] + reconstruction[i], binnum_phi, PHI_BINS, binnum_pt, PT_BINS);
@@ -299,6 +327,20 @@ void Pt_Assignment_DATAonly_v2(){
 		phi_DATA17_400to600[i] = new TH1F(phi_name[1] + reconstruction[i] + "_400to600", phi_name[1] + reconstruction[i] + "_400to600", binnum_phi, PHI_BINS);
 		phi_DATA16_above600[i] = new TH1F(phi_name[0] + reconstruction[i] + "_above600", phi_name[0] + reconstruction[i] + "_above600", binnum_phi, PHI_BINS);
 		phi_DATA17_above600[i] = new TH1F(phi_name[1] + reconstruction[i] + "_above600", phi_name[1] + reconstruction[i] + "_above600", binnum_phi, PHI_BINS);
+
+		phi_DATA16_till400_BB[i] = new TH1F(phi_name[0] + reconstruction[i] + "_till400", phi_name[0] + reconstruction[i] + "_till400", binnum_phi, PHI_BINS);
+		phi_DATA17_till400_BB[i] = new TH1F(phi_name[1] + reconstruction[i] + "_till400", phi_name[1] + reconstruction[i] + "_till400",binnum_phi, PHI_BINS);
+		phi_DATA16_400to600_BB[i] = new TH1F(phi_name[0] + reconstruction[i] + "_400to600", phi_name[0] + reconstruction[i] + "_400to600", binnum_phi, PHI_BINS);
+		phi_DATA17_400to600_BB[i] = new TH1F(phi_name[1] + reconstruction[i] + "_400to600", phi_name[1] + reconstruction[i] + "_400to600", binnum_phi, PHI_BINS);
+		phi_DATA16_above600_BB[i] = new TH1F(phi_name[0] + reconstruction[i] + "_above600", phi_name[0] + reconstruction[i] + "_above600", binnum_phi, PHI_BINS);
+		phi_DATA17_above600_BB[i] = new TH1F(phi_name[1] + reconstruction[i] + "_above600", phi_name[1] + reconstruction[i] + "_above600", binnum_phi, PHI_BINS);
+
+		phi_DATA16_till400_BE[i] = new TH1F(phi_name[0] + reconstruction[i] + "_till400", phi_name[0] + reconstruction[i] + "_till400", binnum_phi, PHI_BINS);
+		phi_DATA17_till400_BE[i] = new TH1F(phi_name[1] + reconstruction[i] + "_till400", phi_name[1] + reconstruction[i] + "_till400",binnum_phi, PHI_BINS);
+		phi_DATA16_400to600_BE[i] = new TH1F(phi_name[0] + reconstruction[i] + "_400to600", phi_name[0] + reconstruction[i] + "_400to600", binnum_phi, PHI_BINS);
+		phi_DATA17_400to600_BE[i] = new TH1F(phi_name[1] + reconstruction[i] + "_400to600", phi_name[1] + reconstruction[i] + "_400to600", binnum_phi, PHI_BINS);
+		phi_DATA16_above600_BE[i] = new TH1F(phi_name[0] + reconstruction[i] + "_above600", phi_name[0] + reconstruction[i] + "_above600", binnum_phi, PHI_BINS);
+		phi_DATA17_above600_BE[i] = new TH1F(phi_name[1] + reconstruction[i] + "_above600", phi_name[1] + reconstruction[i] + "_above600", binnum_phi, PHI_BINS);
 
 		pt_vs_met_DATA16[i] = new TH2F(pt_vs_met_name[0] + reconstruction[i], pt_vs_met_name[0] + reconstruction[i], binnum_met, MET_BINS, binnum_pt, PT_BINS);
 		pt_vs_met_DATA17[i] = new TH2F(pt_vs_met_name[1] + reconstruction[i], pt_vs_met_name[1] + reconstruction[i], binnum_met, MET_BINS, binnum_pt, PT_BINS);
@@ -431,7 +473,7 @@ void Pt_Assignment_DATAonly_v2(){
      
      printf("opening... DATA 2016 --- %lld\n", nentries);
      
-     float weight = LUMINOSITY_2017 / LUMINOSITY_2016;
+     float weight = LUMINOSITY_2016/ LUMINOSITY_2017;
 
    	 for(int p=0; p<nentries; p++){
 //    	 for(int p=0; p<10000; p++){
@@ -452,8 +494,6 @@ void Pt_Assignment_DATAonly_v2(){
      		(lep_triggerMatchPt[0]>50 || lep_triggerMatchPt[1]>50) && 
     	 		
 //    	 		dil_mass > 120 &&
-//    	 		(dil_mass < 70 || dil_mass > 110) &&
-			dil_mass > 60 && dil_mass < 120 &&
 
      		lep_sumPt[0]/lep_tk_pt[0]<0.10 && 
    	 		lep_sumPt[1]/lep_tk_pt[1]<0.10 &&
@@ -476,6 +516,9 @@ void Pt_Assignment_DATAonly_v2(){
 
 				if(prev_event == event) continue; //to remove double event; take the first --> they are already sorted in pt
 				prev_event = event;
+				
+// 				if(dil_mass < 60 || dil_mass > 120) continue;
+				if(dil_mass < 120) continue;
 
    				if (
  					(lep_numberOfMatchedStations[1] > 1 || (lep_numberOfMatchedStations[1] == 1 && !(lep_stationMask[1] == 1 || lep_stationMask[1] == 16)) || (lep_numberOfMatchedStations[1] == 1 &&(lep_stationMask[1] == 1 || lep_stationMask[1] == 16) && lep_numberOfMatchedRPCLayers[1] > 2))
@@ -487,15 +530,15 @@ void Pt_Assignment_DATAonly_v2(){
 					 && GoodVtx
 					 && vertex_chi2 < 20
 				){  
-					Dimuon_DATA16->Fill(dil_mass,  weight); 
-					lep_1.SetPtEtaPhiM(lep_picky_pt[0], lep_picky_eta[0], lep_picky_phi[0], 0.105);
-					lep_2.SetPtEtaPhiM(lep_picky_pt[1], lep_picky_eta[1], lep_picky_phi[1], 0.105);
-					ZPrime = lep_1 + lep_2;
-					Dimuon_Picky_DATA16->Fill(ZPrime.M(),  weight); 
-					lep_1.SetPtEtaPhiM(lep_dyt_pt[0], lep_dyt_eta[0], lep_dyt_phi[0], 0.105);
-					lep_2.SetPtEtaPhiM(lep_dyt_pt[1], lep_dyt_eta[1], lep_dyt_phi[1], 0.105);
-					ZPrime = lep_1 + lep_2;
-					Dimuon_Dyt_DATA16->Fill(ZPrime.M(),  weight); 
+					Dimuon_DATA16->Fill(dil_mass);
+// 					lep_1.SetPtEtaPhiM(lep_picky_pt[0], lep_picky_eta[0], lep_picky_phi[0], 0.105);
+// 					lep_2.SetPtEtaPhiM(lep_picky_pt[1], lep_picky_eta[1], lep_picky_phi[1], 0.105);
+// 					ZPrime = lep_1 + lep_2;
+// 					Dimuon_Picky_DATA16->Fill(ZPrime.M());
+// 					lep_1.SetPtEtaPhiM(lep_dyt_pt[0], lep_dyt_eta[0], lep_dyt_phi[0], 0.105);
+// 					lep_2.SetPtEtaPhiM(lep_dyt_pt[1], lep_dyt_eta[1], lep_dyt_phi[1], 0.105);
+// 					ZPrime = lep_1 + lep_2;
+// 					Dimuon_Dyt_DATA16->Fill(ZPrime.M());
 				}
 
 
@@ -544,7 +587,7 @@ void Pt_Assignment_DATAonly_v2(){
 					lepton_phi[h][7] = lep_tuneP_phi[h];					
 
 // 					if(numberOfValidMuonHits[h][1] == 0) continue;
-
+/*
 							////////////////////////////////////////////
 							////////////////////////////////////////////		
 							///////////// MULTIPLE COUNTING ////////////
@@ -604,14 +647,14 @@ void Pt_Assignment_DATAonly_v2(){
 							///////////// MULTIPLE COUNTING ////////////
 							////////////////////////////////////////////
 							////////////////////////////////////////////
-	     					
-	     			for(int i = 1; i < 7; i++){ // for on different reconstruction
+*/	     					
+	     			for(int i = 1; i < 8; i++){ // for on different reconstruction
    	 						    	 						
     	 				if(lep_pt[h] == lepton_pt[h][i]){
     	 					
     	 					bool multiple_reconstruction = false;	
     	 					for(int z = 1; z < 7; z++){
-    	 						if(z == i) continue;
+    	 						if(z == i || i == 7) continue;
     	 						if(lepton_pt[h][z] == lepton_pt[h][i]){
     	 							multiple_reconstruction = true;
     	 							break;
@@ -628,46 +671,45 @@ void Pt_Assignment_DATAonly_v2(){
 									// Select DYT only if DYT = TuneP    	 						
 // 									if(i == 4 && lepton_pt[h][i] == lepton_pt[h][5]) continue;
 //      								if(i != 7) count_assignment_DATA16_till400[i][j-14]++;
-   							pt_DATA16[i]->Fill(lepton_pt[h][i], weight);
-   							eta_DATA16[i]->Fill(fabs(lepton_eta[h][i]), weight);
-   							phi_DATA16[i]->Fill(lepton_phi[h][i], weight);
- 							pt_vs_eta_DATA16[i]->Fill(lep_eta[h], lep_pt[h], weight);
- 							pt_vs_phi_DATA16[i]->Fill(lep_phi[h], lep_pt[h], weight);
- 							eta_vs_phi_DATA16[i]->Fill(lep_phi[h], lep_eta[h], weight);
- 							pt_vs_met_DATA16[i]->Fill(met_pt, lep_pt[h], weight);
-
- 							pt_DATA16[7]->Fill(lepton_pt[h][7], weight);
-   							eta_DATA16[7]->Fill(fabs(lepton_eta[h][7]), weight);
-							phi_DATA16[7]->Fill(lepton_phi[h][7], weight);
-							pt_vs_eta_DATA16[7]->Fill(lep_eta[h], lep_pt[h], weight);
-   	 						pt_vs_phi_DATA16[7]->Fill(lep_phi[h], lep_pt[h], weight);
-   		 					eta_vs_phi_DATA16[7]->Fill(lep_phi[h], lep_eta[h], weight);
-	   	 					pt_vs_met_DATA16[7]->Fill(met_pt, lep_pt[h], weight);
+   							pt_DATA16[i]->Fill(lepton_pt[h][i]);
+   							if(fabs(lepton_eta[h][i]) < 0.9) pt_DATA16_BB[i]->Fill(lepton_pt[h][i]);
+   							else pt_DATA16_BE[i]->Fill(lepton_pt[h][i]);
+   							eta_DATA16[i]->Fill(fabs(lepton_eta[h][i]));
+   							phi_DATA16[i]->Fill(lepton_phi[h][i]);
+ 							pt_vs_eta_DATA16[i]->Fill(lep_eta[h], lep_pt[h]);
+ 							pt_vs_phi_DATA16[i]->Fill(lep_phi[h], lep_pt[h]);
+ 							eta_vs_phi_DATA16[i]->Fill(lep_phi[h], lep_eta[h]);
+ 							pt_vs_met_DATA16[i]->Fill(met_pt, lep_pt[h]);
 	   	 							
 	   	 							
 		     				if(lepton_pt[h][i] < 400){
-   								count_assignment_DATA16_till400[i]++;
-	    	 					count_assignment_DATA16_till400[7]++;
-	   							eta_DATA16_till400[i]->Fill(fabs(lepton_eta[h][i]), weight);
-	   							phi_DATA16_till400[i]->Fill(lepton_phi[h][i], weight);
-	   							eta_DATA16_till400[7]->Fill(fabs(lepton_eta[h][7]), weight);
-	    	 					phi_DATA16_till400[7]->Fill(lepton_phi[h][7], weight);
+//    								count_assignment_DATA16_till400[i] += weight;
+	    	 					count_assignment_DATA16_till400[i]++;
+	   							eta_DATA16_till400[i]->Fill(fabs(lepton_eta[h][i]));
+	   							phi_DATA16_till400[i]->Fill(lepton_phi[h][i]);
+	   							if(fabs(lepton_eta[h][i]) < 0.9) phi_DATA16_till400_BB[i]->Fill(lepton_phi[h][i]);
+   								else phi_DATA16_till400_BE[i]->Fill(lepton_phi[h][i]);
+
      						}
      						else if(lepton_pt[h][i] > 400 && lepton_pt[h][i] < 600){
-   								count_assignment_DATA16_400to600[i]++;
-	    	 					count_assignment_DATA16_400to600[7]++;
-	     						eta_DATA16_400to600[i]->Fill(fabs(lepton_eta[h][i]), weight);
-	     						phi_DATA16_400to600[i]->Fill(lepton_phi[h][i], weight);
-	     						eta_DATA16_400to600[7]->Fill(fabs(lepton_eta[h][7]), weight);
-	    	 					phi_DATA16_400to600[7]->Fill(lepton_phi[h][7], weight);
+//    								count_assignment_DATA16_400to600[i]+=weight;
+	    	 					count_assignment_DATA16_400to600[i]++;
+	     						eta_DATA16_400to600[i]->Fill(fabs(lepton_eta[h][i]));
+	     						phi_DATA16_400to600[i]->Fill(lepton_phi[h][i]);
+	   							if(fabs(lepton_eta[h][i]) < 0.9) phi_DATA16_400to600_BB[i]->Fill(lepton_phi[h][i]);
+   								else phi_DATA16_400to600_BE[i]->Fill(lepton_phi[h][i]);
+
 		     				}
 	    	 				else{
-	     						count_assignment_DATA16_above600[i]++;
-	    	 					count_assignment_DATA16_above600[7]++;
-	     						eta_DATA16_above600[i]->Fill(fabs(lepton_eta[h][i]), weight);
-	     						phi_DATA16_above600[i]->Fill(lepton_phi[h][i], weight);
-	     						eta_DATA16_above600[7]->Fill(fabs(lepton_eta[h][7]), weight);
-	    	 					phi_DATA16_above600[7]->Fill(lepton_phi[h][7], weight);
+// 	     						count_assignment_DATA16_above600[i]+=weight;
+	    	 					count_assignment_DATA16_above600[i]++;
+	     						eta_DATA16_above600[i]->Fill(fabs(lepton_eta[h][i]));
+	     						phi_DATA16_above600[i]->Fill(lepton_phi[h][i]);
+	   							if(fabs(lepton_eta[h][i]) < 0.9) phi_DATA16_above600_BB[i]->Fill(lepton_phi[h][i]);
+   								else phi_DATA16_above600_BE[i]->Fill(lepton_phi[h][i]);
+
+// 	     						eta_DATA16_above600[7]->Fill(fabs(lepton_eta[h][7]));
+// 	    	 					phi_DATA16_above600[7]->Fill(lepton_phi[h][7]);
     	 					}
 // 	    	 							std::cout<<lepton_pt[h][i]<<"\t"<<count_assignment_DATA16_above600[7][j-14]<<"\t"<<count_assignment_DATA16_till400[7][j-14]<<std::endl;
 //     	 							break; // to take only one reconstruction in case of double counting --- DYT chosen because it is the first
@@ -800,8 +842,8 @@ void Pt_Assignment_DATAonly_v2(){
 
 	nentries = treeDATA17->GetEntries();
 	
-	printf("opening... DATA17 --- %lld\n", nentries);    
-	
+	printf("opening... DATA17 --- %lld\n", nentries); 
+		
 	for(int p=0; p<nentries; p++){
 // 	for(int p=0; p<10000; p++){
 // 	for(int p=0; p<1; p++){
@@ -822,7 +864,7 @@ void Pt_Assignment_DATAonly_v2(){
     	 		
 //     	 		dil_mass > 120 &&
 //     	 		(dil_mass < 70 || dil_mass > 110) &&
-				dil_mass > 60 && dil_mass < 120 &&
+// 				dil_mass > 60 && dil_mass < 120 &&
     	 		
 	     		lep_sumPt[0]/lep_tk_pt[0]<0.10 && 
     	 		lep_sumPt[1]/lep_tk_pt[1]<0.10 &&
@@ -846,6 +888,9 @@ void Pt_Assignment_DATAonly_v2(){
 					if(prev_event == event) continue; //to remove double event; take the first --> they are already sorted in pt	
 					prev_event = event;
 					
+// 					if(dil_mass < 60 || dil_mass > 120) continue;
+					if(dil_mass < 120) continue;
+					
      				if (
    	 					(lep_numberOfMatchedStations[1] > 1 || (lep_numberOfMatchedStations[1] == 1 && !(lep_stationMask[1] == 1 || lep_stationMask[1] == 16)) || (lep_numberOfMatchedStations[1] == 1 &&(lep_stationMask[1] == 1 || lep_stationMask[1] == 16) && lep_numberOfMatchedRPCLayers[1] > 2))
    	 					 && (lep_numberOfMatchedStations[0] > 1 || (lep_numberOfMatchedStations[0] == 1 && !(lep_stationMask[0] == 1 || lep_stationMask[0] == 16)) || (lep_numberOfMatchedStations[0] == 1 &&(lep_stationMask[0] == 1 || lep_stationMask[0] == 16) && lep_numberOfMatchedRPCLayers[0] > 2))
@@ -857,14 +902,14 @@ void Pt_Assignment_DATAonly_v2(){
    						 && vertex_chi2 < 20
      					){  
 							Dimuon_DATA17->Fill(dil_mass,  weight); 
-							lep_1.SetPtEtaPhiM(lep_picky_pt[0], lep_picky_eta[0], lep_picky_phi[0], 0.105);
-							lep_2.SetPtEtaPhiM(lep_picky_pt[1], lep_picky_eta[1], lep_picky_phi[1], 0.105);
-							ZPrime = lep_1 + lep_2;
-							Dimuon_Picky_DATA17->Fill(ZPrime.M(),  weight); 
-							lep_1.SetPtEtaPhiM(lep_dyt_pt[0], lep_dyt_eta[0], lep_dyt_phi[0], 0.105);
-							lep_2.SetPtEtaPhiM(lep_dyt_pt[1], lep_dyt_eta[1], lep_dyt_phi[1], 0.105);
-							ZPrime = lep_1 + lep_2;
-							Dimuon_Dyt_DATA17->Fill(ZPrime.M(),  weight); 
+// 							lep_1.SetPtEtaPhiM(lep_picky_pt[0], lep_picky_eta[0], lep_picky_phi[0], 0.105);
+// 							lep_2.SetPtEtaPhiM(lep_picky_pt[1], lep_picky_eta[1], lep_picky_phi[1], 0.105);
+// 							ZPrime = lep_1 + lep_2;
+// 							Dimuon_Picky_DATA17->Fill(ZPrime.M(),  weight); 
+// 							lep_1.SetPtEtaPhiM(lep_dyt_pt[0], lep_dyt_eta[0], lep_dyt_phi[0], 0.105);
+// 							lep_2.SetPtEtaPhiM(lep_dyt_pt[1], lep_dyt_eta[1], lep_dyt_phi[1], 0.105);
+// 							ZPrime = lep_1 + lep_2;
+// 							Dimuon_Dyt_DATA17->Fill(ZPrime.M(),  weight); 
 						}
 
 					for(int h = 0; h < 2; h++){ // for on two muons in the event
@@ -919,7 +964,7 @@ void Pt_Assignment_DATAonly_v2(){
 							int c = 3;
 							int d = 4;
 							int e = 5;
-
+/*
 							////////////////////////////////////////////
 							////////////////////////////////////////////		
 							///////////// MULTIPLE COUNTING ////////////
@@ -972,14 +1017,14 @@ void Pt_Assignment_DATAonly_v2(){
 							///////////// MULTIPLE COUNTING ////////////
 							////////////////////////////////////////////
 							////////////////////////////////////////////
-
-	     					for(int i = 1; i < 7; i++){ // for on different reconstruction
+*/
+	     					for(int i = 1; i < 8; i++){ // for on different reconstruction
    	 						    	 						
     	 						if(lep_pt[h] == lepton_pt[h][i]){
     	 						
     	 							bool multiple_reconstruction = false;	
     	 							for(int z = 1; z < 7; z++){
-    	 								if(z == i) continue;
+		    	 						if(z == i || i == 7) continue;
     	 								if(lepton_pt[h][z] == lepton_pt[h][i]){
     	 									multiple_reconstruction = true;
     	 									break;
@@ -996,47 +1041,58 @@ void Pt_Assignment_DATAonly_v2(){
 									// Select DYT only if DYT = TuneP    	 						
 // 									if(i == 4 && lepton_pt[h][i] == lepton_pt[h][5]) continue;
 //      								if(i != 7) count_assignment_DATA17_till400[i][j-14]++;
-	     							pt_DATA17[i]->Fill(lepton_pt[h][i]);
-	     							eta_DATA17[i]->Fill(fabs(lepton_eta[h][i]));
-	     							phi_DATA17[i]->Fill(lepton_phi[h][i]);
-    	 							pt_vs_eta_DATA17[i]->Fill(lep_eta[h], lep_pt[h]);
-    	 							pt_vs_phi_DATA17[i]->Fill(lep_phi[h], lep_pt[h]);
-    	 							eta_vs_phi_DATA17[i]->Fill(lep_phi[h], lep_eta[h]);
-    	 							pt_vs_met_DATA17[i]->Fill(met_pt, lep_pt[h]);
+	     							pt_DATA17[i]->Fill(lepton_pt[h][i], weight);
+		   							if(fabs(lepton_eta[h][i]) < 0.9) pt_DATA17_BB[i]->Fill(lepton_pt[h][i], weight);
+   									else pt_DATA17_BE[i]->Fill(lepton_pt[h][i], weight);
+	     							eta_DATA17[i]->Fill(fabs(lepton_eta[h][i]), weight);
+	     							phi_DATA17[i]->Fill(lepton_phi[h][i], weight);
+    	 							pt_vs_eta_DATA17[i]->Fill(lep_eta[h], lep_pt[h], weight);
+    	 							pt_vs_phi_DATA17[i]->Fill(lep_phi[h], lep_pt[h], weight);
+    	 							eta_vs_phi_DATA17[i]->Fill(lep_phi[h], lep_eta[h], weight);
+    	 							pt_vs_met_DATA17[i]->Fill(met_pt, lep_pt[h], weight);
 
-    	 							pt_DATA17[7]->Fill(lepton_pt[h][7]);
-	     							eta_DATA17[7]->Fill(fabs(lepton_eta[h][7]));
-     								phi_DATA17[7]->Fill(lepton_phi[h][7]);
-   	 								pt_vs_eta_DATA17[7]->Fill(lep_eta[h], lep_pt[h]);
-   	 								pt_vs_phi_DATA17[7]->Fill(lep_phi[h], lep_pt[h]);
-   		 							eta_vs_phi_DATA17[7]->Fill(lep_phi[h], lep_eta[h]);
-	   	 							pt_vs_met_DATA17[7]->Fill(met_pt, lep_pt[h]);
+//     	 							pt_DATA17[7]->Fill(lepton_pt[h][7], weight);
+// 	     							eta_DATA17[7]->Fill(fabs(lepton_eta[h][7]), weight);
+//      								phi_DATA17[7]->Fill(lepton_phi[h][7], weight);
+//    	 								pt_vs_eta_DATA17[7]->Fill(lep_eta[h], lep_pt[h], weight);
+//    	 								pt_vs_phi_DATA17[7]->Fill(lep_phi[h], lep_pt[h], weight);
+//    		 							eta_vs_phi_DATA17[7]->Fill(lep_phi[h], lep_eta[h], weight);
+// 	   	 							pt_vs_met_DATA17[7]->Fill(met_pt, lep_pt[h], weight);
 
 		     						if(lepton_pt[h][i] < 400){
-	     								count_assignment_DATA17_till400[i]++;
-	    	 							count_assignment_DATA17_till400[7]++;
-		     							eta_DATA17_till400[i]->Fill(fabs(lepton_eta[h][i]));
-		     							phi_DATA17_till400[i]->Fill(lepton_phi[h][i]);
-		    	 						eta_DATA17_till400[7]->Fill(fabs(lepton_eta[h][7]));
-	    	 							phi_DATA17_till400[7]->Fill(lepton_phi[h][7]);
+	     								count_assignment_DATA17_till400[i]+=weight;
+// 	    	 							count_assignment_DATA17_till400[i]++;
+		     							eta_DATA17_till400[i]->Fill(fabs(lepton_eta[h][i]), weight);
+		     							phi_DATA17_till400[i]->Fill(lepton_phi[h][i], weight);
+// 		    	 						eta_DATA17_till400[7]->Fill(fabs(lepton_eta[h][7]), weight);
+// 	    	 							phi_DATA17_till400[7]->Fill(lepton_phi[h][7], weight);
+			   							if(fabs(lepton_eta[h][i]) < 0.9) phi_DATA17_till400_BB[i]->Fill(lepton_phi[h][i], weight);
+	   									else phi_DATA17_till400_BE[i]->Fill(lepton_phi[h][i], weight);
+
 
 		     						}
 	    	 						else if(lepton_pt[h][i] > 400 && lepton_pt[h][i] < 600){
-	     								count_assignment_DATA17_400to600[i]++;
-	    	 							count_assignment_DATA17_400to600[7]++;
-	     								eta_DATA17_400to600[i]->Fill(fabs(lepton_eta[h][i]));
-	     								phi_DATA17_400to600[i]->Fill(lepton_phi[h][i]);
-	     								eta_DATA17_400to600[7]->Fill(fabs(lepton_eta[h][7]));
-	    	 							phi_DATA17_400to600[7]->Fill(lepton_phi[h][7]);
+	     								count_assignment_DATA17_400to600[i]+=weight;
+// 	    	 							count_assignment_DATA17_400to600[i]++;
+	     								eta_DATA17_400to600[i]->Fill(fabs(lepton_eta[h][i]), weight);
+	     								phi_DATA17_400to600[i]->Fill(lepton_phi[h][i], weight);
+// 	     								eta_DATA17_400to600[7]->Fill(fabs(lepton_eta[h][7]), weight);
+// 	    	 							phi_DATA17_400to600[7]->Fill(lepton_phi[h][7], weight);
+			   							if(fabs(lepton_eta[h][i]) < 0.9) phi_DATA17_400to600_BB[i]->Fill(lepton_phi[h][i], weight);
+	   									else phi_DATA17_400to600_BE[i]->Fill(lepton_phi[h][i], weight);
+
 	     							}
 
 	    	 						else{
-	     								count_assignment_DATA17_above600[i]++;
-	    	 							count_assignment_DATA17_above600[7]++;
-	     								eta_DATA17_above600[i]->Fill(fabs(lepton_eta[h][i]));
-	     								phi_DATA17_above600[i]->Fill(lepton_phi[h][i]);
-	     								eta_DATA17_above600[7]->Fill(fabs(lepton_eta[h][7]));
-	    	 							phi_DATA17_above600[7]->Fill(lepton_phi[h][7]);
+	     								count_assignment_DATA17_above600[i]+=weight;
+// 	    	 							count_assignment_DATA17_above600[i]++;
+	     								eta_DATA17_above600[i]->Fill(fabs(lepton_eta[h][i]), weight);
+	     								phi_DATA17_above600[i]->Fill(lepton_phi[h][i], weight);
+// 	     								eta_DATA17_above600[7]->Fill(fabs(lepton_eta[h][7]), weight);
+// 	    	 							phi_DATA17_above600[7]->Fill(lepton_phi[h][7], weight);
+			   							if(fabs(lepton_eta[h][i]) < 0.9) phi_DATA17_above600_BB[i]->Fill(lepton_phi[h][i], weight);
+	   									else phi_DATA17_above600_BE[i]->Fill(lepton_phi[h][i], weight);
+
 	     							}
 //     	 							break; // to take only one reconstruction in case of double counting --- DYT chosen because it is the first
     	 						}
@@ -1086,20 +1142,38 @@ void Pt_Assignment_DATAonly_v2(){
 		 }// end loop p
 
 
+     float count16_err[8] = {0};
+     float count17_err[8] = {0};
+     float count16_TOT_err[8] = {0};
+     float count17_TOT_err[8] = {0};
+     float first = 0;
+     float second = 0;
+     float TOT_DATA16 = 0;
+     float TOT_DATA17 = 0;
 
      std::cout<<" Till 400 GeV "<<std::endl;
-     int TOT_DATA16 = 0;
-     int TOT_DATA17 = 0;
      for(int i = 1; i < 7; i++){
      	TOT_DATA16+=count_assignment_DATA16_till400[i];
      	TOT_DATA17+=count_assignment_DATA17_till400[i];
      }
+     for(int i = 1; i < 8; i++){
+     	count16_err[i] = sqrt(count_assignment_DATA16_till400[i]);
+     	count17_err[i] = sqrt(count_assignment_DATA17_till400[i]);
+
+		first = count16_err[i]/TOT_DATA16;
+		second = (count_assignment_DATA16_till400[i] * sqrt(TOT_DATA16)) / pow(TOT_DATA16, 2);
+		count16_TOT_err[i] = sqrt(pow(first, 2) + pow(second, 2));
+		first = count17_err[i]/TOT_DATA17;
+		second = (count_assignment_DATA17_till400[i] * sqrt(TOT_DATA17)) / pow(TOT_DATA17, 2);
+		count17_TOT_err[i] = sqrt(pow(first, 2) + pow(second, 2));
+     }
+     	
  	 printf(" ----------------------------------------------------------------------------------------------------------------------------------- \n");
-     printf("  DATA16         --->  %15d\t%15d\t%15d\t%15d\t%15d\t\t|%15d\n", count_assignment_DATA16_till400[1], count_assignment_DATA16_till400[2], count_assignment_DATA16_till400[3], count_assignment_DATA16_till400[4], count_assignment_DATA16_till400[5], count_assignment_DATA16_till400[7]);
- 	 printf("  DATA17         --->  %15d\t%15d\t%15d\t%15d\t%15d\t\t|%15d\n", count_assignment_DATA17_till400[1], count_assignment_DATA17_till400[2], count_assignment_DATA17_till400[3], count_assignment_DATA17_till400[4], count_assignment_DATA17_till400[5], count_assignment_DATA17_till400[7]);
+     printf("  DATA16         --->  %.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\n", count_assignment_DATA16_till400[1], count16_err[1], count_assignment_DATA16_till400[2], count16_err[2], count_assignment_DATA16_till400[3], count16_err[3], count_assignment_DATA16_till400[4], count16_err[4], count_assignment_DATA16_till400[5], count16_err[5], count_assignment_DATA16_till400[7], count16_err[7]);
+ 	 printf("  DATA17         --->  %.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\n", count_assignment_DATA17_till400[1], count17_err[1], count_assignment_DATA17_till400[2], count17_err[2], count_assignment_DATA17_till400[3], count17_err[3], count_assignment_DATA17_till400[4], count17_err[4], count_assignment_DATA17_till400[5], count17_err[5], count_assignment_DATA17_till400[7], count17_err[7]);
  	 printf(" ----------------------------------------------------------------------------------------------------------------------------------- \n");
-     printf(" DATA16 (%%)      ---> %15.3f\t%15.3f\t%15.3f\t%15.3f\t%15.3f\t\t|%15.3f\n", (float)count_assignment_DATA16_till400[1]/TOT_DATA16, (float)count_assignment_DATA16_till400[2]/TOT_DATA16, (float)count_assignment_DATA16_till400[3]/TOT_DATA16, (float)count_assignment_DATA16_till400[4]/TOT_DATA16, (float)count_assignment_DATA16_till400[5]/TOT_DATA16, (float)count_assignment_DATA16_till400[7]/TOT_DATA16);
- 	 printf(" DATA17 (%%)      ---> %15.3f\t%15.3f\t%15.3f\t%15.3f\t%15.3f\t\t|%15.3f\n", (float)count_assignment_DATA17_till400[1]/TOT_DATA17, (float)count_assignment_DATA17_till400[2]/TOT_DATA17, (float)count_assignment_DATA17_till400[3]/TOT_DATA17, (float)count_assignment_DATA17_till400[4]/TOT_DATA17, (float)count_assignment_DATA17_till400[5]/TOT_DATA17, (float)count_assignment_DATA17_till400[7]/TOT_DATA17);
+     printf(" DATA16 (%%)      ---> %.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\n", (float)count_assignment_DATA16_till400[1]/TOT_DATA16, count16_TOT_err[1], (float)count_assignment_DATA16_till400[2]/TOT_DATA16, count16_TOT_err[2], (float)count_assignment_DATA16_till400[3]/TOT_DATA16, count16_TOT_err[3], (float)count_assignment_DATA16_till400[4]/TOT_DATA16, count16_TOT_err[4], (float)count_assignment_DATA16_till400[5]/TOT_DATA16, count16_TOT_err[5], (float)count_assignment_DATA16_till400[7]/TOT_DATA16, count16_TOT_err[7]);
+ 	 printf(" DATA17 (%%)      ---> %.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\n", (float)count_assignment_DATA17_till400[1]/TOT_DATA17, count17_TOT_err[1], (float)count_assignment_DATA17_till400[2]/TOT_DATA17, count17_TOT_err[2], (float)count_assignment_DATA17_till400[3]/TOT_DATA17, count17_TOT_err[3], (float)count_assignment_DATA17_till400[4]/TOT_DATA17, count17_TOT_err[4], (float)count_assignment_DATA17_till400[5]/TOT_DATA17, count17_TOT_err[5], (float)count_assignment_DATA17_till400[7]/TOT_DATA17, count17_TOT_err[7]);
 
 
      std::cout<<"Between 400 and 600 GeV "<<std::endl;
@@ -1110,12 +1184,23 @@ void Pt_Assignment_DATAonly_v2(){
      	TOT_DATA16+=count_assignment_DATA16_400to600[i];
      	TOT_DATA17+=count_assignment_DATA17_400to600[i];
      }
+     for(int i = 1; i< 8; i++){
+     	count16_err[i] = sqrt(count_assignment_DATA16_400to600[i]);
+     	count17_err[i] = sqrt(count_assignment_DATA17_400to600[i]);
+
+		first = count16_err[i]/TOT_DATA16;
+		second = (count_assignment_DATA16_400to600[i] * sqrt(TOT_DATA16)) / pow(TOT_DATA16, 2);
+		count16_TOT_err[i] = sqrt(pow(first, 2) + pow(second, 2));
+		first = count17_err[i]/TOT_DATA17;
+		second = (count_assignment_DATA17_400to600[i] * sqrt(TOT_DATA17)) / pow(TOT_DATA17, 2);
+		count17_TOT_err[i] = sqrt(pow(first, 2) + pow(second, 2));
+     }
  	 printf(" ----------------------------------------------------------------------------------------------------------------------------------- \n");
-     printf("  DATA16         --->  %15d\t%15d\t%15d\t%15d\t%15d\t\t|%15d\n", count_assignment_DATA16_400to600[1], count_assignment_DATA16_400to600[2], count_assignment_DATA16_400to600[3], count_assignment_DATA16_400to600[4], count_assignment_DATA16_400to600[5], count_assignment_DATA16_400to600[7]);
- 	 printf("  DATA17         --->  %15d\t%15d\t%15d\t%15d\t%15d\t\t|%15d\n", count_assignment_DATA17_400to600[1], count_assignment_DATA17_400to600[2], count_assignment_DATA17_400to600[3], count_assignment_DATA17_400to600[4], count_assignment_DATA17_400to600[5], count_assignment_DATA17_400to600[7]);
+     printf("  DATA16         --->  %.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\n", count_assignment_DATA16_400to600[1], count16_err[1], count_assignment_DATA16_400to600[2], count16_err[2], count_assignment_DATA16_400to600[3], count16_err[3], count_assignment_DATA16_400to600[4], count16_err[4], count_assignment_DATA16_400to600[5], count16_err[5], count_assignment_DATA16_400to600[7], count16_err[7]);
+ 	 printf("  DATA17         --->  %.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\n", count_assignment_DATA17_400to600[1], count17_err[1], count_assignment_DATA17_400to600[2], count17_err[2], count_assignment_DATA17_400to600[3], count17_err[3], count_assignment_DATA17_400to600[4], count17_err[4], count_assignment_DATA17_400to600[5], count17_err[5], count_assignment_DATA17_400to600[7], count17_err[7]);
  	 printf(" ----------------------------------------------------------------------------------------------------------------------------------- \n");
-     printf(" DATA16 (%%)      ---> %15.3f\t%15.3f\t%15.3f\t%15.3f\t%15.3f\t\t|%15.3f\n", (float)count_assignment_DATA16_400to600[1]/TOT_DATA16, (float)count_assignment_DATA16_400to600[2]/TOT_DATA16, (float)count_assignment_DATA16_400to600[3]/TOT_DATA16, (float)count_assignment_DATA16_400to600[4]/TOT_DATA16, (float)count_assignment_DATA16_400to600[5]/TOT_DATA16, (float)count_assignment_DATA16_400to600[7]/TOT_DATA16);
- 	 printf(" DATA17 (%%)      ---> %15.3f\t%15.3f\t%15.3f\t%15.3f\t%15.3f\t\t|%15.3f\n", (float)count_assignment_DATA17_400to600[1]/TOT_DATA17, (float)count_assignment_DATA17_400to600[2]/TOT_DATA17, (float)count_assignment_DATA17_400to600[3]/TOT_DATA17, (float)count_assignment_DATA17_400to600[4]/TOT_DATA17, (float)count_assignment_DATA17_400to600[5]/TOT_DATA17, (float)count_assignment_DATA17_400to600[7]/TOT_DATA17); 	
+     printf(" DATA16 (%%)      ---> %.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\n", (float)count_assignment_DATA16_400to600[1]/TOT_DATA16, count16_TOT_err[1], (float)count_assignment_DATA16_400to600[2]/TOT_DATA16, count16_TOT_err[2], (float)count_assignment_DATA16_400to600[3]/TOT_DATA16, count16_TOT_err[3], (float)count_assignment_DATA16_400to600[4]/TOT_DATA16, count16_TOT_err[4], (float)count_assignment_DATA16_400to600[5]/TOT_DATA16, count16_TOT_err[5], (float)count_assignment_DATA16_400to600[7]/TOT_DATA16, count16_TOT_err[7]);
+ 	 printf(" DATA17 (%%)      ---> %.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\n", (float)count_assignment_DATA17_400to600[1]/TOT_DATA17, count17_TOT_err[1], (float)count_assignment_DATA17_400to600[2]/TOT_DATA17, count17_TOT_err[2], (float)count_assignment_DATA17_400to600[3]/TOT_DATA17, count17_TOT_err[3], (float)count_assignment_DATA17_400to600[4]/TOT_DATA17, count17_TOT_err[4], (float)count_assignment_DATA17_400to600[5]/TOT_DATA17, count17_TOT_err[5], (float)count_assignment_DATA17_400to600[7]/TOT_DATA17, count17_TOT_err[7]);
  	
 
 
@@ -1126,12 +1211,24 @@ void Pt_Assignment_DATAonly_v2(){
      	TOT_DATA16+=count_assignment_DATA16_above600[i];
      	TOT_DATA17+=count_assignment_DATA17_above600[i];
      }
+     for(int i = 1; i< 8; i++){
+     	count16_err[i] = sqrt(count_assignment_DATA16_above600[i]);
+     	count17_err[i] = sqrt(count_assignment_DATA17_above600[i]);
+
+		first = count16_err[i]/TOT_DATA16;
+		second = (count_assignment_DATA16_above600[i] * sqrt(TOT_DATA16)) / pow(TOT_DATA16, 2);
+		count16_TOT_err[i] = sqrt(pow(first, 2) + pow(second, 2));
+		first = count17_err[i]/TOT_DATA17;
+		second = (count_assignment_DATA17_above600[i] * sqrt(TOT_DATA17)) / pow(TOT_DATA17, 2);
+		count17_TOT_err[i] = sqrt(pow(first, 2) + pow(second, 2));
+     }
+
  	 printf(" ----------------------------------------------------------------------------------------------------------------------------------- \n");
-     printf("  DATA16         --->  %15d\t%15d\t%15d\t%15d\t%15d\t\t|%15d\n", count_assignment_DATA16_above600[1], count_assignment_DATA16_above600[2], count_assignment_DATA16_above600[3], count_assignment_DATA16_above600[4], count_assignment_DATA16_above600[5], count_assignment_DATA16_above600[7]);
- 	 printf("  DATA17         --->  %15d\t%15d\t%15d\t%15d\t%15d\t\t|%15d\n", count_assignment_DATA17_above600[1], count_assignment_DATA17_above600[2], count_assignment_DATA17_above600[3], count_assignment_DATA17_above600[4], count_assignment_DATA17_above600[5], count_assignment_DATA17_above600[7]);
+     printf("  DATA16         --->  %.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\n", count_assignment_DATA16_above600[1], count16_err[1], count_assignment_DATA16_above600[2], count16_err[2], count_assignment_DATA16_above600[3], count16_err[3], count_assignment_DATA16_above600[4], count16_err[4], count_assignment_DATA16_above600[5], count16_err[5], count_assignment_DATA16_above600[7], count16_err[7]);
+ 	 printf("  DATA17         --->  %.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\n", count_assignment_DATA17_above600[1], count17_err[1], count_assignment_DATA17_above600[2], count17_err[2], count_assignment_DATA17_above600[3], count17_err[3], count_assignment_DATA17_above600[4], count17_err[4], count_assignment_DATA17_above600[5], count17_err[5], count_assignment_DATA17_above600[7], count17_err[7]);
  	 printf(" ----------------------------------------------------------------------------------------------------------------------------------- \n");
-     printf(" DATA16 (%%)      ---> %15.3f\t%15.3f\t%15.3f\t%15.3f\t%15.3f\t\t|%15.3f\n", (float)count_assignment_DATA16_above600[1]/TOT_DATA16, (float)count_assignment_DATA16_above600[2]/TOT_DATA16, (float)count_assignment_DATA16_above600[3]/TOT_DATA16, (float)count_assignment_DATA16_above600[4]/TOT_DATA16, (float)count_assignment_DATA16_above600[5]/TOT_DATA16, (float)count_assignment_DATA16_above600[7]/TOT_DATA16);
- 	 printf(" DATA17 (%%)      ---> %15.3f\t%15.3f\t%15.3f\t%15.3f\t%15.3f\t\t|%15.3f\n", (float)count_assignment_DATA17_above600[1]/TOT_DATA17, (float)count_assignment_DATA17_above600[2]/TOT_DATA17, (float)count_assignment_DATA17_above600[3]/TOT_DATA17, (float)count_assignment_DATA17_above600[4]/TOT_DATA17, (float)count_assignment_DATA17_above600[5]/TOT_DATA17, (float)count_assignment_DATA17_above600[7]/TOT_DATA17);
+     printf(" DATA16 (%%)      ---> %.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\n", (float)count_assignment_DATA16_above600[1]/TOT_DATA16, count16_TOT_err[1], (float)count_assignment_DATA16_above600[2]/TOT_DATA16, count16_TOT_err[2], (float)count_assignment_DATA16_above600[3]/TOT_DATA16, count16_TOT_err[3], (float)count_assignment_DATA16_above600[4]/TOT_DATA16, count16_TOT_err[4], (float)count_assignment_DATA16_above600[5]/TOT_DATA16, count16_TOT_err[5], (float)count_assignment_DATA16_above600[7]/TOT_DATA16, count16_TOT_err[7]);
+ 	 printf(" DATA17 (%%)      ---> %.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\t%.3f+/-%.3f\n", (float)count_assignment_DATA17_above600[1]/TOT_DATA17, count17_TOT_err[1], (float)count_assignment_DATA17_above600[2]/TOT_DATA17, count17_TOT_err[2], (float)count_assignment_DATA17_above600[3]/TOT_DATA17, count17_TOT_err[3], (float)count_assignment_DATA17_above600[4]/TOT_DATA17, count17_TOT_err[4], (float)count_assignment_DATA17_above600[5]/TOT_DATA17, count17_TOT_err[5], (float)count_assignment_DATA17_above600[7]/TOT_DATA17, count17_TOT_err[7]);
 
 
  	 	
@@ -1145,53 +1242,76 @@ void Pt_Assignment_DATAonly_v2(){
 	int c = 2;
 	int d = 3;
 	int e = 4;
-	for(int k = 0; k < 5; k++){
-		int j = k + 1;
-		name_histo = Form("%s_MultipleCounting", reconstruction[j].Data());
-		SaveMultipleCounting(name_histo, pt_CountDouble_DATA16[a], pt_CountDouble_DATA17[a], dir_save, a, b, c, d, e);
-		swap(a,b);
-		swap(b,c);	
-		swap(c,d);	
-		swap(d,e);	
-	}	
+// 	for(int k = 0; k < 5; k++){
+// 		int j = k + 1;
+// 		name_histo = Form("%s_MultipleCounting", reconstruction[j].Data());
+// 		SaveMultipleCounting(name_histo, pt_CountDouble_DATA16[a], pt_CountDouble_DATA17[a], dir_save, a, b, c, d, e);
+// 		swap(a,b);
+// 		swap(b,c);	
+// 		swap(c,d);	
+// 		swap(d,e);	
+// 	}	
 	save_document = dir_save + "Variuos_distribution.pdf";
 	SalvaHisto("h_blank", h_blank, h_blank, dir_save + "Variuos_distribution.pdf[", 0,  0, "p_{T}");
-	SalvaHisto("Dimuon Mass: TuneP", Dimuon_DATA16, Dimuon_DATA17, dir_save + "Variuos_distribution.pdf[", 1,  1, "m_{#mu#mu} [GeV]");
-	SalvaHisto("Dimuon Mass: Picky", Dimuon_Picky_DATA16, Dimuon_Picky_DATA17, dir_save + "Variuos_distribution.pdf", 1,  1, "m_{#mu#mu} [GeV]");
-	SalvaHisto("Dimuon Mass: Dyt", Dimuon_Dyt_DATA16, Dimuon_Dyt_DATA17, dir_save + "Variuos_distribution.pdf", 1,  1, "m_{#mu#mu} [GeV]");
+	SalvaHisto("Dimuon Mass: TuneP", Dimuon_DATA17, Dimuon_DATA16, dir_save + "Variuos_distribution.pdf[", 1,  1, "m_{#mu#mu} [GeV]");
+// 	SalvaHisto("Dimuon Mass: Picky", Dimuon_Picky_DATA16, Dimuon_Picky_DATA17, dir_save + "Variuos_distribution.pdf", 1,  1, "m_{#mu#mu} [GeV]");
+// 	SalvaHisto("Dimuon Mass: Dyt", Dimuon_Dyt_DATA16, Dimuon_Dyt_DATA17, dir_save + "Variuos_distribution.pdf", 1,  1, "m_{#mu#mu} [GeV]");
 	
 	for(int i = 1; i < 8; i++){
 	
 		if(i != 2 && i != 4 && i != 7) continue;
 	
 		name_histo = Form("#eta %s: p_{T} < 400GeV", reconstruction[i].Data());
-		SalvaHisto(name_histo, eta_DATA16_till400[i], eta_DATA17_till400[i], save_document, 0,  0, "#eta");
+		SalvaHisto(name_histo, eta_DATA17_till400[i], eta_DATA16_till400[i], save_document, 0,  0, "#eta");
 
 		name_histo = Form("#eta %s: 400 < p_{T} < 600GeV", reconstruction[i].Data());
-		SalvaHisto(name_histo, eta_DATA16_400to600[i], eta_DATA17_400to600[i], save_document, 0,  0, "#eta");
+		SalvaHisto(name_histo, eta_DATA17_400to600[i], eta_DATA16_400to600[i], save_document, 0,  0, "#eta");
 
 		name_histo = Form("#eta %s: p_{T} > 600GeV", reconstruction[i].Data());
-		SalvaHisto(name_histo, eta_DATA16_above600[i], eta_DATA17_above600[i], save_document, 0,  0, "#eta");
+		SalvaHisto(name_histo, eta_DATA17_above600[i], eta_DATA16_above600[i], save_document, 0,  0, "#eta");
 
 
 		name_histo = Form("#phi %s: p_{T} < 400GeV", reconstruction[i].Data());
-		SalvaHisto(name_histo, phi_DATA16_till400[i], phi_DATA17_till400[i], save_document, 0, 0,  "#phi");
+		SalvaHisto(name_histo, phi_DATA17_till400[i], phi_DATA16_till400[i], save_document, 0, 0,  "#phi");
 
 		name_histo = Form("#phi %s: 400 < p_{T} < 600GeV", reconstruction[i].Data());
-		SalvaHisto(name_histo, phi_DATA16_400to600[i], phi_DATA17_400to600[i], save_document, 0,  0, "#phi");
+		SalvaHisto(name_histo, phi_DATA17_400to600[i], phi_DATA16_400to600[i], save_document, 0,  0, "#phi");
 
 		name_histo = Form("#phi %s: p_{T} > 600GeV", reconstruction[i].Data());
-		SalvaHisto(name_histo, phi_DATA16_above600[i], phi_DATA17_above600[i], save_document, 0,  0, "#phi");
+		SalvaHisto(name_histo, phi_DATA17_above600[i], phi_DATA16_above600[i], save_document, 0,  0, "#phi");
 
+		name_histo = Form("#phi %s BB: p_{T} < 400GeV", reconstruction[i].Data());
+		SalvaHisto(name_histo, phi_DATA17_till400_BB[i], phi_DATA16_till400_BB[i], save_document, 0, 0,  "#phi");
+
+		name_histo = Form("#phi %s BB: 400 < p_{T} < 600GeV", reconstruction[i].Data());
+		SalvaHisto(name_histo, phi_DATA17_400to600_BB[i], phi_DATA16_400to600_BB[i], save_document, 0,  0, "#phi");
+
+		name_histo = Form("#phi %s BB: p_{T} > 600GeV", reconstruction[i].Data());
+		SalvaHisto(name_histo, phi_DATA17_above600_BB[i], phi_DATA16_above600_BB[i], save_document, 0,  0, "#phi");
+
+		name_histo = Form("#phi %s BE: p_{T} < 400GeV", reconstruction[i].Data());
+		SalvaHisto(name_histo, phi_DATA17_till400_BE[i], phi_DATA16_till400_BE[i], save_document, 0, 0,  "#phi");
+
+		name_histo = Form("#phi %s BE: 400 < p_{T} < 600GeV", reconstruction[i].Data());
+		SalvaHisto(name_histo, phi_DATA17_400to600_BE[i], phi_DATA16_400to600_BE[i], save_document, 0,  0, "#phi");
+
+		name_histo = Form("#phi %s BE: p_{T} > 600GeV", reconstruction[i].Data());
+		SalvaHisto(name_histo, phi_DATA17_above600_BE[i], phi_DATA16_above600_BE[i], save_document, 0,  0, "#phi");
 
 		name_histo = Form("%s p_{T}", reconstruction[i].Data());
-		SalvaHisto(name_histo, pt_DATA16[i], pt_DATA17[i], save_document, 0,  1, "p_{T}");
+		SalvaHisto(name_histo, pt_DATA17[i], pt_DATA16[i], save_document, 0,  1, "p_{T}");
+
+		name_histo = Form("%s p_{T} BB", reconstruction[i].Data());
+		SalvaHisto(name_histo, pt_DATA17_BB[i], pt_DATA16_BB[i], save_document, 0,  1, "p_{T}");
+
+		name_histo = Form("%s p_{T} BE", reconstruction[i].Data());
+		SalvaHisto(name_histo, pt_DATA17_BE[i], pt_DATA16_BE[i], save_document, 0,  1, "p_{T}");
 
 		name_histo = Form("%s #eta", reconstruction[i].Data());
-		SalvaHisto(name_histo, eta_DATA16[i], eta_DATA17[i], save_document, 0,  0, "#eta");
+		SalvaHisto(name_histo, eta_DATA17[i], eta_DATA16[i], save_document, 0,  0, "#eta");
 
 		name_histo = Form("%s #phi", reconstruction[i].Data());
-		SalvaHisto(name_histo, phi_DATA16[i], phi_DATA17[i], save_document, 0,  0, "#phi");
+		SalvaHisto(name_histo, phi_DATA17[i], phi_DATA16[i], save_document, 0,  0, "#phi");
 
 
 /*		name_histo = Form("%s p_{T} vs #eta: DATA16", reconstruction[i].Data());
@@ -1269,7 +1389,7 @@ void Pt_Assignment_DATAonly_v2(){
 
 	SalvaHisto("h_blank", h_blank, h_blank, dir_save + "Variuos_distribution.pdf]", 0,  0, "p_{T}");
 
-	TCanvas *c_Double_Count_DATA16;
+/*	TCanvas *c_Double_Count_DATA16;
 	TLatex lat;
 	TString vv = " == ";
 	for(int i = 0; i < 6; i++){
@@ -1331,7 +1451,7 @@ void Pt_Assignment_DATAonly_v2(){
 		    c_Double_Count_DATA16->Write();
 		}
 	}
-	
+*/
 }// end of function 
 
 
@@ -1401,7 +1521,7 @@ void SalvaHisto(TString name, TH2F* h_DATA16, TString save, TString name_Xaxis, 
 	
 }
 
-void SalvaHisto(TString name, TH1F* h_DATA16, TH1F* h_DATA17, TString save, bool logx, bool logy, TString name_axis, int X_pos_latex, TString strig_1, TString strig_2, TString strig_3, TString strig_4, TString strig_5){
+void SalvaHisto(TString name, TH1F* h_DATA17, TH1F* h_DATA16, TString save, bool logx, bool logy, TString name_axis, int X_pos_latex, TString strig_1, TString strig_2, TString strig_3, TString strig_4, TString strig_5){
 
 	TLatex lat;
 	TCanvas *c1 = new TCanvas(name, name,  500, 500);//210,45,1050,750);
@@ -1428,84 +1548,90 @@ void SalvaHisto(TString name, TH1F* h_DATA16, TH1F* h_DATA17, TString save, bool
 	if(logy) min = 0.1;
 	else min = 0;
 
-	if(h_DATA17->GetMaximum() > h_DATA16->GetMaximum())
-		max = h_DATA17->GetMaximum();
-	else
+	if(h_DATA16->GetMaximum() > h_DATA17->GetMaximum())
 		max = h_DATA16->GetMaximum();
+	else
+		max = h_DATA17->GetMaximum();
 		
 	max = 1.1 * max;
 	
 	if(max == 0) max = 1;
 	
-	h_DATA16->SetLineColor(kBlue);
-	h_DATA16->SetTitle(name);
-	h_DATA16->Draw();
-	h_DATA16->SetStats(1);
-	c1->Update();
-
-	TPaveStats * st_DATA16 = (TPaveStats *)h_DATA16->GetListOfFunctions()->FindObject("stats");
-    if( st_DATA16 ){ 
-		st_DATA16->SetName("Const");
-		st_DATA16->SetX1NDC(0.75);
-		st_DATA16->SetY1NDC(0.52);
-		st_DATA16->SetY2NDC(0.72);
-		st_DATA16->SetTextColor(kBlue);
-    }
-    else std::cout << "Null pointer to TPaveStats DATA16: " << st_DATA16 << std::endl;
-  
-	h_DATA17->SetLineColor(kRed);
+	h_DATA17->SetLineColor(kBlue);
 	h_DATA17->SetTitle(name);
 	h_DATA17->Draw();
-// 	h_DATA17->SetStats(0);
-	TH1F *ratio = (TH1F*) h_DATA17->Clone();
 	h_DATA17->SetStats(1);
 	c1->Update();
-// 	gPad->Update();
 
 	TPaveStats * st_DATA17 = (TPaveStats *)h_DATA17->GetListOfFunctions()->FindObject("stats");
     if( st_DATA17 ){ 
-    	st_DATA17->SetTextColor(kRed); 
 		st_DATA17->SetName("Const");
 		st_DATA17->SetX1NDC(0.75);
-		st_DATA17->SetY1NDC(0.75);
-		st_DATA17->SetY2NDC(0.95);
-
+		st_DATA17->SetY1NDC(0.52);
+		st_DATA17->SetY2NDC(0.72);
+		st_DATA17->SetTextColor(kBlue);
     }
     else std::cout << "Null pointer to TPaveStats DATA17: " << st_DATA17 << std::endl;
+  
+	h_DATA16->SetLineColor(kRed);
+	h_DATA16->SetTitle(name);
+	h_DATA16->Draw();
+// 	h_DATA16->SetStats(0);
+	TH1F *ratio = (TH1F*) h_DATA16->Clone();
+	h_DATA16->SetStats(1);
+	c1->Update();
+// 	gPad->Update();
 
-	h_DATA16->GetYaxis()->SetTitleOffset(1.2);
+	TPaveStats * st_DATA16 = (TPaveStats *)h_DATA16->GetListOfFunctions()->FindObject("stats");
+    if( st_DATA16 ){ 
+    	st_DATA16->SetTextColor(kRed); 
+		st_DATA16->SetName("Const");
+		st_DATA16->SetX1NDC(0.75);
+		st_DATA16->SetY1NDC(0.75);
+		st_DATA16->SetY2NDC(0.95);
+
+    }
+    else std::cout << "Null pointer to TPaveStats DATA16: " << st_DATA16 << std::endl;
+
 	h_DATA17->GetYaxis()->SetTitleOffset(1.2);
+	h_DATA16->GetYaxis()->SetTitleOffset(1.2);
 
-	h_DATA16->SetMaximum(max);
-	h_DATA16->SetMinimum(min);	
-// 	h_DATA16->GetYaxis()->SetRangeUser(min, max);//SetMaximum(max);
-	h_DATA17->GetYaxis()->SetRangeUser(min, max);//SetMaximum(max);
+	h_DATA17->SetMaximum(max);
+	h_DATA17->SetMinimum(min);	
+// 	h_DATA17->GetYaxis()->SetRangeUser(min, max);//SetMaximum(max);
+	h_DATA16->GetYaxis()->SetRangeUser(min, max);//SetMaximum(max);
 
 		
     c1->Update();
 
-	h_DATA16->Draw();
-	h_DATA17->Draw("sameP");
-	h_DATA17->SetMarkerStyle(3);
-	h_DATA17->SetMarkerColor(kRed);
-	h_DATA17->SetMarkerSize(0.5);
-	st_DATA16->Draw("same");
-// 	st_DATA17->Draw("same");
-	h_DATA16->GetXaxis()->SetTitle(name_axis);
-	h_DATA16->GetYaxis()->SetTitleSize(0.04);
-	h_DATA16->GetYaxis()->SetLabelSize(0.04);
-	h_DATA16->GetXaxis()->SetTitleSize(0.04);
-	h_DATA16->GetXaxis()->SetLabelSize(0.04);
+	h_DATA17->Draw("HIST E");
+	gStyle->SetHatchesSpacing(2);
+	h_DATA17->SetFillStyle(3004);
+	h_DATA17->SetFillColor(kBlue);
+	h_DATA16->Draw("same E");
+	gStyle->SetHatchesSpacing(5);
+	h_DATA16->SetFillStyle(3005);
+	h_DATA16->SetFillColor(kRed);
+	h_DATA16->SetMarkerColor(kRed);
+	h_DATA16->SetMarkerSize(0.5);
+	h_DATA16->SetMarkerStyle(3);
+	st_DATA17->Draw("same");
+// 	st_DATA16->Draw("sameP");
 	h_DATA17->GetXaxis()->SetTitle(name_axis);
 	h_DATA17->GetYaxis()->SetTitleSize(0.04);
 	h_DATA17->GetYaxis()->SetLabelSize(0.04);
 	h_DATA17->GetXaxis()->SetTitleSize(0.04);
 	h_DATA17->GetXaxis()->SetLabelSize(0.04);
+	h_DATA16->GetXaxis()->SetTitle(name_axis);
+	h_DATA16->GetYaxis()->SetTitleSize(0.04);
+	h_DATA16->GetYaxis()->SetLabelSize(0.04);
+	h_DATA16->GetXaxis()->SetTitleSize(0.04);
+	h_DATA16->GetXaxis()->SetLabelSize(0.04);
 	
 //     	
 	TLegend *l1 = new TLegend(0.4,0.8,0.6,0.9);
-	l1->AddEntry(h_DATA17, "DATA 2017", "l");
 	l1->AddEntry(h_DATA16, "DATA 2016", "l");
+	l1->AddEntry(h_DATA17, "DATA 2017", "l");
 	l1->Draw();	
 	
 	lat.DrawLatex(X_pos_latex, max, strig_1);
@@ -1529,14 +1655,14 @@ void SalvaHisto(TString name, TH1F* h_DATA16, TH1F* h_DATA17, TString save, bool
 		pad22->SetLogx();
 	pad22->cd();
 	
-	ratio->Divide(h_DATA16);
+	ratio->Divide(h_DATA17);
 	ratio->GetYaxis()->SetRangeUser(0, 2);
 	ratio->SetTitle("");
 	ratio->SetStats(0);
 	ratio->GetYaxis()->SetTitleSize(0.1);
 // 	ratio->GetYaxis()->SetTitleFont(43);
 	ratio->GetYaxis()->SetLabelSize(0.14);
-	ratio->GetYaxis()->SetTitle("DATA17 / DATA16");
+	ratio->GetYaxis()->SetTitle("DATA16 / DATA17");
 	ratio->GetYaxis()->SetTitleOffset(0.50);
 	ratio->GetYaxis()->SetNdivisions(506); 
 	ratio->GetXaxis()->SetTitle(name_axis);

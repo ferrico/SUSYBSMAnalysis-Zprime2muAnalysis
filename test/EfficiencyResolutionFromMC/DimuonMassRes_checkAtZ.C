@@ -649,10 +649,10 @@ bool save = true;
     }
  	if(save){ 
 	 	if(i==1)
- 			canvas->Print("./Check_Resolution_Code_2016_AtZ_Tracker/Split_3categorie/BB_resolutionAtZ_MC_fabs.pdf[");
-		canvas->Print("./Check_Resolution_Code_2016_AtZ_Tracker/Split_3categorie/BB_resolutionAtZ_MC_fabs.pdf");
+ 			canvas->Print("./Check_Resolution_Code_2018_AtZ/Split_3categorie/BB_resolutionAtZ_MC_fabs.pdf[");
+		canvas->Print("./Check_Resolution_Code_2018_AtZ/Split_3categorie/BB_resolutionAtZ_MC_fabs.pdf");
  		if(i==DileptonMass_2d_vsPt_BB_MC->GetNbinsY())
-	 		canvas->Print("./Check_Resolution_Code_2016_AtZ_Tracker/Split_3categorie/BB_resolutionAtZ_MC_fabs.pdf]");
+	 		canvas->Print("./Check_Resolution_Code_2018_AtZ/Split_3categorie/BB_resolutionAtZ_MC_fabs.pdf]");
 	    canvas->Write();
 	}
 }
@@ -700,10 +700,10 @@ bool save = true;
     }
 	if(save){
 	 	if(i==1)
- 			canvas->Print("./Check_Resolution_Code_2016_AtZ_Tracker/Split_3categorie/BE_resolutionAtZ_MC_fabs.pdf[");
-		canvas->Print("./Check_Resolution_Code_2016_AtZ_Tracker/Split_3categorie/BE_resolutionAtZ_MC_fabs.pdf");
+ 			canvas->Print("./Check_Resolution_Code_2018_AtZ/Split_3categorie/BE_resolutionAtZ_MC_fabs.pdf[");
+		canvas->Print("./Check_Resolution_Code_2018_AtZ/Split_3categorie/BE_resolutionAtZ_MC_fabs.pdf");
  		if(i==DileptonMass_2d_vsPt_BE_MC->GetNbinsY())
- 			canvas->Print("./Check_Resolution_Code_2016_AtZ_Tracker/Split_3categorie/BE_resolutionAtZ_MC_fabs.pdf]");
+ 			canvas->Print("./Check_Resolution_Code_2018_AtZ/Split_3categorie/BE_resolutionAtZ_MC_fabs.pdf]");
 	    canvas->Write();
 	}
 
@@ -752,10 +752,10 @@ bool save = true;
     }
 	if(save){
 	 	if(i==1)
- 			canvas->Print("./Check_Resolution_Code_2016_AtZ_Tracker/Split_3categorie/EE_resolutionAtZ_MC_fabs.pdf[");
-		canvas->Print("./Check_Resolution_Code_2016_AtZ_Tracker/Split_3categorie/EE_resolutionAtZ_MC_fabs.pdf");
+ 			canvas->Print("./Check_Resolution_Code_2018_AtZ/Split_3categorie/EE_resolutionAtZ_MC_fabs.pdf[");
+		canvas->Print("./Check_Resolution_Code_2018_AtZ/Split_3categorie/EE_resolutionAtZ_MC_fabs.pdf");
  		if(i==DileptonMass_2d_vsPt_EE_MC->GetNbinsY())
- 			canvas->Print("./Check_Resolution_Code_2016_AtZ_Tracker/Split_3categorie/EE_resolutionAtZ_MC_fabs.pdf]");
+ 			canvas->Print("./Check_Resolution_Code_2018_AtZ/Split_3categorie/EE_resolutionAtZ_MC_fabs.pdf]");
 	    canvas->Write();
 	}
 
@@ -804,10 +804,10 @@ bool save = true;
     }
   if(save){	 	
  	if(i==1)
- 		canvas->Print("./Check_Resolution_Code_2016_AtZ_Tracker/Split_3categorie/BB_resolutionAtZ_DATA_fabs.pdf[");
-	canvas->Print("./Check_Resolution_Code_2016_AtZ_Tracker/Split_3categorie/BB_resolutionAtZ_DATA_fabs.pdf");
+ 		canvas->Print("./Check_Resolution_Code_2018_AtZ/Split_3categorie/BB_resolutionAtZ_DATA_fabs.pdf[");
+	canvas->Print("./Check_Resolution_Code_2018_AtZ/Split_3categorie/BB_resolutionAtZ_DATA_fabs.pdf");
  	if(i==DileptonMass_2d_vsPt_BB_DATA->GetNbinsY())
- 		canvas->Print("./Check_Resolution_Code_2016_AtZ_Tracker/Split_3categorie/BB_resolutionAtZ_DATA_fabs.pdf]");
+ 		canvas->Print("./Check_Resolution_Code_2018_AtZ/Split_3categorie/BB_resolutionAtZ_DATA_fabs.pdf]");
     canvas->Write();
 	}
 }
@@ -855,10 +855,10 @@ bool save = true;
     }
   if(save){	 	
  	if(i==1)
- 		canvas->Print("./Check_Resolution_Code_2016_AtZ_Tracker/Split_3categorie/BE_resolutionAtZ_DATA_fabs.pdf[");
-	canvas->Print("./Check_Resolution_Code_2016_AtZ_Tracker/Split_3categorie/BE_resolutionAtZ_DATA_fabs.pdf");
+ 		canvas->Print("./Check_Resolution_Code_2018_AtZ/Split_3categorie/BE_resolutionAtZ_DATA_fabs.pdf[");
+	canvas->Print("./Check_Resolution_Code_2018_AtZ/Split_3categorie/BE_resolutionAtZ_DATA_fabs.pdf");
  	if(i==DileptonMass_2d_vsPt_BE_DATA->GetNbinsY())
- 		canvas->Print("./Check_Resolution_Code_2016_AtZ_Tracker/Split_3categorie/BE_resolutionAtZ_DATA_fabs.pdf]");
+ 		canvas->Print("./Check_Resolution_Code_2018_AtZ/Split_3categorie/BE_resolutionAtZ_DATA_fabs.pdf]");
     canvas->Write();
 	}
 }
@@ -906,10 +906,10 @@ bool save = true;
     }
   if(save){	 	
  	if(i==1)
- 		canvas->Print("./Check_Resolution_Code_2016_AtZ_Tracker/Split_3categorie/EE_resolutionAtZ_DATA_fabs.pdf[");
-	canvas->Print("./Check_Resolution_Code_2016_AtZ_Tracker/Split_3categorie/EE_resolutionAtZ_DATA_fabs.pdf");
+ 		canvas->Print("./Check_Resolution_Code_2018_AtZ/Split_3categorie/EE_resolutionAtZ_DATA_fabs.pdf[");
+	canvas->Print("./Check_Resolution_Code_2018_AtZ/Split_3categorie/EE_resolutionAtZ_DATA_fabs.pdf");
  	if(i==DileptonMass_2d_vsPt_EE_DATA->GetNbinsY())
- 		canvas->Print("./Check_Resolution_Code_2016_AtZ_Tracker/Split_3categorie/EE_resolutionAtZ_DATA_fabs.pdf]");
+ 		canvas->Print("./Check_Resolution_Code_2018_AtZ/Split_3categorie/EE_resolutionAtZ_DATA_fabs.pdf]");
     canvas->Write();
 	}
 }
@@ -982,8 +982,8 @@ legend_MC->AddEntry(MC_res_bb,"DY", "lep");
  l_bb->Draw();
  c_BB->Update();
   if(save){
- c_BB->Print("./Check_Resolution_Code_2016_AtZ_Tracker/Split_3categorie/ResolutionAtZ_BB_fabs.png");
- c_BB->Print("./Check_Resolution_Code_2016_AtZ_Tracker/Split_3categorie/ResolutionAtZ_BB_fabs.pdf");
+ c_BB->Print("./Check_Resolution_Code_2018_AtZ/Split_3categorie/ResolutionAtZ_BB_fabs.png");
+ c_BB->Print("./Check_Resolution_Code_2018_AtZ/Split_3categorie/ResolutionAtZ_BB_fabs.pdf");
 }
 
  TCanvas* c_BE = new TCanvas("res_BE", "res_BE", 500, 500);
@@ -1038,8 +1038,8 @@ legend_MC->AddEntry(MC_res_bb,"DY", "lep");
  ratio_be->Draw("E2");
  l_be->Draw();
  if(save){
- c_BE->Print("./Check_Resolution_Code_2016_AtZ_Tracker/Split_3categorie/ResolutionAtZ_BE_fabs.png");
- c_BE->Print("./Check_Resolution_Code_2016_AtZ_Tracker/Split_3categorie/ResolutionAtZ_BE_fabs.pdf");
+ c_BE->Print("./Check_Resolution_Code_2018_AtZ/Split_3categorie/ResolutionAtZ_BE_fabs.png");
+ c_BE->Print("./Check_Resolution_Code_2018_AtZ/Split_3categorie/ResolutionAtZ_BE_fabs.pdf");
 }
 
  TCanvas* c_EE = new TCanvas("res_EE", "res_EE", 500, 500);
@@ -1094,8 +1094,8 @@ legend_MC->AddEntry(MC_res_bb,"DY", "lep");
  ratio_ee->Draw("E2");
  l_ee->Draw();
  if(save){
- c_EE->Print("./Check_Resolution_Code_2016_AtZ_Tracker/Split_3categorie/ResolutionAtZ_EE_fabs.png");
- c_EE->Print("./Check_Resolution_Code_2016_AtZ_Tracker/Split_3categorie/ResolutionAtZ_EE_fabs.pdf");
+ c_EE->Print("./Check_Resolution_Code_2018_AtZ/Split_3categorie/ResolutionAtZ_EE_fabs.png");
+ c_EE->Print("./Check_Resolution_Code_2018_AtZ/Split_3categorie/ResolutionAtZ_EE_fabs.pdf");
 }
 
 
