@@ -10,16 +10,15 @@ from SUSYBSMAnalysis.Zprime2muAnalysis.Zprime2muAnalysis_cfg import process
 from SUSYBSMAnalysis.Zprime2muAnalysis.Zprime2muAnalysis_cff import goodDataFiltersMiniAOD
 
 process.source.fileNames =[#'file:./pat.root'
-'file:./pickevents.root'
+'/store/data/Run2018D/SingleMuon/MINIAOD/PromptReco-v2/000/320/500/00000/12C8CC7E-8C95-E811-BDA3-FA163EA1F576.root',
 # '/store/data/Run2018B/SingleMuon/MINIAOD/PromptReco-v2/000/318/733/00000/BEAE5A42-D17B-E811-A212-02163E017F53.root'
 # '/store/data/Run2018C/SingleMuon/MINIAOD/PromptReco-v2/000/319/459/00000/4C957E16-7386-E811-A469-FA163E1DFF8B.root'
 # '/store/data/Run2018A/SingleMuon/MINIAOD/PromptReco-v2/000/316/239/00000/00765293-4759-E811-B89D-FA163EC3C021.root'
 			   ]
 process.maxEvents.input = -1
 
-# process.GlobalTag.globaltag ='101X_dataRun2_Prompt_v9' # DATA A_v1
-# process.GlobalTag.globaltag ='101X_dataRun2_Prompt_v10' # DATA A_v2,3 e B_v1
-process.GlobalTag.globaltag ='101X_dataRun2_Prompt_v11' # DATA B_v2 e C
+# process.GlobalTag.globaltag ='102X_dataRun2_Prompt_v11' # DATA D
+process.GlobalTag.globaltag ='102X_dataRun2_Sep2018Rereco_v1' # reReco A,B,C
 #process.options.wantSummary = cms.untracked.bool(True)# false di default
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000 # default 1000
 
@@ -472,9 +471,8 @@ def check_prescale(process, trigger_paths, hlt_process_name='HLT'):
     process.pCheckPrescale = cms.Path(process.CheckPrescale)
 
 def for_data(process):
-# 	process.GlobalTag.globaltag ='101X_dataRun2_Prompt_v9' # DATA A_v1
-# 	process.GlobalTag.globaltag ='101X_dataRun2_Prompt_v10' # DATA A_v2,3 e b_v1
-	process.GlobalTag.globaltag ='101X_dataRun2_Prompt_v11' # DATA B_v2 e C
+# 	process.GlobalTag.globaltag ='102X_dataRun2_Prompt_v11' # DATA D
+	process.GlobalTag.globaltag ='102X_dataRun2_Sep2018Rereco_v1' # reReco A,B,C
 	ntuplify(process)
     #check_prescale(process, trigger_paths) ####### Now it seams that there are no prescaled path ########
 
@@ -559,10 +557,14 @@ config.Site.storageSite = 'T2_IT_Bari'
 # 						('SingleMuonRun2018A_v2-PromptReco', '/SingleMuon/Run2018A-PromptReco-v2/MINIAOD'),
 # 						('SingleMuonRun2018A_v3-PromptReco', '/SingleMuon/Run2018A-PromptReco-v3/MINIAOD'),
 # 						('SingleMuonRun2018B_v1-PromptReco', '/SingleMuon/Run2018B-PromptReco-v1/MINIAOD'),
-						('SingleMuonRun2018B_v2-PromptReco', '/SingleMuon/Run2018B-PromptReco-v2/MINIAOD'),
-						('SingleMuonRun2018C_v1-PromptReco', '/SingleMuon/Run2018C-PromptReco-v1/MINIAOD'),
-						('SingleMuonRun2018C_v2-PromptReco', '/SingleMuon/Run2018C-PromptReco-v2/MINIAOD'),
-						('SingleMuonRun2018C_v3-PromptReco', '/SingleMuon/Run2018C-PromptReco-v3/MINIAOD'),
+# 						('SingleMuonRun2018B_v2-PromptReco', '/SingleMuon/Run2018B-PromptReco-v2/MINIAOD'),
+# 						('SingleMuonRun2018C_v1-PromptReco', '/SingleMuon/Run2018C-PromptReco-v1/MINIAOD'),
+# 						('SingleMuonRun2018C_v2-PromptReco', '/SingleMuon/Run2018C-PromptReco-v2/MINIAOD'),
+# 						('SingleMuonRun2018C_v3-PromptReco', '/SingleMuon/Run2018C-PromptReco-v3/MINIAOD'),
+						('SingleMuonRun2018A_v2-17Sep2018', '/SingleMuon/Run2018A-17Sep2018-v2/MINIAOD'),
+						('SingleMuonRun2018B_v1-17Sep2018', '/SingleMuon/Run2018B-17Sep2018-v1/MINIAOD'),
+						('SingleMuonRun2018C_v1-17Sep2018', '/SingleMuon/Run2018C-17Sep2018-v1/MINIAOD'),
+# 						('SingleMuonRun2018D_v2-PromptReco', '/SingleMuon/Run2018D-PromptReco-v2/MINIAOD'),
 
             ]
 
