@@ -6,7 +6,7 @@ Double_t cruijff( Double_t *x, Double_t * par) {
  // par[3] = alphaL
  // par[4] = alphaR
 
- double dx = (x[0]-par[1]) ;
+ double dx = (x[0]-par[1]);
  double sigma = par[2] ; //dx<0 ? par[2]: par[3] ;
  double alpha = dx<0 ? par[3]: par[4] ;
  double f = 2*sigma*sigma + alpha*dx*dx ;

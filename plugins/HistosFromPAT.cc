@@ -238,8 +238,6 @@ Zprime2muHistosFromPAT::Zprime2muHistosFromPAT(const edm::ParameterSet& cfg)
   mayConsume<GenEventInfoProduct>(edm::InputTag("generator"));
   if (fill_gen_info) consumes<std::vector<reco::GenParticle>>(hardInteraction->src);
  
-
-
   std::string title_prefix = cfg.getUntrackedParameter<std::string>("titlePrefix", "");
   if (title_prefix.size() && title_prefix[title_prefix.size()-1] != ' ')
     title_prefix += " ";
@@ -802,6 +800,8 @@ void Zprime2muHistosFromPAT::analyze(const edm::Event& event, const edm::EventSe
 	if (gen_ev_info.isValid()){
         	eventWeight = gen_ev_info->weight();
         	_madgraphWeight = ( eventWeight > 0 ) ? 1 : -1;
+// 			std::cout<<"HISTO  ---- "<<gen_ev_info->weight()<<" ---- "<<eventWeight<<std::endl;
+
 	}
         WeightMadGraph->Fill(_madgraphWeight);
     }

@@ -10,15 +10,44 @@ from SUSYBSMAnalysis.Zprime2muAnalysis.Zprime2muAnalysis_cfg import process
 from SUSYBSMAnalysis.Zprime2muAnalysis.Zprime2muAnalysis_cff import goodDataFiltersMiniAOD
 
 process.source.fileNames =[#'file:./pat.root'
-'/store/data/Run2018D/SingleMuon/MINIAOD/PromptReco-v2/000/320/500/00000/12C8CC7E-8C95-E811-BDA3-FA163EA1F576.root',
-# '/store/data/Run2018B/SingleMuon/MINIAOD/PromptReco-v2/000/318/733/00000/BEAE5A42-D17B-E811-A212-02163E017F53.root'
-# '/store/data/Run2018C/SingleMuon/MINIAOD/PromptReco-v2/000/319/459/00000/4C957E16-7386-E811-A469-FA163E1DFF8B.root'
-# '/store/data/Run2018A/SingleMuon/MINIAOD/PromptReco-v2/000/316/239/00000/00765293-4759-E811-B89D-FA163EC3C021.root'
+# '/store/mc/RunIIAutumn18MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_50_120/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/120000/FE95CC6D-6238-BB49-A1A0-67188E79CF11.root',
+
+# '/store/mc/RunIIAutumn18MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_3500_4500/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/110000/DB8FBD39-15B8-814A-86D5-F2833A227992.root',
+# '/store/mc/RunIIAutumn18MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_3500_4500/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/110000/C1712BCD-2E20-454F-B3D3-5CC0E66CB76A.root',
+# '/store/mc/RunIIAutumn18MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_3500_4500/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/110000/98CC641A-F710-2D44-8EAA-45620FD6F39C.root',
+# '/store/mc/RunIIAutumn18MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_3500_4500/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/110000/865EBE8C-44B8-9C49-96D7-86CCD38ACA0B.root',
+# '/store/mc/RunIIAutumn18MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_3500_4500/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/110000/66FBD284-CCA1-F548-B968-29D395EF4350.root',
+# '/store/mc/RunIIAutumn18MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_3500_4500/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/110000/57ACB3C4-17C4-EA4F-B3C8-46E32B2AE15A.root',
+# '/store/mc/RunIIAutumn18MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_3500_4500/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/110000/474CF2DC-5C86-994B-9F39-D2363FFB1826.root',
+# '/store/mc/RunIIAutumn18MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_3500_4500/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/110000/40C2E201-C318-1E4C-A616-0B1D9A543A45.root',
+# '/store/mc/RunIIAutumn18MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_3500_4500/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/110000/36830EB2-4183-F949-9327-C6C5858A39DF.root',
+# '/store/mc/RunIIAutumn18MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_3500_4500/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/110000/31AE5DA9-2467-054B-9414-BA1DC48A22AA.root',
+# '/store/mc/RunIIAutumn18MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_3500_4500/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/110000/301F3D16-BB5B-8D45-B89A-B21EA09819BB.root',
+# '/store/mc/RunIIAutumn18MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_3500_4500/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/110000/1D9080EB-A34A-6B46-AD9D-005C1101DABF.root',
+
+# '/store/mc/RunIIAutumn18MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_800_1400/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/60000/16134D98-B9D7-4041-8D01-A039DFEFDE6B.root',
+# '/store/mc/RunIIAutumn18MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_800_1400/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/60000/8D8C33EA-DE97-6A40-82B9-615CE17C3727.root',
+# '/store/mc/RunIIAutumn18MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_800_1400/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/60000/9386C334-9AAA-A74F-BA55-3FE1B00555C6.root',
+# '/store/mc/RunIIAutumn18MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_800_1400/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/60000/A9C8E1A2-A0E9-884F-BAD7-48B99E67D16E.root',
+# '/store/mc/RunIIAutumn18MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_800_1400/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/60000/C863AB7C-104A-7942-B124-9AA2E90C4C3B.root',
+# '/store/mc/RunIIAutumn18MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_800_1400/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/60000/F8575267-F0D8-A54E-AC3D-7290FD0D5CA4.root',
+
+# '/store/mc/RunIIAutumn18MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_2300_3500/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/120000/03566E13-0DE9-CA47-92CB-EDB2A354118C.root',
+# '/store/mc/RunIIAutumn18MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_2300_3500/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/120000/641C8C27-37B1-DB4B-A5CC-EAB27B6EB10D.root',
+# '/store/mc/RunIIAutumn18MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_2300_3500/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/120000/88CE548C-5263-7042-93D1-2ABB0A13276D.root',
+# '/store/mc/RunIIAutumn18MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_2300_3500/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/120000/97B5EDFB-D67A-7A4B-B306-97E3E77E7316.root',
+# '/store/mc/RunIIAutumn18MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_2300_3500/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/120000/A18A3E9D-D5FA-3C48-86F8-883C8CF84374.root',
+# '/store/mc/RunIIAutumn18MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_2300_3500/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/120000/DF8FA170-2B12-E74A-A23C-7D720A0F1E76.root',
+# '/store/mc/RunIIAutumn18MiniAOD/ZToMuMu_NNPDF31_13TeV-powheg_M_2300_3500/MINIAODSIM/102X_upgrade2018_realistic_v15-v2/120000/E341A5B4-928D-7C43-934E-8529706D5EEA.root',
+
+
+
+#'/store/data/Run2018D/SingleMuon/MINIAOD/PromptReco-v2/000/320/500/00000/12C8CC7E-8C95-E811-BDA3-FA163EA1F576.root',
 			   ]
 process.maxEvents.input = -1
-
+process.GlobalTag.globaltag ='102X_upgrade2018_realistic_v15' # DY 102
 # process.GlobalTag.globaltag ='102X_dataRun2_Prompt_v11' # DATA D
-process.GlobalTag.globaltag ='102X_dataRun2_Sep2018Rereco_v1' # reReco A,B,C
+# process.GlobalTag.globaltag ='102X_dataRun2_Sep2018Rereco_v1' # reReco A,B,C
 #process.options.wantSummary = cms.untracked.bool(True)# false di default
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000 # default 1000
 
@@ -226,28 +255,23 @@ for cut_name, Selection in cuts.iteritems():
        #define the list of MC samples to be read here. be careful that if WWinclusive or tautau sample are not commented it will apply the filters when running locally.
 
     samples = [
-    	('DYJetsToLL_M50', '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'),
-#  												   	('DYJetsToLL_M-50_ext', '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAOD-94X_mc2017_realistic_v10_ext1-v1/MINIAODSIM')
-# 	    ('dy50to120', '/ZToMuMu_NNPDF31_13TeV-powheg_M_50_120/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM'),
-#     	('dy120to200', '/ZToMuMu_NNPDF31_13TeV-powheg_M_120_200/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v2/MINIAODSIM'),
-# 	    ('dy200to400', '/ZToMuMu_NNPDF31_13TeV-powheg_M_200_400/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'),
-#     	('dy400to800', '/ZToMuMu_NNPDF31_13TeV-powheg_M_400_800/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v2/MINIAODSIM'),
-# 	    ('dy800to1400', '/ZToMuMu_NNPDF31_13TeV-powheg_M_800_1400/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'),
-#     	('dy1400to2300', '/ZToMuMu_NNPDF31_13TeV-powheg_M_1400_2300/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'),
-#     	('dy2300to3500', '/ZToMuMu_NNPDF31_13TeV-powheg_M_2300_3500/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v2/MINIAODSIM'),
-#     	('dy3500to4500', '/ZToMuMu_NNPDF31_13TeV-powheg_M_3500_4500/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'),
-    	('dy4500to6000', '/ZToMuMu_NNPDF31_13TeV-powheg_M_4500_6000/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM'),
-# 
-#     	('WZ', '/WZ_TuneCUETP8M1_13TeV-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM'),
-# 	    ('ZZ', '/ZZ_TuneCUETP8M1_13TeV-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM'),
-# 		('WW', '/WW_TuneCUETP8M1_13TeV-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM'),
-# 
-# 	    ('Wantitop', '/ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM'),
-#     	('tW', '/ST_tW_top_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM'),
-# 
-#####     	('ttbar', '/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10_ext1-v2/MINIAODSIM'),
-#     	('ttbar', '/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10_ext1-v1/MINIAODSIM'),
+# 	    ('dy50to120', '/ZToMuMu_NNPDF31_13TeV-powheg_M_50_120/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM'),
+#     	('dy120to200', '/ZToMuMu_NNPDF31_13TeV-powheg_M_120_200/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM'),
+# 	    ('dy200to400', '/ZToMuMu_NNPDF31_13TeV-powheg_M_200_400/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM'),
+#     	('dy400to800', '/ZToMuMu_NNPDF31_13TeV-powheg_M_400_800/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM'),
+# 	    ('dy800to1400', '/ZToMuMu_NNPDF31_13TeV-powheg_M_800_1400/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM'),
+#     	('dy1400to2300', '/ZToMuMu_NNPDF31_13TeV-powheg_M_1400_2300/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM'),
+#     	('dy2300to3500', '/ZToMuMu_NNPDF31_13TeV-powheg_M_2300_3500/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM'),
+#     	('dy3500to4500', '/ZToMuMu_NNPDF31_13TeV-powheg_M_3500_4500/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM'),
+#     	('dy4500to6000', '/ZToMuMu_NNPDF31_13TeV-powheg_M_4500_6000/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM'),
 
+	    ('ZZ', '/ZZ_TuneCP5_13TeV-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM'),
+    	('WZ', '/WZ_TuneCP5_13TeV-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v3/MINIAODSIM'),
+		('WW', '/WW_TuneCP5_13TeV-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM'),
+	    ('Wantitop', '/ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v1/MINIAODSIM'),
+    	('tW', '/ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v1/MINIAODSIM'),
+    	('ttbar_lep', '/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM'),
+    	('dyInclusive50', '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM'),
 
 
 # 		('dyPt100to250', '/DYJetsToLL_Pt-100To250_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext5-v1/MINIAODSIM'),
@@ -265,11 +289,9 @@ for cut_name, Selection in cuts.iteritems():
 # 	    ('WW1200to2500', '/WWTo2L2Nu_Mll_1200To2500_13TeV-powheg/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM'),
 #     	('WW2500', '/WWTo2L2Nu_Mll_2500ToInf_13TeV-powheg/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM'),
 # 
-#     	('dyInclusive50', '/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv2-PUMoriond17_HCALDebug_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM'),
 # 
 # 	    ('Wjets', '/WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM'),
 # 
-#     	('ttbar_lep', '/TTTo2L2Nu_TuneCUETP8M2_ttHtranche3_13TeV-powheg-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM'),
 #     	('ttbar_lep50to500', '/TTTo2L2Nu_TuneCUETP8M2_ttHtranche3_13TeV-powheg-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM'),
 # 		('ttbar_lep_500to800', '/TTToLL_MLL_500To800_TuneCUETP8M1_13TeV-powheg-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM'),
 # 		('ttbar_lep_800to1200', '/TTToLL_MLL_800To1200_TuneCUETP8M1_13TeV-powheg-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM'),
@@ -388,7 +410,7 @@ for cut_name, Selection in cuts.iteritems():
     setattr(process, pathname, path)
 
 
-def ntuplify(process, fill_gen_info=False):
+def ntuplify(process, fill_gen_info=True):
 
 
     if miniAOD:
@@ -402,8 +424,8 @@ def ntuplify(process, fill_gen_info=False):
 						jet_src = cms.InputTag("slimmedJets"),
                                            beamspot_src = cms.InputTag('offlineBeamSpot'),
                                            vertices_src = cms.InputTag('offlineSlimmedPrimaryVertices'),
-# 								TriggerResults_src = cms.InputTag('TriggerResults', '', 'PAT'),	#mc
-								TriggerResults_src = cms.InputTag('TriggerResults', '', 'RECO'),	#data
+								TriggerResults_src = cms.InputTag('TriggerResults', '', 'PAT'),	#mc
+# 								TriggerResults_src = cms.InputTag('TriggerResults', '', 'RECO'),	#data
                                            genEventInfo = cms.untracked.InputTag('generator'),
                                            metFilter = cms.VInputTag( cms.InputTag("Flag_HBHENoiseFilter"), cms.InputTag("Flag_HBHENoiseIsoFilter"), cms.InputTag("Flag_EcalDeadCellTriggerPrimitiveFilter"), cms.InputTag("Flag_eeBadScFilter"), cms.InputTag("Flag_globalTightHalo2016Filter"))
                                            )
@@ -471,8 +493,9 @@ def check_prescale(process, trigger_paths, hlt_process_name='HLT'):
     process.pCheckPrescale = cms.Path(process.CheckPrescale)
 
 def for_data(process):
+	process.GlobalTag.globaltag ='102X_upgrade2018_realistic_v15' # DY 102
 # 	process.GlobalTag.globaltag ='102X_dataRun2_Prompt_v11' # DATA D
-	process.GlobalTag.globaltag ='102X_dataRun2_Sep2018Rereco_v1' # reReco A,B,C
+# 	process.GlobalTag.globaltag ='102X_dataRun2_Sep2018Rereco_v1' # reReco A,B,C
 	ntuplify(process)
     #check_prescale(process, trigger_paths) ####### Now it seams that there are no prescaled path ########
 
@@ -544,6 +567,7 @@ config.Data.outLFNDirBase = '/store/user/ferrico'
 config.Data.ignoreLocality = True 
 config.Site.whitelist = ["T2_IT_Bari"]
 config.Site.storageSite = 'T2_IT_Bari'
+config.Debug.scheddName = 'crab3-5@vocms059.cern.ch'
 '''
     
     just_testing = 'testing' in sys.argv
@@ -561,10 +585,11 @@ config.Site.storageSite = 'T2_IT_Bari'
 # 						('SingleMuonRun2018C_v1-PromptReco', '/SingleMuon/Run2018C-PromptReco-v1/MINIAOD'),
 # 						('SingleMuonRun2018C_v2-PromptReco', '/SingleMuon/Run2018C-PromptReco-v2/MINIAOD'),
 # 						('SingleMuonRun2018C_v3-PromptReco', '/SingleMuon/Run2018C-PromptReco-v3/MINIAOD'),
-						('SingleMuonRun2018A_v2-17Sep2018', '/SingleMuon/Run2018A-17Sep2018-v2/MINIAOD'),
-						('SingleMuonRun2018B_v1-17Sep2018', '/SingleMuon/Run2018B-17Sep2018-v1/MINIAOD'),
-						('SingleMuonRun2018C_v1-17Sep2018', '/SingleMuon/Run2018C-17Sep2018-v1/MINIAOD'),
-# 						('SingleMuonRun2018D_v2-PromptReco', '/SingleMuon/Run2018D-PromptReco-v2/MINIAOD'),
+
+# 						('SingleMuonRun2018A_v2-17Sep2018', '/SingleMuon/Run2018A-17Sep2018-v2/MINIAOD'),
+# 						('SingleMuonRun2018B_v1-17Sep2018', '/SingleMuon/Run2018B-17Sep2018-v1/MINIAOD'),
+# 						('SingleMuonRun2018C_v1-17Sep2018', '/SingleMuon/Run2018C-17Sep2018-v1/MINIAOD'),
+						('SingleMuonRun2018D_v2-PromptReco', '/SingleMuon/Run2018D-PromptReco-v2/MINIAOD'),
 
             ]
 

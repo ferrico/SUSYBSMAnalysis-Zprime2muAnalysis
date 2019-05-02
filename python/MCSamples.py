@@ -58,32 +58,34 @@ samples = [
 # ### 	N_EVENT scaled by: -N_EVENT * n_neg/n + N_EVENT * n_pos/n (N_EVENT from report = 26923935; n from weight = 26923940 n_neg = 4339415 (0.1612); n_pos = 22584525 (0.8388); )
 # 	sample('DYJetsToLL_M50', 'DYJetsToLL_M50', '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM', 26923935, 209 , 1., 1921.8,   k_factor=1.),#NLO xs and k-factor applied to reach NLO
 
-#     sample('dy50to120',   'DY50to120', '/ZToMuMu_NNPDF31_13TeV-powheg_M_50_120/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM', 2760000, 209 , 1., 1975,   k_factor=1.),#NLO xs and k-factor applied to reach NLO
-#     sample('dy120to200',  'DY120to200', '/ZToMuMu_NNPDF31_13TeV-powheg_M_120_200/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v2/MINIAODSIM', 100000, 210, 1., 19.32, k_factor=1.),#mcm 19.32
-#     sample('dy200to400',  'DY200to400', '/ZToMuMu_NNPDF31_13TeV-powheg_M_200_400/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM', 100000, 211, 1., 2.731, k_factor=1.),#mcm 2.731
-#     sample('dy400to800',  'DY400to800', '/ZToMuMu_NNPDF31_13TeV-powheg_M_400_800/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v2/MINIAODSIM', 100000, 212, 1., 0.241, k_factor=1.),
-#     sample('dy800to1400', 'DY800to1400', '/ZToMuMu_NNPDF31_13TeV-powheg_M_800_1400/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM', 100000, 72, 1., 0.01678, k_factor=1.),
-#     sample('dy1400to2300','DY1400to2300', '/ZToMuMu_NNPDF31_13TeV-powheg_M_1400_2300/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM', 100000, 70 , 1., 0.00139,    k_factor=1.),
-# 	sample('dy2300to3500','DY2300to3500', '/ZToMuMu_NNPDF31_13TeV-powheg_M_2300_3500/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v2/MINIAODSIM', 100000, 70 , 1., 0.00008948,    k_factor=1.),
-#     sample('dy3500to4500','DY3500to4500', '/ZToMuMu_NNPDF31_13TeV-powheg_M_3500_4500/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM', 100000, 70 , 1., 0.0000041,    k_factor=1.),
-#     sample('dy4500to6000','DY4500to6000', '/ZToMuMu_NNPDF31_13TeV-powheg_M_4500_6000/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM', 100000, 70 , 1., 4.56E-7,    k_factor=1.),    
+#     sample('dy50to120',   'DY50to120', '/ZToMuMu_NNPDF31_13TeV-powheg_M_50_120/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM', 2982000, 209 , 1., 1975,   k_factor=1.),#NLO xs and k-factor applied to reach NLO
+#     sample('dy120to200',  'DY120to200', '/ZToMuMu_NNPDF31_13TeV-powheg_M_120_200/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM', 100000, 210, 1., 19.32, k_factor=1.),#mcm 19.32
+#     sample('dy200to400',  'DY200to400', '/ZToMuMu_NNPDF31_13TeV-powheg_M_200_400/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM', 100000, 211, 1., 2.731 , k_factor=1.),#mcm 2.731
+#     sample('dy400to800',  'DY400to800', '/ZToMuMu_NNPDF31_13TeV-powheg_M_400_800/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM', 100000, 212, 1., 0.241, k_factor=1.),
+#     sample('dy800to1400', 'DY800to1400', '/ZToMuMu_NNPDF31_13TeV-powheg_M_800_1400/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM', 100000, 72, 1., 0.01678, k_factor=1.),
+#     sample('dy1400to2300','DY1400to2300', '/ZToMuMu_NNPDF31_13TeV-powheg_M_1400_2300/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM', 100000, 70 , 1., 0.00139,    k_factor=1.),
+# 	sample('dy2300to3500','DY2300to3500', '/ZToMuMu_NNPDF31_13TeV-powheg_M_2300_3500/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM', 100000, 70 , 1., 0.00008948,    k_factor=1.),
+#     sample('dy3500to4500','DY3500to4500', '/ZToMuMu_NNPDF31_13TeV-powheg_M_3500_4500/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM', 100000, 70 , 1., 0.0000041,    k_factor=1.),
+#     sample('dy4500to6000','DY4500to6000', '/ZToMuMu_NNPDF31_13TeV-powheg_M_4500_6000/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM', 100000, 70 , 1., 4.56E-7,    k_factor=1.),    
     
-#     sample('WZ', 'WZ', '/WZ_TuneCUETP8M1_13TeV-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM', 994554, 98, 1., 47.13, k_factor=1.),#NLO from MCFM
-#     sample('ZZ',   'ZZ', '/ZZ_TuneCUETP8M1_13TeV-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM', 992884, 94, 1.,16.523, k_factor=1.),#NLO from MCFM
-#     sample('WW',  'WW', '/WW_TuneCUETP8M1_13TeV-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM',1000000,66 , 1., 118.7, k_factor=1.),#12.178, k_factor=1.),#already NNLO xs
+#     sample('WZ', 'WZ', '/WZ_TuneCP5_13TeV-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v3/MINIAODSIM', 3885000, 98, 1., 47.13, k_factor=1.),#NLO from MCFM
+#     sample('ZZ',   'ZZ', '/ZZ_TuneCP5_13TeV-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM', 1979000, 94, 1.,16.523, k_factor=1.),#NLO from MCFM
+    sample('WW',  'WW', '/WW_TuneCP5_13TeV-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM', 7850000,66 , 1., 118.7, k_factor=1.),#12.178, k_factor=1.),#already NNLO xs
+#     sample('Wantitop', 'WantiTop', '/ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v1/MINIAODSIM',76230001,63 , 1., 35.6, k_factor=1.),#already NNLO xs          
+#     sample('tW',     'tW', '/ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v1/MINIAODSIM',9598000, 66 , 1., 35.6, k_factor=1.),#already NNLO xs
+#  	sample('dyInclusive50', 'DYInclusive50', '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM', 997561, 209 , 1., 5765.4,    k_factor=1., is_madgraph=True),  
+# 	sample('ttbar_lep',     'ttbar', '/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM', 64310000,66 , 1., 831.76, k_factor=1.),#87.31, k_factor=1.),#already NNLO xs
+
+#     sample('ttbar',     'ttbar', '/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10_ext1-v2/MINIAODSIM',33844772,66 , 1., 831.76, k_factor=1.),#87.31, k_factor=1.),#already NNLO xs
+
 
 #### Moriond 2017 MC ---> OLD ONE ######
 #### Moriond 2017 MC ---> OLD ONE ######
-#  	sample('dyInclusive50', 'DYInclusive50', '/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv2-PUMoriond17_HCALDebug_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM', 19385554, 209 , 1., 5765.4,    k_factor=1., is_madgraph=True),  
 #  	sample('Wjets', 'Wjets', '/WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM',29705748,52,1.,61526.7,k_factor=1),#already NNLO xs
 # 	sample('ttbar_lep',     'ttbar_lep', '/TTTo2L2Nu_TuneCUETP8M2_ttHtranche3_13TeV-powheg-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM', 78892260, 4 , 1., 87.31, k_factor=1.),
 #### Moriond 2017 MC ---> OLD ONE ######
 #### Moriond 2017 MC ---> OLD ONE ######
     
-#     sample('ttbar',     'ttbar', '/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10_ext1-v2/MINIAODSIM',33844772,66 , 1., 831.76, k_factor=1.),#87.31, k_factor=1.),#already NNLO xs
-#   
-#     sample('Wantitop', 'WantiTop', '/ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM',6620324,63 , 1., 35.6, k_factor=1.),#already NNLO xs          
-#     sample('tW',     'tW', '/ST_tW_top_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10-v2/MINIAODSIM',6723341,66 , 1., 35.6, k_factor=1.),#already NNLO xs
 
 
 

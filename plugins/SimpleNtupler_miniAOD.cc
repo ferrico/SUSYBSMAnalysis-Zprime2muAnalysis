@@ -305,6 +305,7 @@ SimpleNtupler_miniAOD::SimpleNtupler_miniAOD(const edm::ParameterSet& cfg)
   consumes<reco::VertexCollection>(vertices_src);
   consumes<edm::TriggerResults>(TriggerResults_src);
   consumes<GenEventInfoProduct>(genEventInfo_);
+//   mayConsume<GenEventInfoProduct>(edm::InputTag("generator"));
   if (fill_gen_info) consumes<std::vector<reco::GenParticle>>(hardInteraction->src);
  
   edm::Service<TFileService> fs;
@@ -763,13 +764,16 @@ void SimpleNtupler_miniAOD::analyze(const edm::Event& event, const edm::EventSet
     
     // This only works for DY/Z'/RSG events, and really just for PYTHIA!
     hardInteraction->Fill(event);
-    int EventWeight = 1.;
+    double EventWeight = 1.;
     edm::Handle<GenEventInfoProduct> gen_ev_info;
+//     event.getByLabel(edm::InputTag("generator"), gen_ev_info);
     event.getByLabel(genEventInfo_, gen_ev_info);
-    EventWeight = gen_ev_info->weight();
-    t.genWeight = ( EventWeight > 0 ) ? 1 : -1;
-
-    
+// 	if (gen_ev_info.isValid()){
+	    EventWeight = gen_ev_info->weight();
+    	t.genWeight = ( EventWeight > 0 ) ? 1 : -1;
+// 		std::cout<<"SIMPLE ---- "<<gen_ev_info->weight()<<" ---- "<<EventWeight<<std::endl;
+// 	}
+  
     //
     // Store Generator Level information
     //

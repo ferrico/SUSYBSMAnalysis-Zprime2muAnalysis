@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import sys, os, glob
-import das_client
+#import das_client
 import json
 from itertools import combinations
 from FWCore.PythonUtilities.LumiList import LumiList
@@ -45,15 +45,10 @@ latest_dataset = '/SingleMuon/Run2016C-PromptReco-v2/AOD'
 lumi_masks = ['Run2018MuonsOnly'] #, 'Run2012PlusDCSOnlyMuonsOnly', 'DCSOnly']
 #lumi_masks = ['DCSOnly'] #, 'Run2012PlusDCSOnlyMuonsOnly', 'DCSOnly']
 datasets = [
-	'SingleMuonRun2018A_v1-PromptReco',
-	'SingleMuonRun2018A_v2-PromptReco',
-	'SingleMuonRun2018A_v3-PromptReco',
-	'SingleMuonRun2018B_v1-PromptReco',
-	'SingleMuonRun2018B_v2-PromptReco',
-	'SingleMuonRun2018C_v1-PromptReco',
-	'SingleMuonRun2018C_v2-PromptReco',
-	'SingleMuonRun2018C_v3-PromptReco',
-
+# 	'SingleMuonRun2018A_v2-17Sep2018',
+# 	'SingleMuonRun2018B_v1-17Sep2018',
+# 	'SingleMuonRun2018C_v1-17Sep2018',
+# 	'SingleMuonRun2018D_v2-PromptReco',
             ]
 
 
@@ -91,6 +86,11 @@ elif cmd == 'checkstatus':
     		print 'crab_ana_datamc_%s_%s' % (lumi_mask,dataset)
         	do('crab status -d crab/crab_ana_datamc_%s_%s' % (lumi_mask,dataset))
 
+elif cmd == 'remove':
+    from SUSYBSMAnalysis.Zprime2muAnalysis.MCSamples import samples
+    for sample in samples:
+        print sample.name
+        do('rm -rf crab/crab_ana_datamc_%(name)s/results/*.root ' % sample)
         
 elif cmd == 'report':
     from SUSYBSMAnalysis.Zprime2muAnalysis.MCSamples import samples
@@ -108,6 +108,11 @@ elif cmd == 'resubmit':
     for sample in samples:
         print sample.name
         do('crab resubmit -d crab/crab_ana_datamc_%(name)s ' % sample)
+    for lumi_mask in lumi_masks:
+    	for dataset in datasets:
+    		print 'crab_ana_datamc_%s_%s' % (lumi_mask,dataset)
+        	do('crab resubmit -d crab/crab_ana_datamc_%s_%s' % (lumi_mask,dataset))
+
 
 elif cmd == 'kill':
     from SUSYBSMAnalysis.Zprime2muAnalysis.MCSamples import samples
