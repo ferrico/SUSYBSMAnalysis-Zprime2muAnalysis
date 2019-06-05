@@ -54,6 +54,26 @@ class tupleonlysample(sample):
 # Single-top cross sections are from https://twiki.cern.ch/twiki/bin/viewauth/CMS/SingleTopSigma
 # K factor for Drell-Yan samples is the ratio of the NNLO to POWHEG cross sections for M > 20 GeV bin, 1915/1871=1.024
 samples = [
+#     sample('DYJetsToLL_M50_amcatnlo', 'DYJetsToLL_M50_amcatnlo', '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM',26923935,209 , 6529, 0, k_factor=1.),
+#     sample('DY1JetsToLL_50_150', 'DY1JetsToLL_50_150', '/DY1JetsToLL_M-50_LHEZpT_50-150_TuneCP5_13TeV-amcnloFXFX-pythia8/RunIIFall17MiniAOD-94X_mc2017_realistic_v11-v1/MINIAODSIM',10128800,209 , 316.6, 0, k_factor=1.),
+#     sample('DY1JetsToLL_150_250', 'DY1JetsToLL_150_250', '/DY2JetsToLL_M-50_LHEZpT_150-250_TuneCP5_13TeV-amcnloFXFX-pythia8/RunIIFall17MiniAOD-94X_mc2017_realistic_v11-v1/MINIAODSIM',37987087,209 , 9.543, 0, k_factor=1.),
+#     sample('DY1JetsToLL_250_400', 'DY1JetsToLL_250_400', '/DY1JetsToLL_M-50_LHEZpT_250-400_TuneCP5_13TeV-amcnloFXFX-pythia8/RunIIFall17MiniAOD-94X_mc2017_realistic_v11-v1/MINIAODSIM',3268187,209 , 1.098, 0, k_factor=1.),
+#     sample('DY1JetsToLL_400_Inf', 'DY1JetsToLL_400_Inf', '/DY1JetsToLL_M-50_LHEZpT_400-inf_TuneCP5_13TeV-amcnloFXFX-pythia8/RunIIFall17MiniAOD-94X_mc2017_realistic_v11-v1/MINIAODSIM',380004,209 , 0.1193, 0, k_factor=1.),
+#     sample('DY2JetsToLL_50_150', 'DY2JetsToLL_50_150', '/DY2JetsToLL_M-50_LHEZpT_50-150_TuneCP5_13TeV-amcnloFXFX-pythia8/RunIIFall17MiniAOD-94X_mc2017_realistic_v11-v1/MINIAODSIM',21710274,209 , 169.6,0, k_factor=1.),
+#     sample('DY2JetsToLL_150_250', 'DY2JetsToLL_150_250', '/DY2JetsToLL_M-50_LHEZpT_150-250_TuneCP5_13TeV-amcnloFXFX-pythia8/RunIIFall17MiniAOD-94X_mc2017_realistic_v11-v1/MINIAODSIM',6632379,209 , 15.65,0, k_factor=1.),
+#     sample('DY2JetsToLL_250_400', 'DY2JetsToLL_250_400', '/DY2JetsToLL_M-50_LHEZpT_250-400_TuneCP5_13TeV-amcnloFXFX-pythia8/RunIIFall17MiniAOD-94X_mc2017_realistic_v11-v1/MINIAODSIM',20220257,209 , 2.737, 0, k_factor=1.),
+#     sample('DY2JetsToLL_400_Inf', 'DY2JetsToLL_400_Inf', '/DY2JetsToLL_M-50_LHEZpT_400-inf_TuneCP5_13TeV-amcnloFXFX-pythia8/RunIIFall17MiniAOD-94X_mc2017_realistic_v11-v1/MINIAODSIM',3759866,209 , 0.4477, 0, k_factor=1.),
+######### 2017 MUON TRK FIXED ###########
+#     sample('dy50to120',   'DY50to120', '/ZToMuMu_NNPDF31_13TeV-powheg_M_50_120/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM', 2961000, 209 , 1., 2112.905,   k_factor=1.),#NLO xs and k-factor applied to reach NLO
+#     sample('dy120to200',  'DY120to200', '/ZToMuMu_NNPDF31_13TeV-powheg_M_120_200/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM', 100000, 210, 1., 20.553, k_factor=1.),#mcm 19.32
+#     sample('dy200to400',  'DY200to400', '/ZToMuMu_NNPDF31_13TeV-powheg_M_200_400/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM', 100000, 211, 1., 2.8861, k_factor=1.),#mcm 2.731
+    sample('dy400to800',  'DY400to800', '/ZToMuMu_NNPDF31_13TeV-powheg_M_400_800/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM', 100000, 212, 1., 0.25126, k_factor=1.),
+#     sample('dy800to1400', 'DY800to1400', '/ZToMuMu_NNPDF31_13TeV-powheg_M_800_1400/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM', 100000, 72, 1., 0.017075, k_factor=1.),
+#     sample('dy1400to2300','DY1400to2300', '/ZToMuMu_NNPDF31_13TeV-powheg_M_1400_2300/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM', 100000, 70 , 1., 1.366E-3,    k_factor=1.),
+#     sample('dy2300to3500','DY2300to3500', '/ZToMuMu_NNPDF31_13TeV-powheg_M_2300_3500/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM', 100000, 70 , 1., 8.178E-5,    k_factor=1.),
+#     sample('dy3500to4500','DY3500to4500', '/ZToMuMu_NNPDF31_13TeV-powheg_M_3500_4500/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM', 100000, 70 , 1., 3.191E-6,    k_factor=1.),
+#     sample('dy4500to6000','DY4500to6000', '/ZToMuMu_NNPDF31_13TeV-powheg_M_4500_6000/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM', 100000, 70 , 1., 2.787E-7,    k_factor=1.),
+######### 2017 MUON TRK FIXED ###########
 
 # ### 	N_EVENT scaled by: -N_EVENT * n_neg/n + N_EVENT * n_pos/n (N_EVENT from report = 26923935; n from weight = 26923940 n_neg = 4339415 (0.1612); n_pos = 22584525 (0.8388); )
 # 	sample('DYJetsToLL_M50', 'DYJetsToLL_M50', '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAOD-94X_mc2017_realistic_v10-v1/MINIAODSIM', 26923935, 209 , 1., 1921.8,   k_factor=1.),#NLO xs and k-factor applied to reach NLO
@@ -70,7 +90,7 @@ samples = [
     
 #     sample('WZ', 'WZ', '/WZ_TuneCP5_13TeV-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v3/MINIAODSIM', 3885000, 98, 1., 47.13, k_factor=1.),#NLO from MCFM
 #     sample('ZZ',   'ZZ', '/ZZ_TuneCP5_13TeV-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM', 1979000, 94, 1.,16.523, k_factor=1.),#NLO from MCFM
-    sample('WW',  'WW', '/WW_TuneCP5_13TeV-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM', 7850000,66 , 1., 118.7, k_factor=1.),#12.178, k_factor=1.),#already NNLO xs
+#     sample('WW',  'WW', '/WW_TuneCP5_13TeV-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM', 7850000,66 , 1., 118.7, k_factor=1.),#12.178, k_factor=1.),#already NNLO xs
 #     sample('Wantitop', 'WantiTop', '/ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v1/MINIAODSIM',76230001,63 , 1., 35.6, k_factor=1.),#already NNLO xs          
 #     sample('tW',     'tW', '/ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v1/MINIAODSIM',9598000, 66 , 1., 35.6, k_factor=1.),#already NNLO xs
 #  	sample('dyInclusive50', 'DYInclusive50', '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM', 997561, 209 , 1., 5765.4,    k_factor=1., is_madgraph=True),  

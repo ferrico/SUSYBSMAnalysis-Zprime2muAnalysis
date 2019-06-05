@@ -195,6 +195,22 @@ class Zprime2muHistosFromPAT : public edm::EDAnalyzer {
   TH1F* DimuonMassVtxConstrainedLogWeight;
   TH2F* DimuonMassConstrainedVsUn;
   TH2F* DimuonMassVertexConstrainedError;
+  
+  TH2F* DimuonMassVertexConstrained_2d_BB;
+  TH2F* DimuonMassVertexConstrained_2d_BE;
+  TH2F* DimuonMassVertexConstrained_2d_EE;
+  TH2F* DimuonMassVertexConstrained_2d_OVER;
+  TH2F* DimuonMassVertexConstrained_2d_FinalBB;
+  TH2F* DimuonMassVertexConstrained_2d_FinalBE;
+  TH2F* DimuonMass_2d_BB;
+  TH2F* DimuonMass_2d_BE;
+  TH2F* DimuonMass_2d_EE;
+  TH2F* DimuonMass_2d_OVER;
+  TH2F* DimuonMass_2d_FinalBB;
+  TH2F* DimuonMass_2d_FinalBE;
+  
+  // for resolution studies //
+  
     //special
     TH1F* DimuonMassVtx_chi2;
     TH1F* DimuonMassVtx_prob;
@@ -421,6 +437,24 @@ Zprime2muHistosFromPAT::Zprime2muHistosFromPAT(const edm::ParameterSet& cfg)
   DimuonMassVtxConstrainedLogWeight = fs->make<TH1F>("DimuonMassVtxConstrainedLogWeight", titlePrefix + "dimu vtx-constrained mass in log bins", NMBINS, logMbins);
   DimuonMassConstrainedVsUn = fs->make<TH2F>("DimuonMassConstrainedVsUn", titlePrefix + "dimu. vertex-constrained vs. non-constrained mass", 200, 0, 3000, 200, 0, 3000);
   DimuonMassVertexConstrainedError = fs->make<TH2F>("DimuonMassVertexConstrainedError", titlePrefix + "dimu. vertex-constrained mass error vs. mass", 100, 0, 3000, 100, 0, 400);
+  
+  //resolution histograms
+  Double_t MASS_BINS[] = {50, 120, 200, 400, 800, 1400, 2300, 3500, 4500, 6000};
+  Int_t  binnum = sizeof(MASS_BINS)/sizeof(Double_t)-1;
+  DimuonMassVertexConstrained_2d_BB = fs->make<TH2F>("ResVxt_BB", "ResVxt_BB", binnum, MASS_BINS, 200, -1., 1.0);
+  DimuonMassVertexConstrained_2d_BE = fs->make<TH2F>("ResVxt_BE", "ResVxt_BE", binnum, MASS_BINS, 200, -1., 1.0);
+  DimuonMassVertexConstrained_2d_EE = fs->make<TH2F>("ResVxt_EE", "ResVxt_EE", binnum, MASS_BINS, 200, -1., 1.0);
+  DimuonMassVertexConstrained_2d_OVER = fs->make<TH2F>("ResVxt_OVER", "ResVxt_OVER", binnum, MASS_BINS, 200, -1., 1.0);  
+  DimuonMassVertexConstrained_2d_FinalBB = fs->make<TH2F>("ResVxt_FinalBB", "ResVxt_FinalBB", binnum, MASS_BINS, 200, -1., 1.0);
+  DimuonMassVertexConstrained_2d_FinalBE = fs->make<TH2F>("ResVxt_FinalBE", "ResVxt_FinalBE", binnum, MASS_BINS, 200, -1., 1.0);
+  DimuonMass_2d_BB = fs->make<TH2F>("Res_BB", "Res_BB", binnum, MASS_BINS, 200, -1., 1.0);
+  DimuonMass_2d_BE = fs->make<TH2F>("Res_BE", "Res_BE", binnum, MASS_BINS, 200, -1., 1.0);
+  DimuonMass_2d_EE = fs->make<TH2F>("Res_EE", "Res_EE", binnum, MASS_BINS, 200, -1., 1.0);
+  DimuonMass_2d_OVER = fs->make<TH2F>("Res_OVER", "Res_OVER", binnum, MASS_BINS, 200, -1., 1.0);  
+  DimuonMass_2d_FinalBB = fs->make<TH2F>("Res_FinalBB", "Res_FinalBB", binnum, MASS_BINS, 200, -1., 1.0);
+  DimuonMass_2d_FinalBE = fs->make<TH2F>("Res_FinalBE", "Res_FinalBE", binnum, MASS_BINS, 200, -1., 1.0);
+
+
     //special
     DimuonMassVtx_chi2 = fs->make<TH1F>("DimuonMassVtx_chi2", titlePrefix + "dimu. vertex #chi^{2}/dof", 300, 0, 30);
     DimuonMassVtx_prob = fs->make<TH1F>("DimuonMassVtx_prob", titlePrefix + "dimu. vertex probability", 100, 0, 1);
@@ -622,7 +656,7 @@ void Zprime2muHistosFromPAT::fillDileptonHistos(const pat::CompositeCandidate& d
 
   DileptonPtVsEta->Fill(dil.eta(), dil.pt(), _madgraphWeight*_kFactor);
   DileptonPVsEta ->Fill(dil.eta(), dil.p(), _madgraphWeight*_kFactor);
-
+ 
   DileptonMass->Fill(dil.mass(), _madgraphWeight*_kFactor);
   DileptonMassWeight->Fill(dil.mass(),_prescaleWeight*_madgraphWeight*_kFactor);//?
   DileptonWithPhotonsMass->Fill(resonanceP4(dil).mass(), _madgraphWeight*_kFactor);
@@ -692,7 +726,43 @@ void Zprime2muHistosFromPAT::fillDileptonHistos(const pat::CompositeCandidate& d
     DimuonMassVertexConstrainedError->Fill(vertex_mass, vertex_mass_err, _madgraphWeight*_kFactor);
     DimuonMassVertexConstrainedWeight->Fill(vertex_mass,_prescaleWeight*_madgraphWeight*_kFactor);
     DimuonMassVtxConstrainedLogWeight->Fill(vertex_mass,_prescaleWeight*_madgraphWeight*_kFactor);
-
+    
+    float genMass;
+   	hardInteraction->Fill(event);    
+    if (fill_gen_info) {
+    	if(hardInteraction->IsValidForRes()){
+// 		if(hardInteraction->IsValid()){
+   		 genMass = (hardInteraction->lepPlusNoIB->p4() + hardInteraction->lepMinusNoIB->p4()).mass();
+	    	float rdil_vtx = vertex_mass / genMass - 1;
+		    float rdil = dil.mass() / genMass - 1;
+    		if (fabs(dil.daughter(0)->eta()) < 0.9 && fabs(dil.daughter(1)->eta()) < 0.9){
+	    		DimuonMassVertexConstrained_2d_BB->Fill(genMass, rdil_vtx, _madgraphWeight*_kFactor);
+		    		DimuonMass_2d_BB->Fill(genMass, rdil, _madgraphWeight*_kFactor);
+    		}
+		    else if (fabs(dil.daughter(0)->eta()) > 1.2 && fabs(dil.daughter(1)->eta()) > 1.2){
+    			DimuonMassVertexConstrained_2d_EE->Fill(genMass, rdil_vtx, _madgraphWeight*_kFactor);
+			    DimuonMass_2d_EE->Fill(genMass, rdil, _madgraphWeight*_kFactor);
+		    }	
+    		else if((fabs(dil.daughter(0)->eta()) > 0.9 && fabs(dil.daughter(0)->eta()) < 1.2) || (fabs(dil.daughter(1)->eta()) > 0.9 && fabs(dil.daughter(1)->eta()) < 1.2)){
+			    DimuonMassVertexConstrained_2d_OVER->Fill(genMass, rdil_vtx, _madgraphWeight*_kFactor);
+    			DimuonMass_2d_OVER->Fill(genMass, rdil, _madgraphWeight*_kFactor);
+			    }
+		    else{
+	    		DimuonMassVertexConstrained_2d_BE->Fill(genMass, rdil_vtx, _madgraphWeight*_kFactor);
+    			DimuonMass_2d_BE->Fill(genMass, rdil, _madgraphWeight*_kFactor);
+		    }
+    		if (fabs(dil.daughter(0)->eta()) < 1.2 && fabs(dil.daughter(1)->eta()) < 1.2){
+			    DimuonMassVertexConstrained_2d_FinalBB->Fill(genMass, rdil_vtx, _madgraphWeight*_kFactor_bb);
+    			DimuonMass_2d_FinalBB->Fill(genMass, rdil, _madgraphWeight*_kFactor);
+	    	}
+		    else{
+	    		DimuonMassVertexConstrained_2d_FinalBE->Fill(genMass, rdil_vtx, _madgraphWeight*_kFactor_be);
+    			DimuonMass_2d_FinalBE->Fill(genMass, rdil, _madgraphWeight*_kFactor);
+		    }
+    	}
+    }
+  
+  
   
     // plot per categories
   if (dil.daughter(0)->eta()<=1.2 && dil.daughter(1)->eta()<=1.2 && dil.daughter(0)->eta()>=-1.2 && dil.daughter(1)->eta()>=-1.2){

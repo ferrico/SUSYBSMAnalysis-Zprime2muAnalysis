@@ -212,6 +212,7 @@ private:
     short lep_numberOfMatches[2];
     short lep_numberOfMatchedStations[2];
     short lep_numberOfMatchedRPCLayers[2];
+    short lep_expectedNnumberOfMatchedStations[2];
     unsigned int lep_stationMask[2];
     int lep_numberOfChambers[2];
     int lep_numberOfChambersNoRPC[2];
@@ -482,6 +483,7 @@ SimpleNtupler_miniAOD::SimpleNtupler_miniAOD(const edm::ParameterSet& cfg)
   tree->Branch("lep_numberOfMatches", t.lep_numberOfMatches, "lep_numberOfMatches[2]/S");
   tree->Branch("lep_numberOfMatchedStations", t.lep_numberOfMatchedStations, "lep_numberOfMatchedStations[2]/S");
   tree->Branch("lep_numberOfMatchedRPCLayers",t.lep_numberOfMatchedRPCLayers, "lep_numberOfMatchedRPCLayers[2]/S");
+  tree->Branch("lep_expectedNnumberOfMatchedStations",t.lep_expectedNnumberOfMatchedStations, "lep_expectedNnumberOfMatchedStations[2]/S");
   tree->Branch("lep_stationMask", t.lep_stationMask, "lep_stationMask[2]/I");
   tree->Branch("lep_numberOfChambers", t.lep_numberOfChambers, "lep_numberOfChambers[2]/I");
   tree->Branch("lep_numberOfChambersNoRPC", t.lep_numberOfChambersNoRPC, "lep_numberOfChambersNoRPC[2]/I");
@@ -1079,6 +1081,7 @@ void SimpleNtupler_miniAOD::analyze(const edm::Event& event, const edm::EventSet
 	t.lep_numberOfMatches[w] = -999;
 	t.lep_numberOfMatchedStations[w] = -999;
 	t.lep_numberOfMatchedRPCLayers[w] = -999;
+	t.lep_expectedNnumberOfMatchedStations[w] = -999;
         t.lep_stationMask[w] = 999;
 	t.lep_isGlobalMuon[w] = false;
 	t.lep_isTrackerMuon[w] = false;
@@ -1095,7 +1098,7 @@ void SimpleNtupler_miniAOD::analyze(const edm::Event& event, const edm::EventSet
 	  t.lep_px[w] = dil.daughter(i)->px();
 	  t.lep_py[w] = dil.daughter(i)->py();
 	  t.lep_pz[w] = dil.daughter(i)->pz();
-          t.lep_E[w] = dil.daughter(i)->energy();
+      t.lep_E[w] = dil.daughter(i)->energy();
 	  t.lep_heep_id[w] = userInt(*el, "HEEPId", 999);
 	  t.lep_min_muon_dR[w] = userFloat(*el, "min_muon_dR", 999);
 
@@ -1453,6 +1456,7 @@ void SimpleNtupler_miniAOD::analyze(const edm::Event& event, const edm::EventSet
 	t.lep_numberOfMatchedStations[w] = mu->numberOfMatchedStations();
 	// number of layers with matched rpc hits
 	t.lep_numberOfMatchedRPCLayers[w] = mu->numberOfChambersCSCorDT();
+	t.lep_expectedNnumberOfMatchedStations[w] = mu->expectedNnumberOfMatchedStations();
         // get bit map of stations with matched segments
         // bits 0-1-2-3 = DT stations 1-2-3-4
         // bits 4-5-6-7 = CSC stations 1-2-3-4
