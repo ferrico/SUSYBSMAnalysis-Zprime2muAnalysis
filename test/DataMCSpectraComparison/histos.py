@@ -24,8 +24,8 @@ process.source.fileNames =[#'file:./pat.root'
 # '/store/mc/RunIIFall17MiniAODv2/ZToMuMu_NNPDF31_13TeV-powheg_M_4500_6000/MINIAODSIM/MUOTrackFix_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/20000/FCDAFAF4-E9FF-E811-9067-1866DAEECF18.root',
 
 # '/store/mc/RunIIFall17MiniAODv2/ZToMuMu_NNPDF31_13TeV-powheg_M_3500_4500/MINIAODSIM/MUOTrackFix_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/90000/D21267A3-0DFF-E811-B019-0CC47A4C8E0E.root',
-# '/store/mc/RunIIFall17MiniAODv2/ZToMuMu_NNPDF31_13TeV-powheg_M_3500_4500/MINIAODSIM/MUOTrackFix_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/90000/844FF8D1-4FFF-E811-A7FD-00000931FE80.root',
-'/store/mc/RunIIFall17MiniAODv2/ZToMuMu_NNPDF31_13TeV-powheg_M_3500_4500/MINIAODSIM/MUOTrackFix_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/90000/22A4ECE2-52FF-E811-98A0-0CC47A745294.root',
+'/store/mc/RunIIFall17MiniAODv2/ZToMuMu_NNPDF31_13TeV-powheg_M_3500_4500/MINIAODSIM/MUOTrackFix_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/90000/844FF8D1-4FFF-E811-A7FD-00000931FE80.root',
+# '/store/mc/RunIIFall17MiniAODv2/ZToMuMu_NNPDF31_13TeV-powheg_M_3500_4500/MINIAODSIM/MUOTrackFix_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/90000/22A4ECE2-52FF-E811-98A0-0CC47A745294.root',
 
 # '/store/mc/RunIIFall17MiniAODv2/ZToMuMu_NNPDF31_13TeV-powheg_M_2300_3500/MINIAODSIM/MUOTrackFix_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/20000/ECB1A1F1-AF01-E911-8152-0CC47A4C8F30.root',
 # '/store/mc/RunIIFall17MiniAODv2/ZToMuMu_NNPDF31_13TeV-powheg_M_2300_3500/MINIAODSIM/MUOTrackFix_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/20000/CA5E0C0A-EAFF-E811-B933-001EC94B4EF3.root',
@@ -167,14 +167,6 @@ process.PrescaleToCommon.overall_prescale = overall_prescale
 
 process.PrescaleToCommonMiniAOD.trigger_paths = prescaled_trigger_paths
 process.PrescaleToCommonMiniAOD.overall_prescale = overall_prescale
-
-from PhysicsTools.PatUtils.l1ECALPrefiringWeightProducer_cfi import l1ECALPrefiringWeightProducer
-process.prefiringweight = l1ECALPrefiringWeightProducer.clone(
-    DataEra = cms.string("2017BtoF"), #Use 2016BtoH for 2016
-    UseJetEMPt = cms.bool(False),
-    PrefiringRateSystematicUncty = cms.double(0.2),
-    SkipWarnings = False)
-    
 
 # The histogramming module that will be cloned multiple times below
 # for making histograms with different cut/dilepton combinations.
@@ -458,9 +450,9 @@ for cut_name, Selection in cuts.iteritems():
     if miniAOD:
         process.load('SUSYBSMAnalysis.Zprime2muAnalysis.DileptonPreselector_cfi')
         process.load("SUSYBSMAnalysis.Zprime2muAnalysis.EventCounter_cfi")
-	pobj = process.prefiringweight * process.EventCounter * process.dileptonPreseletor *  process.muonPhotonMatchMiniAOD * reduce(lambda x,y: x*y, path_list)
+	pobj = process.EventCounter * process.dileptonPreseletor *  process.muonPhotonMatchMiniAOD * reduce(lambda x,y: x*y, path_list)
     else:
-    	pobj = process.prefiringweight * process.muonPhotonMatch * reduce(lambda x,y: x*y, path_list)
+    	pobj = process.muonPhotonMatch * reduce(lambda x,y: x*y, path_list)
 
 
     for name, ana_dataset in samples:
