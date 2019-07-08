@@ -243,7 +243,8 @@ Zprime2muHistosFromPAT::Zprime2muHistosFromPAT(const edm::ParameterSet& cfg)
     _kFactor(1.),
     _kFactor_bb(1.),
     _kFactor_be(1.),
-    fill_gen_info(cfg.existsAs<edm::ParameterSet>("hardInteraction")),
+    fill_gen_info(
+    cfg.getParameter<bool>("fill_gen_info")),//cfg.existsAs<edm::ParameterSet>("hardInteraction")),
     hardInteraction(fill_gen_info ? new HardInteraction(cfg.getParameter<edm::ParameterSet>("hardInteraction")) : 0)
 {
 
@@ -711,7 +712,7 @@ void Zprime2muHistosFromPAT::fillDileptonHistos(const pat::CompositeCandidate& d
   if (dil.hasUserFloat("vertexM") && dil.hasUserFloat("vertexMError")) {
     float vertex_mass = dil.userFloat("vertexM");
     float vertex_mass_err = dil.userFloat("vertexMError");
-      //std::cout<<" filling mass "<<vertex_mass<<std::endl;
+      std::cout<<" filling mass "<<vertex_mass<<std::endl;
     float smearedMass = getSmearedMass(dil,gM);
     DimuonMassVertexConstrained->Fill(vertex_mass, _madgraphWeight*_kFactor);
     DimuonMassVertexConstrainedSmear->Fill(smearedMass, _madgraphWeight*_kFactor);
@@ -728,10 +729,10 @@ void Zprime2muHistosFromPAT::fillDileptonHistos(const pat::CompositeCandidate& d
     DimuonMassVtxConstrainedLogWeight->Fill(vertex_mass,_prescaleWeight*_madgraphWeight*_kFactor);
     
     float genMass;
-   	hardInteraction->Fill(event);    
     if (fill_gen_info) {
+	   	hardInteraction->Fill(event);    
     	if(hardInteraction->IsValidForRes()){
-// 		if(hardInteraction->IsValid()){
+
    		 genMass = (hardInteraction->lepPlusNoIB->p4() + hardInteraction->lepMinusNoIB->p4()).mass();
 	    	float rdil_vtx = vertex_mass / genMass - 1;
 		    float rdil = dil.mass() / genMass - 1;
@@ -760,10 +761,8 @@ void Zprime2muHistosFromPAT::fillDileptonHistos(const pat::CompositeCandidate& d
     			DimuonMass_2d_FinalBE->Fill(genMass, rdil, _madgraphWeight*_kFactor);
 		    }
     	}
-    }
-  
-  
-  
+    } //if (fill_gen_info) {
+        
     // plot per categories
   if (dil.daughter(0)->eta()<=1.2 && dil.daughter(1)->eta()<=1.2 && dil.daughter(0)->eta()>=-1.2 && dil.daughter(1)->eta()>=-1.2){
         DimuonMassVertexConstrained_bb->Fill(vertex_mass,_madgraphWeight*_kFactor_bb);
@@ -899,8 +898,8 @@ void Zprime2muHistosFromPAT::analyze(const edm::Event& event, const edm::EventSe
   else {
     if (leptonsFromDileptons)
         if (_usekFactor){
-    	hardInteraction->Fill(event);
     	if (fill_gen_info) {
+	    	hardInteraction->Fill(event);
 // 			if(hardInteraction->IsValid()){
 			if(hardInteraction->IsValidForRes()){
     			gM = (hardInteraction->lepPlusNoIB->p4() + hardInteraction->lepMinusNoIB->p4()).mass();
