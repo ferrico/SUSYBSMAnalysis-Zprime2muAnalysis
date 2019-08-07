@@ -779,8 +779,8 @@ void SimpleNtupler_miniAOD::analyze(const edm::Event& event, const edm::EventSet
     //
     // Store Generator Level information
     //
-//     if(hardInteraction->IsValid()){
-	if(hardInteraction->IsValidForRes()){
+   if(hardInteraction->IsValid()){
+//	if(hardInteraction->IsValidForRes()){
       t.gen_res_mass = hardInteraction->resonance->mass();
       t.gen_res_pt   = hardInteraction->resonance->pt();
       t.gen_res_rap  = hardInteraction->resonance->rapidity();
